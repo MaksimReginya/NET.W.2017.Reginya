@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sorting", "Sorting\Sorting.csproj", "{DE849673-0CF5-4ADF-A429-F1F17D0EDFAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortingsTest", "SortingsTest\SortingsTest.csproj", "{960C0C63-439C-4317-AB40-04A03E8ED0D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE849673-0CF5-4ADF-A429-F1F17D0EDFAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE849673-0CF5-4ADF-A429-F1F17D0EDFAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE849673-0CF5-4ADF-A429-F1F17D0EDFAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE849673-0CF5-4ADF-A429-F1F17D0EDFAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960C0C63-439C-4317-AB40-04A03E8ED0D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960C0C63-439C-4317-AB40-04A03E8ED0D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960C0C63-439C-4317-AB40-04A03E8ED0D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960C0C63-439C-4317-AB40-04A03E8ED0D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2E7A7AE-763A-4EDB-8CE6-05F8BC35C8B7}
+	EndGlobalSection
+EndGlobal
