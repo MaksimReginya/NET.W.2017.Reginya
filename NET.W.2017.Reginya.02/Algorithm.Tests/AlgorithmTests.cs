@@ -8,7 +8,7 @@ namespace Algorithm.Tests
     public class AlgorithmTests
     {
         [TestMethod]
-        public void InsertNumber_15insertin15from0to0_15returned()
+        public void InsertNumber_15insertIn15from0to0_15returned()
         {
             // Arrange.
             int number1 = 15, number2 = 15;
@@ -23,7 +23,7 @@ namespace Algorithm.Tests
         }
 
         [TestMethod]
-        public void InsertNumber_8insertin15from0to0_9returned()
+        public void InsertNumber_8insertIn15from0to0_9returned()
         {
             // Arrange.
             int number1 = 8, number2 = 15;
@@ -38,7 +38,7 @@ namespace Algorithm.Tests
         }
 
         [TestMethod]
-        public void InsertNumber_8insertin15from3to8_120returned()
+        public void InsertNumber_8insertIn15from3to8_120returned()
         {
             // Arrange.
             int number1 = 8, number2 = 15;
@@ -54,7 +54,7 @@ namespace Algorithm.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void InsertNumber_1insertnegative2from0to0_exceptionreturned()
+        public void InsertNumber_1insertNegative2from0to0_exceptionReturned()
         {
             // Arrange.
             int number1 = 1, number2 = -2;
@@ -68,7 +68,7 @@ namespace Algorithm.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void InsertNumber_8insert15from3tonegative8_exceptionreturned()
+        public void InsertNumber_8insert15from3toNegative8_exceptionReturned()
         {
             // Arrange.
             int number1 = 8, number2 = 15;
@@ -82,7 +82,7 @@ namespace Algorithm.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void InsertNumber_8insert15from8to3_exceptionreturned()
+        public void InsertNumber_8insert15from8to3_exceptionReturned()
         {
             // Arrange.
             int number1 = 8, number2 = 15;
@@ -92,6 +92,6 @@ namespace Algorithm.Tests
             Algorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
-        }
+        }        
     }
 }

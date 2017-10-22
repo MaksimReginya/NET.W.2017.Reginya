@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Algorithm
 {
@@ -27,7 +29,7 @@ namespace Algorithm
 
             if (i < 0 || i > 31 || j < 0 || j > 31)
             {
-                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " must be greater than 0 and less than 32");
+                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " must be not negative and less than 32");
             }
 
             if (number1 < 0 || number2 < 0)
@@ -47,6 +49,56 @@ namespace Algorithm
             number1BitArray.CopyTo(result, 0);
             return result[0];
         }
-        
+
+        /// <summary>
+        /// Finds the nearest largest integer that consists of digits of the original number. </summary>
+        /// <param name="source">Source number</param>       
+        /// <exception cref="ArgumentException">Throws if source number is not positive</exception>
+        /// <returns>
+        /// Nearest largest integer consisting of digits of the original number.
+        /// Or -1 if a required number does not exist. </returns>        
+        public static int FindNextBiggerNumber(int source)
+        {
+            if (source < 1)
+            {
+                throw new ArgumentException(nameof(source) + " must be positive");
+            }
+            
+            var numerals = source.ToString().ToCharArray();
+            var list = new List<char>();
+            int i = 0;
+            for (i = numerals.Length - 1; i > 0; i --)
+            {
+                if (numerals[i] > numerals[i - 1])
+                {
+                    list.Add(numerals[i - 1]);
+
+                    char temp = numerals[i];
+                    numerals[i] = numerals[i - 1];
+                    numerals[i - 1] = temp;    
+                    
+                    break;
+                }
+                else
+                {
+                    list.Add(numerals[i]);
+                }
+            }
+
+            if (i == 0)
+            {
+                return -1;
+            }
+
+            list.Sort();
+            foreach (var item in list)
+            {
+                numerals[i] = item;
+                i++;
+            }
+
+
+            return Int32.Parse(new String(numerals));
+        }                
     }
 }

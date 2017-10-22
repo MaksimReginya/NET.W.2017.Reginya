@@ -21,6 +21,22 @@ namespace Algorithm.NUnitTests
             {
                 return -1;
             }
-        }      
+        }
+
+        [TestCase(12, ExpectedResult = 21)]
+        [TestCase(1234321, ExpectedResult = 1241233)]
+        [TestCase(20, ExpectedResult = -1)]
+        [TestCase(-5, ExpectedResult = -2)]
+        public int FindNextBiggerNumberTest(int source)
+        {
+            try
+            {
+                return Algorithm.FindNextBiggerNumber(source);
+            }
+            catch (ArgumentException)
+            {
+                return -2;
+            }
+        }
     }
 }
