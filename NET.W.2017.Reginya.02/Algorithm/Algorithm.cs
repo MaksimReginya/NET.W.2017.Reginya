@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Algorithm
@@ -99,6 +100,30 @@ namespace Algorithm
 
 
             return Int32.Parse(new String(numerals));
-        }                
+        }
+
+        /// <summary>
+        /// Finds the nearest largest integer that consists of digits of the original number. </summary>
+        /// <param name="source">Source number</param>    
+        /// <param name="operationTime">Time spent on the operation</param>  
+        /// <param name="operationTime1">Time spent on the operation</param>  
+        /// <exception cref="ArgumentException">Throws if source number is not positive</exception>
+        /// <returns>
+        /// Nearest largest integer consisting of digits of the original number.
+        /// Or -1 if a required number does not exist. </returns>        
+        public static int FindNextBiggerNumber(int source, out TimeSpan operationTime, out TimeSpan operationTime1)
+        {
+            var watch = new Stopwatch();
+            watch.Start();
+            int result = FindNextBiggerNumber(source);
+            watch.Stop();
+            operationTime = watch.Elapsed;
+
+            var startTime = DateTime.Now;
+            result = FindNextBiggerNumber(source);
+            operationTime1 = DateTime.Now - startTime;
+            
+            return result;
+        }
     }
 }
