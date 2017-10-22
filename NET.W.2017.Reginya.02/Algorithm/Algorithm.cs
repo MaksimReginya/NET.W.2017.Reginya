@@ -125,5 +125,39 @@ namespace Algorithm
             
             return result;
         }
+
+        /// <summary>
+        /// Filters the array, so that only numbers containing the given digit remain on the output. </summary>
+        /// <param name="digit">Target digit</param>
+        /// <param name="numbers">Source numbers</param>        
+        /// <exception cref="ArgumentException">
+        /// Throws when (digit &lt; 0) || (digit &gt; 9) </exception>
+        /// <exception cref="ArgumentNullException">
+        /// Throws when numbers equals null </exception>
+        /// <returns>
+        /// Numbers containing a given digit or null if there are no such numbers. </returns>
+        public static int[] FilterDigit(int digit, params int[] numbers)
+        {
+            if (digit < 0 || digit > 9)
+                throw new ArgumentException(nameof(digit) + " must be from 0 to 9");
+
+            if (numbers == null)
+                throw new ArgumentException(nameof(numbers) + " can't be null");
+
+            if (numbers.Length == 0)
+                return null;
+
+            var result = new List<int>();
+            var digitStr = digit.ToString();
+            for (int i = 0; i < numbers.Length; i++)
+            {                
+                if (numbers[i].ToString().Contains(digitStr))
+                {
+                    result.Add(numbers[i]);
+                }
+            }
+
+            return result.ToArray();
+        }
     }
 }
