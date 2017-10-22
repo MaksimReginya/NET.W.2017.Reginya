@@ -23,20 +23,14 @@ namespace Algorithm
         /// Result of bit insertion </returns>
         public static int InsertNumber(int number1, int number2, int i, int j)
         {
-            if (i > j)
-            {
-                throw new ArgumentException(nameof(i) + " must be less than " + nameof(j));
-            }
+            if (i > j)            
+                throw new ArgumentException(nameof(i) + " must be less than " + nameof(j));            
 
-            if (i < 0 || i > 31 || j < 0 || j > 31)
-            {
-                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " must be not negative and less than 32");
-            }
+            if (i < 0 || i > 31 || j < 0 || j > 31)            
+                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " can be not negative and less than 32");            
 
-            if (number1 < 0 || number2 < 0)
-            {
-                throw new ArgumentException(nameof(number1) + " and " + nameof(number2) + " must not be negative");
-            }
+            if (number1 < 0 || number2 < 0)            
+                throw new ArgumentException(nameof(number1) + " and " + nameof(number2) + " can not be negative");            
 
             var number1BitArray = new BitArray(new[] { number1 });
             var number2BitArray = new BitArray(new[] { number2 });
@@ -60,10 +54,8 @@ namespace Algorithm
         /// Or -1 if a required number does not exist. </returns>        
         public static int FindNextBiggerNumber(int source)
         {
-            if (source < 1)
-            {
-                throw new ArgumentException(nameof(source) + " must be positive");
-            }
+            if (source < 1)            
+                throw new ArgumentException(nameof(source) + " must be positive");            
             
             var numerals = source.ToString().ToCharArray();
             var list = new List<char>();
@@ -80,16 +72,12 @@ namespace Algorithm
                     
                     break;
                 }
-                else
-                {
-                    list.Add(numerals[i]);
-                }
+                else                
+                    list.Add(numerals[i]);               
             }
 
-            if (i == 0)
-            {
-                return -1;
-            }
+            if (i == 0)            
+                return -1;            
 
             list.Sort();
             foreach (var item in list)
@@ -139,10 +127,7 @@ namespace Algorithm
         public static int[] FilterDigit(int digit, params int[] numbers)
         {
             if (digit < 0 || digit > 9)
-                throw new ArgumentException(nameof(digit) + " must be from 0 to 9");
-
-            if (numbers == null)
-                throw new ArgumentException(nameof(numbers) + " can't be null");
+                throw new ArgumentException(nameof(digit) + " must be from 0 to 9");           
 
             if (numbers.Length == 0)
                 return null;
@@ -151,13 +136,53 @@ namespace Algorithm
             var digitStr = digit.ToString();
             for (int i = 0; i < numbers.Length; i++)
             {                
-                if (numbers[i].ToString().Contains(digitStr))
-                {
+                if (numbers[i].ToString().Contains(digitStr))                
                     result.Add(numbers[i]);
-                }
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Calculates the root of the nth power from the number by the Newton method with a given accuracy. </summary>
+        /// <param name="number">Source number</param>
+        /// <param name="power">Power of root</param>
+        /// <param name="accuracy">Accuracy</param>
+        /// <exception cref="ArgumentException">
+        /// Throws if one of the arguments is negative </exception>
+        /// <returns>
+        /// The root of the nth power from the number</returns>
+        public static double FindNthRoot(double number, int power, double accuracy = 0.001)
+        {
+            if (power <= 0)            
+                throw new ArgumentException(nameof(power) + " must be positive");            
+
+            if (number < 0 && power % 2 == 0)            
+                throw new ArgumentException("The root of even degree from negative number is not defined.");            
+                
+            if (number.Equals(0))            
+                throw new ArgumentException(nameof(number) + " can not be zero");            
+
+            if (accuracy <= 0)            
+                throw new ArgumentException(nameof(accuracy) +" must be positive");            
+
+            double x0 = number / power;
+            double x1 = GetNextNumber(number, power, x0);
+            double delta = accuracy * 2;
+
+            while (delta > accuracy)
+            {
+                x0 = x1;
+                x1 = GetNextNumber(number, power, x0);
+                delta = Math.Abs(x0 - x1);
+            }
+
+            return x1;
+        }                
+
+        private static double GetNextNumber(double number, int power, double x0)
+        {
+            return 1.0 / power * ((power - 1) * x0 + number / Math.Pow(x0, power - 1));
         }
     }
 }
