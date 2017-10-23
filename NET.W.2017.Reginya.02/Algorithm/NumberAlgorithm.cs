@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Algorithm
 {
-    public class Algorithm
+    /// <summary>
+    /// Provides methods to make manipulations with numbers </summary>
+    public class NumberAlgorithm
     {
+        #region PublicMethods                
         /// <summary>
         /// Inserts first number bits from the jth to the ith position into second number
         /// so that the bits of second number occupy positions from bit j to bit i. </summary>        
@@ -30,19 +31,13 @@ namespace Algorithm
                 throw new ArgumentException(nameof(i) + " and " + nameof(j) + " can be not negative and less than 32");            
 
             if (number1 < 0 || number2 < 0)            
-                throw new ArgumentException(nameof(number1) + " and " + nameof(number2) + " can not be negative");            
+                throw new ArgumentException(nameof(number1) + " and " + nameof(number2) + " can not be negative");
 
-            var number1BitArray = new BitArray(new[] { number1 });
-            var number2BitArray = new BitArray(new[] { number2 });
-
-            int l = 0;
-            for (int k = i; k <= j; k++)
-                number1BitArray.Set(k, number2BitArray.Get(l++));
-
-            // Convert bit array to single int
-            var result = new int[1];            
-            number1BitArray.CopyTo(result, 0);
-            return result[0];
+            int mask = (2 << (j - i)) - 1;
+            mask <<= i;
+            number2 = (number2 << i) & mask;
+            number1 = number1 & ~mask;
+            return number1 | number2;
         }
 
         /// <summary>
@@ -113,43 +108,16 @@ namespace Algorithm
             
             return result;
         }
-
-        /// <summary>
-        /// Filters the array, so that only numbers containing the given digit remain on the output. </summary>
-        /// <param name="digit">Target digit</param>
-        /// <param name="numbers">Source numbers</param>        
-        /// <exception cref="ArgumentException">
-        /// Throws when (digit &lt; 0) || (digit &gt; 9) </exception>
-        /// <exception cref="ArgumentNullException">
-        /// Throws when numbers equals null </exception>
-        /// <returns>
-        /// Numbers containing a given digit or null if there are no such numbers. </returns>
-        public static int[] FilterDigit(int digit, params int[] numbers)
-        {
-            if (digit < 0 || digit > 9)
-                throw new ArgumentException(nameof(digit) + " must be from 0 to 9");           
-
-            if (numbers.Length == 0)
-                return null;
-
-            var result = new List<int>();
-            var digitStr = digit.ToString();
-            for (int i = 0; i < numbers.Length; i++)
-            {                
-                if (numbers[i].ToString().Contains(digitStr))                
-                    result.Add(numbers[i]);
-            }
-
-            return result.ToArray();
-        }
-
+       
         /// <summary>
         /// Calculates the root of the nth power from the number by the Newton method with a given accuracy. </summary>
         /// <param name="number">Source number</param>
         /// <param name="power">Power of root</param>
         /// <param name="accuracy">Accuracy</param>
         /// <exception cref="ArgumentException">
-        /// Throws if one of the arguments is negative </exception>
+        /// Throws if power or accuracy is not positive, or
+        /// number equals zero, or
+        /// number is negative and power is even </exception>
         /// <returns>
         /// The root of the nth power from the number</returns>
         public static double FindNthRoot(double number, int power, double accuracy = 0.001)
@@ -178,11 +146,14 @@ namespace Algorithm
             }
 
             return x1;
-        }                
+        }
+        #endregion
 
+        #region PrivateMethods
         private static double GetNextNumber(double number, int power, double x0)
         {
             return 1.0 / power * ((power - 1) * x0 + number / Math.Pow(x0, power - 1));
         }
-    }
+        #endregion
+    }    
 }

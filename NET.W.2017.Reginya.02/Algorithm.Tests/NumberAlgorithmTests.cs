@@ -5,7 +5,7 @@ using Algorithm;
 namespace Algorithm.Tests
 {
     [TestClass]
-    public class AlgorithmTests
+    public class NumberAlgorithmTests
     {
         [TestMethod]
         public void InsertNumber_15insertIn15from0to0_15returned()
@@ -16,7 +16,7 @@ namespace Algorithm.Tests
             int expected = 15;
 
             // Act.
-            int actual = Algorithm.InsertNumber(number1, number2, i, j);
+            int actual = NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
             Assert.AreEqual(expected, actual);
@@ -31,7 +31,7 @@ namespace Algorithm.Tests
             int expected = 9;
 
             // Act.
-            int actual = Algorithm.InsertNumber(number1, number2, i, j);
+            int actual = NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
             Assert.AreEqual(expected, actual);
@@ -46,7 +46,7 @@ namespace Algorithm.Tests
             int expected = 120;
 
             // Act.
-            int actual = Algorithm.InsertNumber(number1, number2, i, j);
+            int actual = NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
             Assert.AreEqual(expected, actual);
@@ -61,7 +61,7 @@ namespace Algorithm.Tests
             int i = 0, j = 0;
 
             // Act.
-            Algorithm.InsertNumber(number1, number2, i, j);
+            NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
         }
@@ -75,7 +75,7 @@ namespace Algorithm.Tests
             int i = 3, j = -8;
 
             // Act.
-            Algorithm.InsertNumber(number1, number2, i, j);
+            NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
         }
@@ -89,7 +89,7 @@ namespace Algorithm.Tests
             int i = 8, j = 3;
 
             // Act.
-            Algorithm.InsertNumber(number1, number2, i, j);
+            NumberAlgorithm.InsertNumber(number1, number2, i, j);
 
             // Assert.
         }        

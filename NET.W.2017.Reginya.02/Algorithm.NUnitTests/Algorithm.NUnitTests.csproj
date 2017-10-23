@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlgorithmNUnitTests.cs" />
+    <Compile Include="ArrayAlgorithmNUnitTests.cs" />
+    <Compile Include="NumberAlgorithmNUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
