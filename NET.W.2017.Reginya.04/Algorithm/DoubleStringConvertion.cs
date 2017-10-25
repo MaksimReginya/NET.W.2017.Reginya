@@ -24,7 +24,7 @@ namespace Algorithm
         public static string ConvertToIEEE754(this double source)
         {
             string sign = "0";
-            if (IsNegative(source))
+            if (IsNegative(source) || double.IsNaN(source))
             {
                 sign = "1";
                 source = Math.Abs(source);
@@ -38,7 +38,7 @@ namespace Algorithm
             
             return sign + strExponent + strFractPart;
         }
-#endregion
+        #endregion
 
         #region Private methods DoubleStringConvertion
         private static bool IsNegative(double source)
@@ -53,6 +53,11 @@ namespace Algorithm
         
         private static int GetExponent(double source)
         {
+            if (double.IsNaN(source))
+            {
+                // NaN's exponent consists only of one's
+                return (int)(Math.Pow(2, ExponentLength) - 1);
+            }
             int power = 0;
 
             double fractPart = source / Math.Pow(2, power) - 1;
@@ -66,12 +71,17 @@ namespace Algorithm
             power += ExponentOffset;
 
             power = power < 0 ? 0 : power;
-
+            
             return power;
         }
 
         private static double GetMantissa(double number, int exponent)
         {
+            if (double.IsNegativeInfinity(number) || double.IsPositiveInfinity(number))            
+                return 0;
+            if (double.IsNaN(number))
+                return 0.1; // NaN has any not-zero mantissa
+
             double fraction;
 
             exponent -= ExponentOffset;
@@ -84,14 +94,13 @@ namespace Algorithm
             {
                 fraction = number / Math.Pow(2, exponent) - 1;
             }
-
-            fraction = double.IsNaN(fraction) ? 0 : fraction;
-
+                        
             return fraction;
         }
             
         private static string ConvertExponentToString(int intPart)
         {
+
             var result = new StringBuilder();
             for(int i = 0; i < ExponentLength; i++)
             {
@@ -103,7 +112,8 @@ namespace Algorithm
 
         private static string ConverMantissaToString(double fractPart)
         {
-            var result = new StringBuilder();                         
+            var result = new StringBuilder();                    
+                                     
             for (int i = 0; i < MantissaLength; i++)
             {
                 fractPart *= 2;
@@ -113,6 +123,6 @@ namespace Algorithm
             }
             return result.ToString();
         }
-#endregion
+        #endregion
     }
 }

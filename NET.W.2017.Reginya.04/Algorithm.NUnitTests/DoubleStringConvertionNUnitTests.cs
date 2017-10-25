@@ -18,9 +18,7 @@ namespace Algorithm.NUnitTests
         [TestCase(double.MaxValue, ExpectedResult =
             "0111111111101111111111111111111111111111111111111111111111111111")]
         [TestCase(double.Epsilon, ExpectedResult =
-            "0000000000000000000000000000000000000000000000000000000000000001")]
-        [TestCase(double.NaN, ExpectedResult =
-            "1111111111111000000000000000000000000000000000000000000000000000")]
+            "0000000000000000000000000000000000000000000000000000000000000001")]                    
         [TestCase(double.NegativeInfinity, ExpectedResult =
             "1111111111110000000000000000000000000000000000000000000000000000")]
         [TestCase(double.PositiveInfinity, ExpectedResult =
