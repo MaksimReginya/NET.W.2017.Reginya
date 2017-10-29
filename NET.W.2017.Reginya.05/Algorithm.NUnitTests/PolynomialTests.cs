@@ -161,6 +161,19 @@ namespace Algorithm.NUnitTests
 
         #endregion
 
+        #region Tests on public methods
+
+        [TestCase(new[] { 1.0, 3.0, 2.0 }, 1.0, 6.0, ExpectedResult = true)]
+        [TestCase(new[] { 0.0, 1.0, -4.0 }, -2.1, -19.74, ExpectedResult = true)]
+        public bool PolynomialCalculateTest(double[] coefficients, double arg, double expected)
+        {
+            var polynomial = new Polynomial(coefficients);
+            double eps = 0.0001d;
+            return polynomial.Calculate(arg) - expected < eps;
+        }
+
+        #endregion
+
         #region Tests on overloaded methods of class Object
 
         [TestCase(new[] { 1.0, 3.0, 2.0 }, new[] { 1.0, 3.0, 2.0 }, ExpectedResult = true)]

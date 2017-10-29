@@ -53,6 +53,20 @@ namespace Algorithm
 
         #endregion
 
+        #region Public methods
+
+        public double Calculate(double arg)
+        {
+            double result = 0;
+            for (int i = 0; i < MaxDegree + 1; i++)
+            {
+                result += Math.Pow(arg, i) * Coefficients[i];
+            }
+            return result;
+        }
+
+        #endregion
+
         #region Overloaded operators
 
         public static Polynomial operator +(Polynomial first, Polynomial second)
