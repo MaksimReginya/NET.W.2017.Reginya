@@ -11,7 +11,7 @@ namespace Algorithm.NUnitTests
         #region Tests on indexer
                     
         [TestCase(1, 8.1, 15.21, 0d, 1.22, 2.0, ExpectedResult = 15.21)]
-        [TestCase(100, -8.9, 18.9889, 6d, 32d, 2.555, 8.6, ExpectedResult = 18.9889)]
+        [TestCase(100, -8.9, 18.9889, 6d, 32d, 2.555, 8.6, ExpectedResult = 0.0)]
         [TestCase(1, -9.2, -27d, 0d, 81d, 9d, -81d, -27d, ExpectedResult = -27d)]
         public double PolynomialIndexerTest(int degree, params double[] coefficients)
         {
@@ -74,12 +74,13 @@ namespace Algorithm.NUnitTests
             });
         }
 
-        [TestCase(new[] { 1.0, 3.0, 2.0 }, 5.0, ExpectedResult = new[] { 5.0, 15.0, 10.0 })]
-        [TestCase(new[] { 1.0, -3.0, 2.0, 3.1 }, 0.1, ExpectedResult = new[] { 0.1, -0.3, 0.2, 0.31 })]
-        public double[] PolynomialAndNumberMultiplicationTest(double[] coefficients, double multiplier)
+        [TestCase(new[] { 1.0, 3.0, 2.0 }, 5.0, new[] { 5.0, 15.0, 10.0 }, ExpectedResult = true)]
+        [TestCase(new[] { 1.0, -3.0, 2.0, 3.1 }, 0.1, new[] { 0.1, -0.3, 0.2, 0.31 }, ExpectedResult = true)]
+        public bool PolynomialAndNumberMultiplicationTest(double[] coefficients, double multiplier, double[] expected)
         {
-            var polynomial = new Polynomial(coefficients);            
-            return (multiplier * polynomial).Coefficients;
+            var polynomial = new Polynomial(coefficients);
+            var expectedPolynomial = new Polynomial(expected);            
+            return (multiplier * polynomial).ToString().Equals(expectedPolynomial.ToString());
         }
 
         [TestCase]
@@ -92,13 +93,14 @@ namespace Algorithm.NUnitTests
             });
         }
 
-        [TestCase(new[] { 1.0, 3.0, 2.0 }, new[] { 5.0, 5.0 }, ExpectedResult = new[] { 5.0, 20.0, 25.0, 10.0 })]
-        [TestCase(new[] { 1.0, -3.0, 2.0, 3.1 }, new[] { 0.1 }, ExpectedResult = new[] { 0.1, -0.3, 0.2, 0.31 })]
-        public double[] PolynomialsMultiplicationTest(double[] coefficientsFirst, double[] coefficientsSecond)
+        [TestCase(new[] { 1.0, 3.0, 2.0 }, new[] { 5.0, 5.0 }, new[] { 5.0, 20.0, 25.0, 10.0 }, ExpectedResult = true)]
+        [TestCase(new[] { 1.0, -3.0, 2.0, 3.1 }, new[] { 0.1 }, new[] { 0.1, -0.3, 0.2, 0.31 }, ExpectedResult = true)]
+        public bool PolynomialsMultiplicationTest(double[] coefficientsFirst, double[] coefficientsSecond, double[] expected)
         {
             var first = new Polynomial(coefficientsFirst);
             var second = new Polynomial(coefficientsSecond);
-            return (first * second).Coefficients;
+            var expectedPolynomial = new Polynomial(expected);
+            return (first * second).ToString().Equals(expectedPolynomial.ToString());
         }
 
         [TestCase(null, new[] { 5.0, 5.0 })]
@@ -170,8 +172,8 @@ namespace Algorithm.NUnitTests
             return first.Equals(second);
         }
 
-        [TestCase(new[] { 1.0, -3.0, 2.0 }, ExpectedResult = "1.0 -3.0*x^1 + 2.0*x^2")]
-        [TestCase(new[] { 0.1 }, ExpectedResult = "0.1")]
+        [TestCase(new[] { 1.1, -3.2, 2.3 }, ExpectedResult = "1,1 -3,2*x^1 + 2,3*x^2")]
+        [TestCase(new[] { 0.1 }, ExpectedResult = "0,1")]
         public string PolynomialsToStringTest(double[] coefficients)
         {
             var polynomial = new Polynomial(coefficients);

@@ -132,8 +132,8 @@ namespace Algorithm
             if (polynomial == null)
                 throw new ArgumentNullException(nameof(polynomial));
 
-            if (Math.Abs(divider - 0.0) > double.Epsilon)
-                throw new ArgumentException(nameof(divider) + "can not be zero");
+            if (Math.Abs(divider - 0.0) < double.Epsilon)
+                throw new ArgumentException(nameof(divider) + " can not be zero");
 
             var newCoefficients = new double[polynomial.MaxDegree + 1];
             for (int i = 0; i < polynomial.MaxDegree + 1; i++)
@@ -153,7 +153,7 @@ namespace Algorithm
                 return false;
 
             for (int i = 0; i <= first.MaxDegree; i++)            
-                if (Math.Abs(first[i] - second[i]) > 0.0001)
+                if (Math.Abs(first[i] - second[i]) > double.Epsilon)
                     return false;            
             
             return true;
@@ -176,7 +176,7 @@ namespace Algorithm
         {
             var str = new StringBuilder();
 
-            if (MaxDegree > 0)            
+            if (MaxDegree >= 0)            
                 str.AppendFormat($"{Coefficients[0]}");            
 
             for (int i = 1; i < Coefficients.Length; i++)
