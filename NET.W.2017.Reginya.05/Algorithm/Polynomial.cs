@@ -1,37 +1,74 @@
 ﻿using System;
 using System.Text;
+using System.Configuration;
+using System.Linq;
 
 namespace Algorithm
-{
+{    
     /// <summary>
     /// Provides methods and operations to work with polynomials.
     /// </summary>
-    public class Polynomial
+    public sealed class Polynomial
     {
-        #region Public constructors
+        #region Private fields
+
+        private static double _epsilon;
+        private readonly double[] _coefficients = {};
+
+        #endregion
+
+        #region Constructors
+
+        static Polynomial()
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            _epsilon = double.Parse(config.AppSettings.Settings["epsilon"].Value);
+            //_epsilon = double.Parse(ConfigurationManager.AppSettings["epsilon"]);
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref="Polynomial"/> class
         /// </summary>
         /// <param name="coefficients">Coefficients of the polynomial</param>
-        public Polynomial(double[] coefficients)
+        /// <exception cref="ArgumentNullException">
+        /// Throws if coefficients array is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Throws if coefficients array is empty
+        /// </exception>
+        public Polynomial(params double[] coefficients)
         {
-            Coefficients = coefficients;
-        }
+            if (coefficients == null)            
+                throw new ArgumentNullException($"{nameof(coefficients)} cannot be null.");            
+
+            if (coefficients.Length == 0)            
+                throw new ArgumentException($"{nameof(coefficients)} cannot be empty.");            
+
+            _coefficients = RemoveZeros(coefficients);
+        }        
 
         #endregion
 
         #region Public properties
 
+        public double[] Coefficients => _coefficients;
+
         /// <summary>
         /// Max degree of the polynomial
         /// </summary>
-        public int MaxDegree => Coefficients.Length - 1;
-
-        /// <summary>
-        /// Coefficients of the polynomial
-        /// </summary>
-        public double[] Coefficients { get; }
+        public int MaxDegree
+        {
+            get
+            {
+                if (_coefficients.Length < 2)
+                    return 0;
+                int i;
+                for (i = _coefficients.Length - 1; i >= 0; i--)
+                    if (Math.Abs(_coefficients[i]) > _epsilon)
+                        break;
+                return i;
+            }
+        }
 
         /// <summary>
         /// Returns the coefficient at the given degree
@@ -39,15 +76,23 @@ namespace Algorithm
         /// <param name="degree">Degree that corresponds to the coefficient</param>
         /// <returns>The coefficient at the given degree</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Throws if the degree is negative
+        /// Throws if the degree is not valid
         /// </exception>
         public double this[int degree]
         {
             get
             {
                 if (degree < 0) throw new ArgumentOutOfRangeException(nameof(degree));
-                if (degree >= Coefficients.Length) return 0;
-                return Coefficients[degree];            
+                if (degree >= _coefficients.Length) return 0;
+                return _coefficients[degree];            
+            }
+            private set
+            {
+                if (degree >= 0 || degree < _coefficients.Length)
+                {
+                    _coefficients[degree] = value;
+                }
+                throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -55,62 +100,230 @@ namespace Algorithm
 
         #region Public methods
 
+        /// <summary>
+        /// Calculates the value of polynomial with argument
+        /// </summary>
+        /// <param name="arg">Argument of polynomial</param>
+        /// <returns>the value of polynomial with argument</returns>
         public double Calculate(double arg)
         {
             double result = 0;
             for (int i = 0; i < MaxDegree + 1; i++)
             {
-                result += Math.Pow(arg, i) * Coefficients[i];
+                result += Math.Pow(arg, i) * _coefficients[i];
             }
             return result;
+        }
+
+        /// <summary>
+        /// Compares two polynomials on equality
+        /// </summary>
+        /// <param name="other">Polynomial to compare with the current instance</param>  
+        /// <returns>Result of comparasion</returns>
+        public bool Equals(Polynomial other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            if (MaxDegree != other.MaxDegree)
+                return false;
+
+            for (int i = 0; i <= MaxDegree; i++)
+                if (Math.Abs(this[i] - other[i]) > _epsilon)
+                    return false;
+
+            return true;
         }
 
         #endregion
 
         #region Overloaded operators
 
-        public static Polynomial operator +(Polynomial first, Polynomial second)
+        /// <summary>
+        /// Adds two polynomials
+        /// </summary>
+        /// <param name="lhs">First addendum</param>
+        /// <param name="rhs">Second addendum</param>
+        /// <returns>Result of addition</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if one of addendums is null
+        /// </exception>
+        public static Polynomial operator +(Polynomial lhs, Polynomial rhs)
         {
-            if (first == null || second == null)
-                throw new ArgumentNullException();
-
-            int maxLength = (first.MaxDegree > second.MaxDegree ? first.MaxDegree : second.MaxDegree) + 1;
-            int minLength = (first.MaxDegree < second.MaxDegree ? first.MaxDegree : second.MaxDegree) + 1;
-
-            var newCoefficients = new double[maxLength];
-            for (int i = 0; i < minLength; i++)
-                newCoefficients[i] = first[i] + second[i];
-
-            if (first.MaxDegree > second.MaxDegree)
-                Array.Copy(first.Coefficients, minLength, newCoefficients, minLength, maxLength - minLength);
-            else
-                Array.Copy(second.Coefficients, minLength, newCoefficients, minLength, maxLength - minLength);
-
-            return new Polynomial(newCoefficients);
+            return Add(lhs, rhs);
         }
 
-        public static Polynomial operator -(Polynomial first, Polynomial second)
+        /// <summary>
+        /// Subtracts two polynomials
+        /// </summary>
+        /// <param name="lhs">Minuend</param>
+        /// <param name="rhs">Subtrahend</param>
+        /// <returns>Result of subtraction</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if one of parameters is null
+        /// </exception>
+        public static Polynomial operator -(Polynomial lhs, Polynomial rhs)
         {
-            if (first == null || second == null)
-                throw new ArgumentNullException();
-
-            int maxLength = (first.MaxDegree > second.MaxDegree ? first.MaxDegree : second.MaxDegree) + 1;
-            int minLength = (first.MaxDegree < second.MaxDegree ? first.MaxDegree : second.MaxDegree) + 1;
-
-            var newCoefficients = new double[maxLength];
-            for (int i = 0; i < minLength; i++)
-                newCoefficients[i] = first[i] - second[i];
-
-            if (first.MaxDegree > second.MaxDegree)
-                Array.Copy(first.Coefficients, minLength, newCoefficients, minLength, maxLength - minLength);
-            else
-                for (int i = minLength; i < maxLength; i++)
-                    newCoefficients[i] = -second[i];
-
-            return new Polynomial(newCoefficients);
+            return Subtract(lhs, rhs);
         }
-                        
+
+        /// <summary>
+        /// Multiplies polynomial and multiplier
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="multiplier">Multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
         public static Polynomial operator *(Polynomial polynomial, double multiplier)
+        {
+            return Multiply(polynomial, multiplier);
+        }
+
+        /// <summary>
+        /// Multiplies multiplier and polynomial
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="multiplier">Multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        public static Polynomial operator *(double multiplier, Polynomial polynomial)
+        {
+            return Multiply(polynomial, multiplier);
+        }
+
+        /// <summary>
+        /// Multiplies two polynomials
+        /// </summary>
+        /// <param name="lhs">First multiplier</param>        
+        /// <param name="rhs">Second multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if any polynomial is null
+        /// </exception>
+        public static Polynomial operator *(Polynomial lhs, Polynomial rhs)
+        {
+            return Multiply(lhs, rhs);
+        }
+
+        /// <summary>
+        /// Divides polynomial and number
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="divider">Divider</param> 
+        /// <returns>Result of division</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Throws if divider is zero
+        /// </exception>
+        public static Polynomial operator /(Polynomial polynomial, double divider)
+        {
+            return Divide(polynomial, divider);
+        }
+
+        /// <summary>
+        /// Compares two polynomials on equality
+        /// </summary>
+        /// <param name="lhs">First polynomial</param>
+        /// <param name="rhs">Second polynomial</param>
+        /// <returns>Result of comparasion</returns>
+        public static bool operator ==(Polynomial lhs, Polynomial rhs)
+        {
+            if (ReferenceEquals(lhs, rhs)) return true;
+            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
+
+            return lhs.Equals(rhs);
+        }
+
+        /// <summary>
+        /// Compares two polynomials on non equality
+        /// </summary>
+        /// <param name="lhs">First polynomial</param>
+        /// <param name="rhs">Second polynomial</param>
+        /// <returns>Result of comparasion</returns>
+        public static bool operator !=(Polynomial lhs, Polynomial rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        #endregion
+
+        #region Static duplicates of operators
+
+        /// <summary>
+        /// Adds two polynomials
+        /// </summary>
+        /// <param name="lhs">First addendum</param>
+        /// <param name="rhs">Second addendum</param>
+        /// <returns>Result of addition</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if one of addendums is null
+        /// </exception>
+        public static Polynomial Add(Polynomial lhs, Polynomial rhs)
+        {
+            if (lhs == null || rhs == null)
+                throw new ArgumentNullException();
+
+            int maxLength = (lhs.MaxDegree > rhs.MaxDegree ? lhs.MaxDegree : rhs.MaxDegree) + 1;
+            int minLength = (lhs.MaxDegree < rhs.MaxDegree ? lhs.MaxDegree : rhs.MaxDegree) + 1;
+
+            var newCoefficients = new double[maxLength];
+            for (int i = 0; i < minLength; i++)
+                newCoefficients[i] = lhs[i] + rhs[i];
+
+            if (lhs.MaxDegree > rhs.MaxDegree)
+                Array.Copy(lhs._coefficients, minLength, newCoefficients, minLength, maxLength - minLength);
+            else
+                Array.Copy(rhs._coefficients, minLength, newCoefficients, minLength, maxLength - minLength);
+
+            return new Polynomial(newCoefficients);
+        }
+
+        /// <summary>
+        /// Subtracts two polynomials
+        /// </summary>
+        /// <param name="lhs">Minuend</param>
+        /// <param name="rhs">Subtrahend</param>
+        /// <returns>Result of subtraction</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if one of parameters is null
+        /// </exception>
+        public static Polynomial Subtract(Polynomial lhs, Polynomial rhs)
+        {
+            if (lhs == null || rhs == null)
+                throw new ArgumentNullException();
+
+            return Add(lhs, Negate(rhs));
+        }
+
+        /// <summary>
+        /// Negates polynomial's coefficients
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <returns>Result of negation</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        public static Polynomial Negate(Polynomial polynomial)
+        {
+            return Multiply(polynomial, -1d);
+        }
+
+        /// <summary>
+        /// Multiplies polynomial and multiplier
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="multiplier">Multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        public static Polynomial Multiply(Polynomial polynomial, double multiplier)
         {
             if (polynomial == null)
                 throw new ArgumentNullException(nameof(polynomial));
@@ -120,33 +333,63 @@ namespace Algorithm
                 newCoefficients[i] = polynomial[i] * multiplier;
             return new Polynomial(newCoefficients);
         }
-               
-        public static Polynomial operator *(double multiplier, Polynomial polynomial)
+
+        /// <summary>
+        /// Multiplies multiplier and polynomial
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="multiplier">Multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        public static Polynomial Multiply(double multiplier, Polynomial polynomial)
         {
-            return polynomial * multiplier;
+            return Multiply(polynomial, multiplier);
         }
 
-        public static Polynomial operator *(Polynomial first, Polynomial second)
+        /// <summary>
+        /// Multiplies two polynomials
+        /// </summary>
+        /// <param name="lhs">First multiplier</param>        
+        /// <param name="rhs">Second multiplier</param> 
+        /// <returns>Result of multiplication</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if any polynomial is null
+        /// </exception>
+        public static Polynomial Multiply(Polynomial lhs, Polynomial rhs)
         {
-            if (first == null || second == null)
+            if (lhs == null || rhs == null)
                 throw new ArgumentNullException();
 
-            int newDegree = first.MaxDegree + second.MaxDegree;
+            int newDegree = lhs.MaxDegree + rhs.MaxDegree;
             var newCoefficients = new double[newDegree + 1];
 
-            for (int i = 0; i <= first.MaxDegree; i++)
-                for (int j = 0; j <= second.MaxDegree; j++)
-                    newCoefficients[i + j] += first[i] * second[j];                            
+            for (int i = 0; i <= lhs.MaxDegree; i++)
+            for (int j = 0; j <= rhs.MaxDegree; j++)
+                newCoefficients[i + j] += lhs[i] * rhs[j];
 
-            return new Polynomial(newCoefficients);
+            return new Polynomial(newCoefficients);        
         }
-                
-        public static Polynomial operator /(Polynomial polynomial, double divider)
+
+        /// <summary>
+        /// Divides polynomial and number
+        /// </summary>
+        /// <param name="polynomial">Source polynomial</param>        
+        /// <param name="divider">Divider</param> 
+        /// <returns>Result of division</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if polynomial is null
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Throws if divider is zero
+        /// </exception>
+        public static Polynomial Divide(Polynomial polynomial, double divider)
         {
             if (polynomial == null)
                 throw new ArgumentNullException(nameof(polynomial));
 
-            if (Math.Abs(divider - 0.0) < double.Epsilon)
+            if (Math.Abs(divider) < _epsilon)
                 throw new ArgumentException(nameof(divider) + " can not be zero");
 
             var newCoefficients = new double[polynomial.MaxDegree + 1];
@@ -155,30 +398,7 @@ namespace Algorithm
             return new Polynomial(newCoefficients);
         }
 
-        public static bool operator ==(Polynomial first, Polynomial second)
-        {
-            if (object.ReferenceEquals(first, null) && object.ReferenceEquals(second, null))
-                return true;
-
-            if (object.ReferenceEquals(first, null) || object.ReferenceEquals(second, null))
-                return false;
-
-            if (first.MaxDegree != second.MaxDegree)
-                return false;
-
-            for (int i = 0; i <= first.MaxDegree; i++)            
-                if (Math.Abs(first[i] - second[i]) > double.Epsilon)
-                    return false;            
-            
-            return true;
-        }
-
-        public static bool operator !=(Polynomial first, Polynomial second)
-        {
-            return !(first == second);
-        }
-
-        #endregion
+        #endregion Static duplicates of operators
 
         #region Overloaded methods of class Object
 
@@ -191,14 +411,14 @@ namespace Algorithm
             var str = new StringBuilder();
 
             if (MaxDegree >= 0)            
-                str.AppendFormat($"{Coefficients[0]}");            
+                str.AppendFormat($"{_coefficients[0]}");            
 
-            for (int i = 1; i < Coefficients.Length; i++)
+            for (int i = 1; i < _coefficients.Length; i++)
             {                                
-                if (Coefficients[i] > 0)
-                    str.AppendFormat($" + {Coefficients[i]}*x^{i}");
+                if (_coefficients[i] > 0)
+                    str.AppendFormat($" + {_coefficients[i]}*x^{i}");
                 else
-                    str.AppendFormat($" {Coefficients[i]}*x^{i}");
+                    str.AppendFormat($" {_coefficients[i]}*x^{i}");
             }
 
             return str.ToString();
@@ -208,11 +428,16 @@ namespace Algorithm
         /// Determines whether the specified instance of <see cref="Polynomial"/>
         /// class is equal to the current instance
         /// </summary>
-        /// <param name="obj">Polynomial to compare with the current instance</param>
-        /// <returns>The result of checking equality</returns>
-        public override bool Equals(object obj)
+        /// <param name="other">Polynomial to compare with the current instance</param>
+        /// <returns>Result of comparasion</returns>
+        public override bool Equals(object other)
         {
-            return this == obj as Polynomial;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            if (other.GetType() != GetType()) return false;
+
+            return Equals((Polynomial)other);
         }
 
         /// <summary>
@@ -221,7 +446,36 @@ namespace Algorithm
         /// <returns>The hash code for this instance</returns>
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();            
+            int result = 0;
+            foreach (var coefficient in _coefficients)
+            {
+                result += coefficient.GetHashCode() ^ MaxDegree;
+            }
+            return result + MaxDegree.GetHashCode();
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private double[] RemoveZeros(double[] coefficients)
+        {
+            Array.Reverse(coefficients);
+            int nonZeroItemIndex = Array.FindIndex(coefficients, coefficient => Math.Abs(coefficient) > _epsilon);
+
+            double[] newCoefficients;
+            Array.Reverse(coefficients);
+            if (nonZeroItemIndex == -1)
+            {
+                newCoefficients = new double[] { 0 };
+            }
+            else
+            {
+                newCoefficients = new double[nonZeroItemIndex];
+                Array.Copy(coefficients, 0, newCoefficients, 0, newCoefficients.Length);
+            }
+
+            return newCoefficients;
         }
 
         #endregion
