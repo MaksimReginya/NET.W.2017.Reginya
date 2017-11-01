@@ -22,7 +22,7 @@ namespace Algorithm
         /// Throws if numbers array length is smaller than 2
         /// </exception>
         /// <returns> The greatest common divisor of numbers array </returns>
-        public static int EuclideanAlgorithm(out TimeSpan operationTime, params int[] numbers)
+        public static int EuclideanAlgorithm(out long operationTime, params int[] numbers)
         {
             if (numbers == null)
                 throw new ArgumentNullException(nameof(numbers));
@@ -40,7 +40,7 @@ namespace Algorithm
             }
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return neighboorsGcd;            
         }
@@ -52,7 +52,7 @@ namespace Algorithm
         /// <param name="num2">One of numbers to find gcd</param>  
         /// <param name="operationTime">Time spent on the operation</param>      
         /// <returns> The greatest common divisor of two numbers </returns>
-        public static int EuclideanAlgorithm(out TimeSpan operationTime, int num1, int num2)
+        public static int EuclideanAlgorithm(out long operationTime, int num1, int num2)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -60,7 +60,7 @@ namespace Algorithm
             int result = GetEuclideanGcdFor2Numbers(num1, num2);
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return result;
         }
@@ -73,7 +73,7 @@ namespace Algorithm
         /// <param name="num3">One of numbers to find gcd</param>
         /// <param name="operationTime">Time spent on the operation</param>
         /// <returns> The greatest common divisor of three numbers </returns>
-        public static int EuclideanAlgorithm(out TimeSpan operationTime, int num1, int num2, int num3)
+        public static int EuclideanAlgorithm(out long operationTime, int num1, int num2, int num3)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -82,7 +82,7 @@ namespace Algorithm
             int result = GetEuclideanGcdFor2Numbers(temp, num3);
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return result;
         }
@@ -101,7 +101,7 @@ namespace Algorithm
         /// Throws if numbers array length is smaller than 2
         /// </exception>
         /// <returns> The greatest common divisor of numbers array </returns>
-        public static int SteinsAlgorithm(out TimeSpan operationTime, params int[] numbers)
+        public static int SteinsAlgorithm(out long operationTime, params int[] numbers)
         {
             if (numbers == null)
                 throw new ArgumentNullException(nameof(numbers));
@@ -119,7 +119,7 @@ namespace Algorithm
             }
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return neighboorsGcd;
         }
@@ -131,7 +131,7 @@ namespace Algorithm
         /// <param name="num2">One of numbers to find gcd</param>  
         /// <param name="operationTime">Time spent on the operation</param>      
         /// <returns> The greatest common divisor of two numbers </returns>
-        public static int SteinsAlgorithm(out TimeSpan operationTime, int num1, int num2)
+        public static int SteinsAlgorithm(out long operationTime, int num1, int num2)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -139,7 +139,7 @@ namespace Algorithm
             int result = GetSteinsGcdFor2Numbers(num1, num2);
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return result;
         }
@@ -152,7 +152,7 @@ namespace Algorithm
         /// <param name="num3">One of numbers to find gcd</param>
         /// <param name="operationTime">Time spent on the operation</param>
         /// <returns> The greatest common divisor of three numbers </returns>
-        public static int SteinsAlgorithm(out TimeSpan operationTime, int num1, int num2, int num3)
+        public static int SteinsAlgorithm(out long operationTime, int num1, int num2, int num3)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -161,7 +161,7 @@ namespace Algorithm
             int result = GetSteinsGcdFor2Numbers(temp, num3);
 
             watch.Stop();
-            operationTime = watch.Elapsed;
+            operationTime = watch.Elapsed.Ticks;
 
             return result;
         }
