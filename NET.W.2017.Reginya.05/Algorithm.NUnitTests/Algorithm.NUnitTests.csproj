@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArraySortingTests.cs" />
+    <Compile Include="Comparators\MaxElementComparator.cs" />
+    <Compile Include="Comparators\MinElementComparator.cs" />
+    <Compile Include="Comparators\SumComparator.cs" />
     <Compile Include="PolynomialTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

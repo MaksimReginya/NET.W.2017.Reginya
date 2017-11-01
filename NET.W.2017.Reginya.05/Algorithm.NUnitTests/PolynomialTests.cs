@@ -34,7 +34,7 @@ namespace Algorithm.NUnitTests
 
         #region Tests on overloaded operators
 
-        [TestCase(new [] { 1.0, 3.0, 2.0 }, new[] { 5.0, 5.0 }, ExpectedResult = new[] { 6.0, 8.0, 2.0 })]
+        [TestCase(new[] { 1.0, 3.0, 2.0 }, new[] { 5.0, 5.0 }, ExpectedResult = new[] { 6.0, 8.0, 2.0 })]
         [TestCase(new[] { 1.0, -3.0, 2.0 }, new[] { 5.0, 5.0 }, ExpectedResult = new[] { 6.0, 2.0, 2.0 })]        
         public double[] PolynomialAdditionTest(double[] coefficientsFirst, double[] coefficientsSecond)
         {
