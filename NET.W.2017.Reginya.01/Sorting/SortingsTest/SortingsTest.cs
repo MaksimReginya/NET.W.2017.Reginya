@@ -12,11 +12,25 @@ namespace SortingsTest
         public void QuickSort_IntArrayOf5El()
         {            
             //Arrange
-            int[] expexted = new int[] {1, 2, 3, 4, 5};
-            int[] actual = new int[] {3, 1, 2, 5, 4};
+            var expexted = new [] {1, 2, 3, 4, 5};
+            var actual = new [] {3, 1, 2, 5, 4};
 
             //Act
-            Sortings.QuickSort(ref actual, 0, actual.Length-1);
+            Sortings.QuickSort(actual);
+
+            //Assert
+            Assert.IsTrue(expexted.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void QuickSort_IntArrayOfNegativeAndBigEl()
+        {
+            //Arrange
+            var expexted = new[] { int.MinValue, -333, 0, 1, 9999, int.MaxValue };
+            var actual = new[] { 9999, int.MaxValue, -333, int.MinValue, 0, 1 };
+
+            //Act
+            Sortings.QuickSort(actual);
 
             //Assert
             Assert.IsTrue(expexted.SequenceEqual(actual));
@@ -30,20 +44,34 @@ namespace SortingsTest
             int[] array = null;
 
             //Act
-            Sortings.QuickSort(ref array, 0, 5);         
+            Sortings.QuickSort(array);         
         }
 
         [TestMethod]
         public void MergeSort_IntArrayOf5El()
         {
             //Arrange
-            int[] expexted = new int[] { 1, 2, 3, 4, 5 };
-            int[] actual = new int[] { 3, 1, 2, 5, 4 };
+            var expexted = new [] { 1, 2, 3, 4, 5 };
+            var actual = new [] { 3, 1, 2, 5, 4 };
 
             //Act
-            actual = Sortings.MergeSort(actual);
+            Sortings.MergeSort(actual);
 
             //Assert            
+            Assert.IsTrue(expexted.SequenceEqual(actual));
+        }
+
+        [TestMethod]
+        public void MergeSort_IntArrayOfNegativeAndBigEl()
+        {
+            //Arrange
+            var expexted = new[] { int.MinValue, -333, 0, 1, 9999, int.MaxValue };
+            var actual = new[] { 9999, int.MaxValue, -333, int.MinValue, 0, 1 };
+
+            //Act
+            Sortings.MergeSort(actual);
+
+            //Assert
             Assert.IsTrue(expexted.SequenceEqual(actual));
         }
 

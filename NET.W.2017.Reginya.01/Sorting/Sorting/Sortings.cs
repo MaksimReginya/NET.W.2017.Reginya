@@ -1,33 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sorting
 {
+    /// <summary>
+    /// Provides methods to sort sz-array of int numbers in ascending order
+    /// </summary>
     public class Sortings
     {
-        public static void QuickSort(ref int[] array, int start, int end)
-        {            
+        #region Public methods
+
+        /// <summary>
+        /// Sorts array using quick sort algorithm
+        /// </summary>
+        /// <param name="array">Source array to sort</param>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if array is null
+        /// </exception>
+        public static void QuickSort(int[] array)
+        {
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
 
             if (array.Length < 2)
-                return;
+                return;            
 
-            if (array.Length <= end)
-                throw new ArgumentException(nameof(end) + " must be less than array length", nameof(end));
+            RecursiveQuickSort(array, 0, array.Length - 1);
+        }
 
-            int index = start + ((end - start) / 2);
+        /// <summary>
+        /// Sorts array using merge sort algorithm
+        /// </summary>
+        /// <param name="array">Source array to sort</param>
+        /// <exception cref="ArgumentNullException">
+        /// Throws if array is null
+        /// </exception>        
+        public static void MergeSort(int[] array)
+        {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+
+            RecursiveMergeSort(array, 0, array.Length);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static void RecursiveQuickSort(int[] array, int start, int end)
+        {
+            int index = start + (end - start) / 2;
             int pivot = array[index];
 
             int i = start;
             int j = end;
             while (i <= j)
             {
-                while ((array[i] < pivot) && (i <= end)) ++i;
-                while ((array[j] > pivot) && (j >= start)) --j;
+                while (array[i] < pivot && i <= end) ++i;
+                while (array[j] > pivot && j >= start) --j;
 
                 if (i <= j)
                 {
@@ -39,52 +68,48 @@ namespace Sorting
                 }
             }
 
-            if (i < end) QuickSort(ref array, i, end);
-            if (j > start) QuickSort(ref array, start, j);
+            if (i < end) RecursiveQuickSort(array, i, end);
+            if (j > start) RecursiveQuickSort(array, start, j);
         }
 
-        public static int[] MergeSort(int[] array)
+        private static void RecursiveMergeSort(int[] array, int left, int right)
         {
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
-            
-            if (array.Length < 2)
-                return array;
+            if (left + 1 >= right) return;            
 
-            int center = array.Length / 2;
-            int[] array1 = MergeSort(array.Take(center).ToArray());
-            int[] array2 = MergeSort(array.Skip(center).ToArray());
+            int middle = (right + left) / 2;
 
-            return Merge(array1, array2);
+            RecursiveMergeSort(array, left, middle);
+            RecursiveMergeSort(array, middle, right);
+
+            Merge(array, left, middle, right);
         }
 
-        private static int[] Merge(int[] array1, int[] array2)
+        private static void Merge(int[] array, int left, int middle, int right)
         {
-            int array1Length = array1.Length;
-            int array2Length = array2.Length;
-            int resultLength = array1Length + array2Length;
+            int currentLeft = left;
+            int currentRight = middle;
+            int currentBufferIndex = 0;
 
-            int[] result = new int[resultLength];
-            int i = 0, j = 0;
-            for (int res = 0; res < resultLength; res++)
-            {
-                if ((i < array1Length) && (j < array2Length))
-                {
-                    if (array1[i] > array2[j])
-                        result[res] = array2[j++];
-                    else
-                        result[res] = array1[i++];
-                }
-                else
-                {
-                    if (j < array2Length)
-                        result[res] = array2[j++];
-                    else
-                        result[res] = array1[i++];
-                }
-            }
+            int[] buffer = new int[right - left];
 
-            return result;
+            while (currentLeft < middle && currentRight < right)            
+                if (array[currentLeft] <= array[currentRight])                
+                    buffer[currentBufferIndex++] = array[currentLeft++];                
+                else                
+                    buffer[currentBufferIndex++] = array[currentRight++];                            
+
+            if (currentRight == right)            
+                while (currentLeft < middle)                
+                    buffer[currentBufferIndex++] = array[currentLeft++];                            
+            else            
+                while (currentRight < right)                
+                    buffer[currentBufferIndex++] = array[currentRight++];                            
+
+            currentBufferIndex = 0;
+            for (int i = left; i < right; i++)            
+                array[i] = buffer[currentBufferIndex++];            
         }
-    }
+
+        #endregion
+        }
 }
