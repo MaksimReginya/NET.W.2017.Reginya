@@ -12,19 +12,12 @@ namespace Algorithm
     {
         #region Private fields
 
-        private static double _epsilon;
+        private static double _epsilon = 0.000001;
         private readonly double[] _coefficients = {};
 
         #endregion
 
-        #region Constructors
-
-        static Polynomial()
-        {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            _epsilon = double.Parse(config.AppSettings.Settings["epsilon"].Value);
-            //_epsilon = double.Parse(ConfigurationManager.AppSettings["epsilon"]);
-        }
+        #region Constructors        
 
         /// <summary>
         /// Initializes a new instance of <see cref="Polynomial"/> class
@@ -471,7 +464,7 @@ namespace Algorithm
             }
             else
             {
-                newCoefficients = new double[nonZeroItemIndex];
+                newCoefficients = new double[coefficients.Length - nonZeroItemIndex];
                 Array.Copy(coefficients, 0, newCoefficients, 0, newCoefficients.Length);
             }
 
