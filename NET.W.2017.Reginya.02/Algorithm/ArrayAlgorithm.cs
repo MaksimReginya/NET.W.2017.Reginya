@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Algorithm
 {
@@ -8,32 +9,29 @@ namespace Algorithm
     public class ArrayAlgorithm
     {
         #region PublicMethods
+
         /// <summary>
         /// Filters the array, so that only numbers containing the given digit remain on the output. </summary>
-        /// <param name="digit">Target digit</param>
+        /// <param name="predicate">Predicate to filter array</param>
         /// <param name="numbers">Source numbers</param>        
-        /// <exception cref="ArgumentException">
-        /// Throws when (digit &lt; 0) || (digit &gt; 9) </exception>        
+        /// <exception cref="ArgumentNullException">
+        /// Throws when predicate or numbers are null </exception>        
         /// <returns>
-        /// Numbers containing a given digit or null if there are no such numbers. </returns>
-        public static int[] FilterDigit(int digit, params int[] numbers)
+        /// Numbers containing a given digit or empty array if there are no such numbers. </returns>
+        public static int[] FilterDigit(IPredicate<int> predicate, params int[] numbers)
         {
-            if (digit < 0 || digit > 9)
-                throw new ArgumentException(nameof(digit) + " must be from 0 to 9");
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            if (numbers == null)
+                throw new ArgumentNullException(nameof(numbers));
 
             if (numbers.Length == 0)
-                return null;
+                return new int[0];
 
-            var result = new List<int>();
-            var digitStr = digit.ToString();
-            foreach (var value in numbers)
-            {
-                if (value.ToString().Contains(digitStr))
-                    result.Add(value);
-            }            
-
-            return result.ToArray();
+            return numbers.Where(predicate.IsTrue).ToArray();
         }
+
         #endregion
     }
 }

@@ -8,7 +8,8 @@ namespace Algorithm
     /// Provides methods to make manipulations with numbers </summary>
     public class NumberAlgorithm
     {
-        #region PublicMethods                
+        #region Public Methods  
+        
         /// <summary>
         /// Inserts first number bits from the jth to the ith position into second number
         /// so that the bits of second number occupy positions from bit j to bit i. </summary>        
@@ -50,11 +51,14 @@ namespace Algorithm
         public static int FindNextBiggerNumber(int source)
         {
             if (source < 1)            
-                throw new ArgumentException(nameof(source) + " must be positive");            
-            
+                throw new ArgumentException(nameof(source) + " must be positive");
+
             var numerals = source.ToString().ToCharArray();
+
+            if (IsDescendingOrder(numerals)) return -1;
+
             var list = new List<char>();
-            int i = 0;
+            int i;
             for (i = numerals.Length - 1; i > 0; i --)
             {
                 if (numerals[i] > numerals[i - 1])
@@ -63,16 +67,16 @@ namespace Algorithm
 
                     char temp = numerals[i];
                     numerals[i] = numerals[i - 1];
-                    numerals[i - 1] = temp;    
+                    numerals[i - 1] = temp;
                     
                     break;
                 }
-                else                
-                    list.Add(numerals[i]);               
+                
+                list.Add(numerals[i]);
             }
 
-            if (i == 0)            
-                return -1;            
+            if (i == 0)
+                return -1;
 
             list.Sort();
             foreach (var item in list)
@@ -80,33 +84,31 @@ namespace Algorithm
                 numerals[i] = item;
                 i++;
             }
-
-
-            return Int32.Parse(new String(numerals));
+            
+            if (!int.TryParse(new string(numerals), out int res))
+                return source;
+            return res;
         }
-
+        
         /// <summary>
         /// Finds the nearest largest integer that consists of digits of the original number. </summary>
         /// <param name="source">Source number</param>    
-        /// <param name="operationTime">Time spent on the operation</param>  
-        /// <param name="operationTime1">Time spent on the operation</param>  
+        /// <param name="operationTime">Time spent on the operation</param>          
         /// <exception cref="ArgumentException">Throws if source number is not positive</exception>
         /// <returns>
         /// Nearest largest integer consisting of digits of the original number.
         /// Or -1 if a required number does not exist. </returns>        
-        public static int FindNextBiggerNumber(int source, out TimeSpan operationTime, out TimeSpan operationTime1)
+        public static int FindNextBiggerNumber(int source, out TimeSpan operationTime)
         {
             var watch = new Stopwatch();
             watch.Start();
+
             int result = FindNextBiggerNumber(source);
+
             watch.Stop();
             operationTime = watch.Elapsed;
 
-            var startTime = DateTime.Now;
-            result = FindNextBiggerNumber(source);
-            operationTime1 = DateTime.Now - startTime;
-            
-            return result;
+            return result;            
         }
        
         /// <summary>
@@ -147,13 +149,29 @@ namespace Algorithm
 
             return x1;
         }
+        
         #endregion
 
-        #region PrivateMethods
+        #region Private Methods
+
         private static double GetNextNumber(double number, int power, double x0)
         {
             return 1.0 / power * ((power - 1) * x0 + number / Math.Pow(x0, power - 1));
         }
+
+        private static bool IsDescendingOrder(char[] array)
+        {
+            bool result = true;
+            for (int i = array.Length - 1; i > 0; i--)
+                if (array[i] > array[i - 1])
+                {
+                    result = false;
+                    break;
+                }
+
+            return result;
+        } 
+        
         #endregion
     }    
 }

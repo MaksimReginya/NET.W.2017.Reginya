@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayAlgorithm.cs" />
+    <Compile Include="IPredicate.cs" />
+    <Compile Include="IsDigitInNumberPredicate.cs" />
     <Compile Include="NumberAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
