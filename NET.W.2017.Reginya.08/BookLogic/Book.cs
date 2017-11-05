@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace BookLogic
 {
+    /// <summary>
+    /// Describes a book with it's properties
+    /// </summary>
     public class Book : IComparable<Book>, IEquatable<Book>
     {
         #region Private fields
@@ -19,6 +22,9 @@ namespace BookLogic
 
         #region Public properties
                 
+        /// <summary>
+        /// Isbn number of the book
+        /// </summary>
         public string Isbn
         {
             get => _isbn;
@@ -28,6 +34,9 @@ namespace BookLogic
                     _isbn = string.Copy(value);
             }
         }
+        /// <summary>
+        /// Author of the book
+        /// </summary>
         public string Author
         {
             get => _author;
@@ -38,6 +47,9 @@ namespace BookLogic
                 _author = value;
             }
         }
+        /// <summary>
+        /// Title of the book
+        /// </summary>
         public string Title
         {
             get => _title;
@@ -48,6 +60,9 @@ namespace BookLogic
                 _title = value;
             }
         }
+        /// <summary>
+        /// Publisher of the book
+        /// </summary>
         public string Publisher
         {
             get => _publisher;
@@ -58,6 +73,9 @@ namespace BookLogic
                 _publisher = value;
             }
         }
+        /// <summary>
+        /// Publishing year of the book
+        /// </summary>
         public int PublishingYear
         {
             get => _publishingYear;
@@ -68,6 +86,9 @@ namespace BookLogic
                 _publishingYear = value;
             }
         }
+        /// <summary>
+        /// Count of pages in book
+        /// </summary>
         public int PagesCount
         {
             get => _pagesCount;
@@ -78,6 +99,9 @@ namespace BookLogic
                 _pagesCount = value;
             }
         }
+        /// <summary>
+        /// Cost of the book
+        /// </summary>
         public double Cost
         {
             get => _cost;

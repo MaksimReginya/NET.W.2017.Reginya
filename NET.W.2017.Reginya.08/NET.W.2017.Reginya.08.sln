@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Storage\Storage.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUI", "ConsoleUI\ConsoleUI.csproj", "{15684949-635B-4583-BF7B-B91CE6E4BA5D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET.W.2017.Reginya.08.01", "NET.W.2017.Reginya.08.01", "{7334EF6E-3661-43EB-B86C-63F9820BD9D5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET.W.2017.Reginya.08.02", "NET.W.2017.Reginya.08.02", "{C7CB8A75-720C-4AA3-BD52-A58C5A39EA59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankAccountLogic", "BankAccountLogic\BankAccountLogic.csproj", "{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +33,19 @@ Global
 		{15684949-635B-4583-BF7B-B91CE6E4BA5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15684949-635B-4583-BF7B-B91CE6E4BA5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15684949-635B-4583-BF7B-B91CE6E4BA5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55D883E4-1CAD-4923-B775-43DC7A18FFCC} = {7334EF6E-3661-43EB-B86C-63F9820BD9D5}
+		{F592EA95-7037-4743-85B4-D4F5E5DD64F4} = {7334EF6E-3661-43EB-B86C-63F9820BD9D5}
+		{15684949-635B-4583-BF7B-B91CE6E4BA5D} = {7334EF6E-3661-43EB-B86C-63F9820BD9D5}
+		{7EB30F47-5ABF-4230-835F-69E7F9A4EED7} = {C7CB8A75-720C-4AA3-BD52-A58C5A39EA59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC05F4BB-5754-47AD-9F9D-0EB907EA1541}
