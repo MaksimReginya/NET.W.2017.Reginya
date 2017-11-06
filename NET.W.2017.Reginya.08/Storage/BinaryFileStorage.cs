@@ -6,6 +6,9 @@ using BookLogic;
 
 namespace Storage
 {
+    /// <summary>
+    /// Binary storage of books
+    /// </summary>
     public class BinaryFileStorage : IBookListStorage
     {
         private readonly string _path;

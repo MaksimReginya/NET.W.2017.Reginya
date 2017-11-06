@@ -7,6 +7,9 @@ using BankAccountLogic.AccountTypes;
 
 namespace AccountsStorage
 {
+    /// <summary>
+    /// Binary storage of accounts
+    /// </summary>
     public class BinaryFileStorage : IAccountsStorage
     {
         private readonly string _path;

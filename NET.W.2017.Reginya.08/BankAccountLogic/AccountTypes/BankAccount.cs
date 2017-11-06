@@ -90,7 +90,13 @@ namespace BankAccountLogic.AccountTypes
 
         #region Protected properties
 
+        /// <summary>
+        /// Balance "cost" for bonus calculation 
+        /// </summary>
         protected abstract int BalanceCost { get; }
+        /// <summary>
+        /// Transaction "cost" for bonus calculation
+        /// </summary>
         protected abstract int TransactionCost { get; }
 
         #endregion
