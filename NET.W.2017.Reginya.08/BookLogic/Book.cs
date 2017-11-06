@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 namespace BookLogic
-{
+{    
     /// <summary>
     /// Describes a book with it's properties
     /// </summary>

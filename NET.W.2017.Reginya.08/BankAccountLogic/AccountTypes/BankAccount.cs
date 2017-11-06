@@ -13,8 +13,8 @@ namespace BankAccountLogic.AccountTypes
         private string _accountNumber;
         private string _ownerFirstName;
         private string _ownerLastName;
-        private double _balance;
-        private double _bonus;
+        private decimal _balance;
+        private decimal _bonus;
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace BankAccountLogic.AccountTypes
         /// <summary>
         /// Balance of the account
         /// </summary>
-        public double Balance
+        public decimal Balance
         {
             get => _balance;
             protected set
@@ -75,7 +75,7 @@ namespace BankAccountLogic.AccountTypes
         /// <summary>
         /// Bonus of the account
         /// </summary>
-        public double Bonus
+        public decimal Bonus
         {
             get => _bonus;
             protected set
@@ -87,8 +87,30 @@ namespace BankAccountLogic.AccountTypes
         }
 
         #endregion
-        
+
+        #region Protected properties
+
+        protected abstract int BalanceCost { get; }
+        protected abstract int TransactionCost { get; }
+
+        #endregion
+
         #region Public methods
+
+        /// <summary>
+        /// Compares two accounts on equality
+        /// </summary>
+        /// <param name="other">Bank account to compare with the current instance</param>  
+        /// <returns>Result of comparasion</returns>
+        public bool Equals(BankAccount other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            return AccountNumber.Equals(other.AccountNumber) && OwnerFirstName.Equals(other.OwnerFirstName) &&
+                   OwnerLastName.Equals(other.OwnerLastName) && Balance.Equals(other.Balance) &&
+                   Bonus.Equals(other.Bonus);
+        }
 
         /// <summary>
         /// Determines if value is valid account number
@@ -108,39 +130,73 @@ namespace BankAccountLogic.AccountTypes
         /// Performs decreasing of account balance on value
         /// </summary>
         /// <param name="value">Value to decrease balance</param>
-        public virtual void Withdraw(double value)
+        public void Withdraw(decimal value)
         {
             if (Balance - value < 0)
                 throw new ArgumentException("Withdraw value can't be bigger than balance.");
 
             Balance -= value;
 
-            DecreaseBonus();
-        }        
+            Bonus -= BonusLogic.CalculateBonus(Balance, value, BalanceCost, TransactionCost) / 2;
+
+            if (Bonus < 0)
+                Bonus = 0m;
+        }
 
         /// <summary>
         /// Performs increasing of account balance on value
         /// </summary>
         /// <param name="value">Value to increase balance</param>
-        public virtual void Replenish(double value)
+        public void Replenish(decimal value)
         {
-            if (value >= double.MaxValue - Balance)
+            if (value >= decimal.MaxValue - Balance)
                 throw new ArgumentException("Value to increase balance is too big.");
 
             Balance += value;
 
-            IncreaseBonus();
+            decimal bonus = BonusLogic.CalculateBonus(Balance, value, BalanceCost, TransactionCost);
+            if (Bonus >= decimal.MaxValue - bonus)
+                Bonus = decimal.MaxValue;
+            else
+                Bonus += bonus;
         }
 
         #endregion
 
-        #region Protected methods
+        #region Overloaded methods of class Object 
 
-        protected virtual void DecreaseBonus() { }
+        /// <summary>
+        /// Determines whether the specified instance of <see cref="BankAccount"/>
+        /// class is equal to the current instance
+        /// </summary>
+        /// <param name="other">Bank account to compare with the current instance</param>
+        /// <returns>Result of comparasion</returns>
+        public override bool Equals(object other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
 
-        protected virtual void IncreaseBonus() { }
+            if (other.GetType() != GetType()) return false;
+
+            return Equals((BankAccount)other);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance of <see cref="BankAccount"/> class
+        /// </summary>
+        /// <returns>The hash code for this instance</returns>
+        public override int GetHashCode() => AccountNumber.GetHashCode();
+
+        /// <summary>
+        /// Converts the value of this instance to a <see cref="string"/>
+        /// </summary>
+        /// <returns>String representation of bank account</returns>
+        public override string ToString()
+        {
+            return $"Account number: {AccountNumber}, Owner's first name: {OwnerFirstName}," +
+                   $" Owner's last name: {OwnerLastName}, Balance: {Balance}, Bonus: {Bonus}.";
+        }
 
         #endregion
-
     }
 }

@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7EB30F47-5ABF-4230-835F-69E7F9A4EED7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BankAccountLogic</RootNamespace>
-    <AssemblyName>BankAccountLogic</AssemblyName>
+    <ProjectGuid>{8ADD6D1D-F41D-44A8-9C50-3CFA6ECF8033}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>BankAccountTestConsoleUI</RootNamespace>
+    <AssemblyName>BankAccountTestConsoleUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,18 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountTypes\BankAccount.cs" />
-    <Compile Include="AccountTypes\BaseBankAccount.cs" />
-    <Compile Include="AccountTypes\GoldBankAccount.cs" />
-    <Compile Include="AccountTypes\PlatinumBankAccount.cs" />
-    <Compile Include="BankAccountsService.cs" />
-    <Compile Include="BonusLogic.cs" />
-    <Compile Include="Exceptions\AccountAlreadyExistsException.cs" />
-    <Compile Include="Exceptions\AccountNotFoundException.cs" />
-    <Compile Include="IAccountsStorage.cs" />
-    <Compile Include="Predicates\IPredicate.cs" />
-    <Compile Include="Predicates\IsNumberValid.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AccountsStorage\AccountsStorage.csproj">
+      <Project>{a7297855-edb7-4ba5-9cc5-83ce331a6618}</Project>
+      <Name>AccountsStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BankAccountLogic\BankAccountLogic.csproj">
+      <Project>{7eb30f47-5abf-4230-835f-69e7f9a4eed7}</Project>
+      <Name>BankAccountLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

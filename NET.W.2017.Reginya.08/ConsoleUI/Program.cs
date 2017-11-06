@@ -41,7 +41,7 @@ namespace ConsoleUI
 
             bookListService.AddBook(new Book("999-9-99-999999-2", "Jon Skeet", "C# in Depth. Third edition", "publisher3",
                 2014, 582, 25.99d));
-            PrintBooks(bookListService.GetBooks());
+            PrintBooks(bookListService.GetBooks());           
 
             bookListService.SortBooksByTag(new TitleComparer());
             PrintBooks(bookListService.GetBooks()); 

@@ -50,6 +50,7 @@ namespace Storage
         /// Loads list of books from a binary file storage.
         /// </summary>
         /// <returns> List of books from the binary storage.</returns>
+        /// <exception cref="FileNotFoundException">Thrown when storage can't be found </exception>
         public IEnumerable<Book> Load()
         {
             if (!File.Exists(_path))

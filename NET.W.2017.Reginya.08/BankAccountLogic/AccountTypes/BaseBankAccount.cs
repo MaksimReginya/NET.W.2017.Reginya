@@ -4,17 +4,17 @@ namespace BankAccountLogic.AccountTypes
 {
     public class BaseBankAccount : BankAccount
     {
-        #region Constants
-                
-        private const int ReplenishBonus = 2;
-        private const int WithdrawBonus = -1;
+        #region Overrided properties of class BankAccount        
+
+        protected override int BalanceCost => 3;
+        protected override int TransactionCost => 1;
 
         #endregion
 
         #region Public constructors
 
         public BaseBankAccount(string accountNumber, string ownerFirstName, string ownerLastName,
-            double balance = 0d, double bonus = 0d)
+            decimal balance = 0m, decimal bonus = 0m)
         {
             AccountNumber = accountNumber;
             OwnerFirstName = ownerFirstName;
@@ -23,26 +23,6 @@ namespace BankAccountLogic.AccountTypes
             Bonus = bonus;
         }
 
-        #endregion
-
-        #region Overrided methods of class BankAccount
-
-        protected override void DecreaseBonus()
-        {
-            if (Bonus + WithdrawBonus < 0)
-                Bonus = 0;
-            else
-                Bonus += WithdrawBonus;
-        }
-
-        protected override void IncreaseBonus()
-        {
-            if (Bonus >= double.MaxValue - ReplenishBonus)
-                Bonus = double.MaxValue;
-            else
-                Bonus += ReplenishBonus;
-        }
-
-        #endregion
+        #endregion        
     }
 }

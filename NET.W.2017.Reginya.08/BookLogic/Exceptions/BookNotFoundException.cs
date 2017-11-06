@@ -24,7 +24,7 @@ namespace BookLogic.Exceptions
         ///  Initializes a new instance of <see cref="BookNotFoundException"/> class.
         /// </summary>
         /// <param name="book">The book that can't be found in list. </param>
-        public BookNotFoundException(Book book) : base($"The book {book} can't be found in list.")
+        public BookNotFoundException(Book book) : base($"Exception: the book {book} can't be found in list.")
         {
             NotFoundBook = book;
         }

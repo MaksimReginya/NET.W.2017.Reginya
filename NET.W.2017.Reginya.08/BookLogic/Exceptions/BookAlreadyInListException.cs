@@ -24,7 +24,7 @@ namespace BookLogic.Exceptions
         ///  Initializes a new instance of <see cref="BookAlreadyInListException"/> class.
         /// </summary>
         /// <param name="book">The book that is already in list. </param>
-        public BookAlreadyInListException(Book book) : base($"The book {book} is already in list.")
+        public BookAlreadyInListException(Book book) : base($"Exception: the book {book} is already in list.")
         {
             DuplicatingBook = book;
         }        
