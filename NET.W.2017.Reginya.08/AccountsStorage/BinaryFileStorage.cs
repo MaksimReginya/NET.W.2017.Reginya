@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Text;
 using BankAccountLogic;
 using BankAccountLogic.AccountTypes;
 
@@ -34,11 +34,11 @@ namespace AccountsStorage
             if (accounts == null)
                 throw new ArgumentNullException(nameof(accounts));
 
-            using (var writer = new BinaryWriter(File.Open(_path, FileMode.Create)))
+            using (var writer = new BinaryWriter(File.Open(_path, FileMode.Create), Encoding.UTF8))
             {
                 foreach (var account in accounts)
                 {
-                    writer.Write(account.GetType().TypeHandle.ToString());
+                    writer.Write(account.GetType().AssemblyQualifiedName);
                     writer.Write(account.AccountNumber);
                     writer.Write(account.OwnerFirstName);
                     writer.Write(account.OwnerLastName);
@@ -61,20 +61,19 @@ namespace AccountsStorage
 
             var accounts = new List<BankAccount>();
 
-            using (var reader = new BinaryReader(File.Open(_path, FileMode.Open)))
+            using (var reader = new BinaryReader(File.Open(_path, FileMode.Open), Encoding.UTF8))
             {
                 while (reader.BaseStream.Position < reader.BaseStream.Length)
                 {
-                    var type = Type.ReflectionOnlyGetType(reader.ReadString(), true, false);
+                    string typeName = reader.ReadString();
+                    Type type = Type.GetType(typeName);
                     string accountNumber = reader.ReadString();
                     string ownerFirstName = reader.ReadString();
                     string ownerLastName = reader.ReadString();
                     decimal balance = reader.ReadDecimal();
                     decimal bonus = reader.ReadDecimal();
-                    var account = Activator.CreateInstance(type, new object[]
-                    {
-                        accountNumber, ownerFirstName, ownerLastName, balance, bonus
-                    }) as BankAccount;
+                    var account = Activator.CreateInstance(type, accountNumber, ownerFirstName,
+                        ownerLastName, balance, bonus) as BankAccount;
                     accounts.Add(account);
                 }
             }
