@@ -1,38 +1,39 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sorting;
 
-namespace SortingsTest
+using Sortings;
+
+namespace Sortings.MSUnitTests
 {
     [TestClass]
-    public class SortingsTest
+    public class SortingsMSUnitTests
     {
         [TestMethod]
         public void QuickSort_IntArrayOf5El()
-        {            
-            //Arrange
-            var expexted = new [] {1, 2, 3, 4, 5};
-            var actual = new [] {3, 1, 2, 5, 4};
+        {
+            // Arrange
+            var expexted = new[] { 1, 2, 3, 4, 5 };
+            var actual = new[] { 3, 1, 2, 5, 4 };
 
-            //Act
+            // Act
             Sortings.QuickSort(actual);
 
-            //Assert
+            // Assert
             Assert.IsTrue(expexted.SequenceEqual(actual));
         }
 
         [TestMethod]
         public void QuickSort_IntArrayOfNegativeAndBigEl()
         {
-            //Arrange
+            // Arrange
             var expexted = new[] { int.MinValue, -333, 0, 1, 9999, int.MaxValue };
             var actual = new[] { 9999, int.MaxValue, -333, int.MinValue, 0, 1 };
 
-            //Act
+            // Act
             Sortings.QuickSort(actual);
 
-            //Assert
+            // Assert
             Assert.IsTrue(expexted.SequenceEqual(actual));
         }
 
@@ -40,38 +41,38 @@ namespace SortingsTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void QuickSort_NullArray()
         {
-            //Arrange
+            // Arrange
             int[] array = null;
 
-            //Act
-            Sortings.QuickSort(array);         
+            // Act
+            Sortings.QuickSort(array);
         }
 
         [TestMethod]
         public void MergeSort_IntArrayOf5El()
         {
-            //Arrange
-            var expexted = new [] { 1, 2, 3, 4, 5 };
-            var actual = new [] { 3, 1, 2, 5, 4 };
+            // Arrange
+            var expexted = new[] { 1, 2, 3, 4, 5 };
+            var actual = new[] { 3, 1, 2, 5, 4 };
 
-            //Act
+            // Act
             Sortings.MergeSort(actual);
 
-            //Assert            
+            // Assert            
             Assert.IsTrue(expexted.SequenceEqual(actual));
         }
 
         [TestMethod]
         public void MergeSort_IntArrayOfNegativeAndBigEl()
         {
-            //Arrange
+            // Arrange
             var expexted = new[] { int.MinValue, -333, 0, 1, 9999, int.MaxValue };
             var actual = new[] { 9999, int.MaxValue, -333, int.MinValue, 0, 1 };
 
-            //Act
+            // Act
             Sortings.MergeSort(actual);
 
-            //Assert
+            // Assert
             Assert.IsTrue(expexted.SequenceEqual(actual));
         }
 
@@ -79,10 +80,10 @@ namespace SortingsTest
         [ExpectedException(typeof(ArgumentNullException))]
         public void MergeSort_NullArray()
         {
-            //Arrange
+            // Arrange
             int[] array = null;
 
-            //Act
+            // Act
             Sortings.MergeSort(array);
         }
     }

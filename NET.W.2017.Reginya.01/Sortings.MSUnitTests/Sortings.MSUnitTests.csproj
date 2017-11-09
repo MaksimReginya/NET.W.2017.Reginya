@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{960C0C63-439C-4317-AB40-04A03E8ED0D5}</ProjectGuid>
+    <ProjectGuid>{232F4A90-5AB6-4B57-B6BB-F1D0037207CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SortingsTest</RootNamespace>
-    <AssemblyName>SortingsTest</AssemblyName>
+    <RootNamespace>Sortings.MSUnitTests</RootNamespace>
+    <AssemblyName>Sortings.MSUnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -48,16 +48,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SortingsTest.cs" />
+    <Compile Include="SortingsMSUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sorting\Sorting.csproj">
-      <Project>{de849673-0cf5-4adf-a429-f1f17d0edfad}</Project>
-      <Name>Sorting</Name>
+    <ProjectReference Include="..\Sortings\Sortings.csproj">
+      <Project>{72f6e89f-25dc-4677-a2db-a254570e7437}</Project>
+      <Name>Sortings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

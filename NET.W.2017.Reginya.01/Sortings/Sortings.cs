@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Sorting
+namespace Sortings
 {
     /// <summary>
-    /// Provides methods to sort sz-array of int numbers in ascending order
+    /// Provides methods to sort single dimensioned array of integer numbers in ascending order
     /// </summary>
     public class Sortings
     {
@@ -19,10 +19,14 @@ namespace Sorting
         public static void QuickSort(int[] array)
         {
             if (array == null)
+            {
                 throw new ArgumentNullException(nameof(array));
+            }
 
             if (array.Length < 2)
-                return;            
+            {
+                return;
+            }
 
             RecursiveQuickSort(array, 0, array.Length - 1);
         }
@@ -37,7 +41,9 @@ namespace Sorting
         public static void MergeSort(int[] array)
         {
             if (array == null)
+            {
                 throw new ArgumentNullException(nameof(array));
+            }
 
             RecursiveMergeSort(array, 0, array.Length);
         }
@@ -48,15 +54,22 @@ namespace Sorting
 
         private static void RecursiveQuickSort(int[] array, int start, int end)
         {
-            int index = start + (end - start) / 2;
+            int index = start + ((end - start) / 2);
             int pivot = array[index];
 
             int i = start;
             int j = end;
             while (i <= j)
             {
-                while (array[i] < pivot && i <= end) ++i;
-                while (array[j] > pivot && j >= start) --j;
+                while (array[i] < pivot && i <= end)
+                {
+                    ++i;
+                }
+
+                while (array[j] > pivot && j >= start)
+                {
+                    --j;
+                }
 
                 if (i <= j)
                 {
@@ -68,13 +81,23 @@ namespace Sorting
                 }
             }
 
-            if (i < end) RecursiveQuickSort(array, i, end);
-            if (j > start) RecursiveQuickSort(array, start, j);
+            if (i < end)
+            {
+                RecursiveQuickSort(array, i, end);
+            }
+
+            if (j > start)
+            {
+                RecursiveQuickSort(array, start, j);
+            }
         }
 
         private static void RecursiveMergeSort(int[] array, int left, int right)
         {
-            if (left + 1 >= right) return;            
+            if (left + 1 >= right)
+            {
+                return;
+            }
 
             int middle = (right + left) / 2;
 
@@ -92,24 +115,40 @@ namespace Sorting
 
             int[] buffer = new int[right - left];
 
-            while (currentLeft < middle && currentRight < right)            
-                if (array[currentLeft] <= array[currentRight])                
-                    buffer[currentBufferIndex++] = array[currentLeft++];                
-                else                
-                    buffer[currentBufferIndex++] = array[currentRight++];                            
+            while (currentLeft < middle && currentRight < right)
+            {
+                if (array[currentLeft] <= array[currentRight])
+                {
+                    buffer[currentBufferIndex++] = array[currentLeft++];
+                }
+                else
+                {
+                    buffer[currentBufferIndex++] = array[currentRight++];
+                }
+            }
 
-            if (currentRight == right)            
-                while (currentLeft < middle)                
-                    buffer[currentBufferIndex++] = array[currentLeft++];                            
-            else            
-                while (currentRight < right)                
-                    buffer[currentBufferIndex++] = array[currentRight++];                            
+            if (currentRight == right)
+            {
+                while (currentLeft < middle)
+                {
+                    buffer[currentBufferIndex++] = array[currentLeft++];
+                }
+            }
+            else
+            {
+                while (currentRight < right)
+                {
+                    buffer[currentBufferIndex++] = array[currentRight++];
+                }
+            }
 
             currentBufferIndex = 0;
-            for (int i = left; i < right; i++)            
-                array[i] = buffer[currentBufferIndex++];            
+            for (int i = left; i < right; i++)
+            {
+                array[i] = buffer[currentBufferIndex++];
+            }
         }
 
         #endregion
-        }
+    }
 }
