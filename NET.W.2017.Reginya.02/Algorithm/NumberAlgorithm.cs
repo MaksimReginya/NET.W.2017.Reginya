@@ -11,7 +11,7 @@ namespace Algorithm
         #region Public Methods  
         
         /// <summary>
-        /// Inserts first number bits from the jth to the ith position into second number
+        /// Inserts first number bits from the j to the i position into second number
         /// so that the bits of second number occupy positions from bit j to bit i. </summary>        
         /// <param name="number1">First number</param>
         /// <param name="number2">Second number</param>
@@ -25,14 +25,20 @@ namespace Algorithm
         /// Result of bit insertion </returns>
         public static int InsertNumber(int number1, int number2, int i, int j)
         {
-            if (i > j)            
-                throw new ArgumentException(nameof(i) + " must be less than " + nameof(j));            
+            if (i > j)
+            {
+                throw new ArgumentException(nameof(i) + " must be less than " + nameof(j));
+            }
 
-            if (i < 0 || i > 31 || j < 0 || j > 31)            
-                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " can be not negative and less than 32");            
+            if (i < 0 || i > 31 || j < 0 || j > 31)
+            {
+                throw new ArgumentException(nameof(i) + " and " + nameof(j) + " can be not negative and less than 32");
+            }
 
-            if (number1 < 0 || number2 < 0)            
+            if (number1 < 0 || number2 < 0)
+            {
                 throw new ArgumentException(nameof(number1) + " and " + nameof(number2) + " can not be negative");
+            }
 
             int mask = (2 << (j - i)) - 1;
             mask <<= i;
@@ -50,16 +56,21 @@ namespace Algorithm
         /// Or -1 if a required number does not exist. </returns>        
         public static int FindNextBiggerNumber(int source)
         {
-            if (source < 1)            
+            if (source < 1)
+            {
                 throw new ArgumentException(nameof(source) + " must be positive");
+            }
 
             var numerals = source.ToString().ToCharArray();
 
-            if (IsDescendingOrder(numerals)) return -1;
+            if (IsDescendingOrder(numerals))
+            {
+                return -1;
+            }
 
             var list = new List<char>();
             int i;
-            for (i = numerals.Length - 1; i > 0; i --)
+            for (i = numerals.Length - 1; i > 0; i--)
             {
                 if (numerals[i] > numerals[i - 1])
                 {
@@ -76,7 +87,9 @@ namespace Algorithm
             }
 
             if (i == 0)
+            {
                 return -1;
+            }
 
             list.Sort();
             foreach (var item in list)
@@ -84,9 +97,12 @@ namespace Algorithm
                 numerals[i] = item;
                 i++;
             }
-            
+
             if (!int.TryParse(new string(numerals), out int res))
+            {
                 return source;
+            }
+
             return res;
         }
         
@@ -124,17 +140,25 @@ namespace Algorithm
         /// The root of the nth power from the number</returns>
         public static double FindNthRoot(double number, int power, double accuracy = 0.001)
         {
-            if (power <= 0)            
-                throw new ArgumentException(nameof(power) + " must be positive");            
+            if (power <= 0)
+            {
+                throw new ArgumentException(nameof(power) + " must be positive");
+            }
 
-            if (number < 0 && power % 2 == 0)            
-                throw new ArgumentException("The root of even degree from negative number is not defined.");            
-                
-            if (number.Equals(0))            
-                throw new ArgumentException(nameof(number) + " can not be zero");            
+            if (number < 0 && power % 2 == 0)
+            { 
+                throw new ArgumentException("The root of even degree from negative number is not defined.");
+            }
 
-            if (accuracy <= 0)            
-                throw new ArgumentException(nameof(accuracy) +" must be positive");            
+            if (number.Equals(0))
+            {
+                throw new ArgumentException(nameof(number) + " can not be zero");
+            }
+
+            if (accuracy <= 0)
+            {
+                throw new ArgumentException(nameof(accuracy) + " must be positive");
+            }
 
             double x0 = number / power;
             double x1 = GetNextNumber(number, power, x0);
@@ -154,20 +178,20 @@ namespace Algorithm
 
         #region Private Methods
 
-        private static double GetNextNumber(double number, int power, double x0)
-        {
-            return 1.0 / power * ((power - 1) * x0 + number / Math.Pow(x0, power - 1));
-        }
+        private static double GetNextNumber(double number, int power, double x0) =>
+            (1.0 / power) * (((power - 1) * x0) + (number / Math.Pow(x0, power - 1)));        
 
         private static bool IsDescendingOrder(char[] array)
         {
             bool result = true;
             for (int i = array.Length - 1; i > 0; i--)
+            {
                 if (array[i] > array[i - 1])
                 {
                     result = false;
                     break;
                 }
+            }
 
             return result;
         } 

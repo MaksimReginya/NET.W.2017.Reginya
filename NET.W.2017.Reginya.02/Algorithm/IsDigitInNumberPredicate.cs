@@ -18,8 +18,8 @@ namespace Algorithm
             _wantedDigit = wantedDigit;
         }
 
-        /// <inheritdoc cref="IPredicate{T}.IsTrue"/>
-        public bool IsTrue(int data)
+        /// <inheritdoc cref="IPredicate{T}.IsSuitable"/>
+        public bool IsSuitable(int data)
         {
             return data.ToString().Contains(_wantedDigit.ToString());
         }

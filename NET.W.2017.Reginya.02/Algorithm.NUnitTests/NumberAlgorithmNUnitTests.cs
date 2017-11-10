@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Algorithm;
 
 namespace Algorithm.NUnitTests
 {

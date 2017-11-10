@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Algorithm
+﻿namespace Algorithm
 {
     /// <summary>
     /// Describes some predicate that is true or false
@@ -13,6 +11,6 @@ namespace Algorithm
         /// </summary>
         /// <param name="data">Predicate parameter</param>
         /// <returns>State of predicate</returns>
-        bool IsTrue(T data);
+        bool IsSuitable(T data);
     }
 }
