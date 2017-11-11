@@ -58,14 +58,15 @@ namespace Algorithm
                 // NaN's exponent consists only of one's
                 return (int)(Math.Pow(2, ExponentLength) - 1);
             }
+
             int power = 0;
 
-            double fractPart = source / Math.Pow(2, power) - 1;
+            double fractPart = (source / Math.Pow(2, power)) - 1;
 
             while (fractPart < 0 || fractPart >= 1)
             {
                 power = fractPart < 1 ? --power : ++power;
-                fractPart = source / Math.Pow(2, power) - 1;
+                fractPart = (source / Math.Pow(2, power)) - 1;
             }
             
             power += ExponentOffset;
@@ -77,10 +78,15 @@ namespace Algorithm
 
         private static double GetMantissa(double number, int exponent)
         {
-            if (double.IsNegativeInfinity(number) || double.IsPositiveInfinity(number))            
+            if (double.IsNegativeInfinity(number) || double.IsPositiveInfinity(number))
+            {
                 return 0;
+            }
+
             if (double.IsNaN(number))
+            {
                 return 0.1; // NaN has any not-zero mantissa
+            }
 
             double fraction;
 
@@ -92,7 +98,7 @@ namespace Algorithm
             }
             else
             {
-                fraction = number / Math.Pow(2, exponent) - 1;
+                fraction = (number / Math.Pow(2, exponent)) - 1;
             }
                         
             return fraction;
@@ -100,13 +106,13 @@ namespace Algorithm
             
         private static string ConvertExponentToString(int intPart)
         {
-
             var result = new StringBuilder();
-            for(int i = 0; i < ExponentLength; i++)
+            for (int i = 0; i < ExponentLength; i++)
             {
                 result.Insert(0, intPart % 2);
                 intPart /= 2;                
-            }            
+            }     
+            
             return result.ToString();
         }
 
@@ -121,6 +127,7 @@ namespace Algorithm
                 result.Append(intPart.ToString());
                 fractPart -= intPart;
             }
+
             return result.ToString();
         }
         #endregion

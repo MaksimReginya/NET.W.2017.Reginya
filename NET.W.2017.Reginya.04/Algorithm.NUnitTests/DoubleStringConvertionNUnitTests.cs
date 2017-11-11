@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Algorithm;
+﻿using NUnit.Framework;
 
 namespace Algorithm.NUnitTests
 {
