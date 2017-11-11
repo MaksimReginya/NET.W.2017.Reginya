@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArraySorting.cs" />
+    <Compile Include="ArraySortingWithDelegate.cs" />
+    <Compile Include="ArraySortingWithInterface.cs" />
+    <Compile Include="DelegateToInterfaceAdapter.cs" />
     <Compile Include="Polynomial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
