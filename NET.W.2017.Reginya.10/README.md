@@ -1,5 +1,5 @@
-1.
-https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.08/NET.W.2017.Reginya.08.01
+1.  https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.08/NET.W.2017.Reginya.08.01
+
  Для объектов класса Book (ISBN, автор, название, издательство, год издания, количество страниц, цена) (домашнее задание 8-ого дня)
  реализовать возможность строкового представления различного вида. Например, для объекта со значениями ISBN = 978-0-7356-6745-7,
  AuthorName  = Jeffrey Richter, Title = CLR via C#, Publisher = Microsoft Press, Year = 2012, NumberOPpages = 826, Price = 59.99$,
@@ -10,15 +10,16 @@ https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Regin
 	-	Jeffrey Richter, CLR via C#, "Microsoft Press", 2012
 	-	ISBN 13: 978-0-7356-6745-7, Jeffrey Richter, CLR via C#, "Microsoft Press", 2012, P. 826., 59.99$.
 	и т.д. 
-Не изменяя класс Book, добавить для объектов данного класса дополнительную возможность форматирования, изначально не предусмотренную классом. 
-Разработать модульные тесты.
-2.
-https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.04
+Не изменяя класс Book, добавить для объектов данного класса дополнительную возможность форматирования, изначально не предусмотренную классом. Разработать модульные тесты.
+
+2.  https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.04
+
  Выполнить рефакторинг класса (с целью сокращения повторного кода) в алгоритмах Евклида
  (для рефакторинга использовать делегаты, рефакторинг возможен только в случае,
  когда все метод находятся в одном классе!). Интерфейс класса измениться не должен.
-3.
-https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.05
+ 
+3.  https://github.com/MaksimReginya/NET.W.2017.Reginya/tree/master/NET.W.2017.Reginya.05
+
  В класс с алгоритмом сортировки не прямоугольной матрицы, принимающим как компаратор интерфейс
  IComparer<int[]> добавить метод, принимающий как параметр делегат-компаратор, инкапсулирующий логику
  сравнения строк матрицы. Протестировать работу разработанного метода на примере сортировки матрицы,
