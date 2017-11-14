@@ -13,8 +13,8 @@ namespace BookLogic
     {
         #region Private fields
 
-        private List<Book> _books;
         private readonly ILogger _logger;
+        private List<Book> _books;        
 
         #endregion
 
@@ -150,7 +150,7 @@ namespace BookLogic
             {
                 storage.Save(_books);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Info("Unhandled Exception:");
                 _logger.Error("Some error while saving books to storage occuried.");
