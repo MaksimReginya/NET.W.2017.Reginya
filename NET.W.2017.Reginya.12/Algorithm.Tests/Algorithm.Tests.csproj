@@ -46,6 +46,7 @@
     <Compile Include="BinarySearchNUnitTests.cs" />
     <Compile Include="Comparers\IntComparer.cs" />
     <Compile Include="Comparers\StringComparer.cs" />
+    <Compile Include="FibonacciNumbersNUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
