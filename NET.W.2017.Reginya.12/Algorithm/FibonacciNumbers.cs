@@ -3,7 +3,7 @@
 namespace Algorithm
 {
     /// <summary>
-    /// Provides method of calcucating array of Fibonacci numbers
+    /// Provides method of calculating array of Fibonacci numbers
     /// </summary>
     public class FibonacciNumbers
     {
@@ -29,7 +29,7 @@ namespace Algorithm
 
             if (length == 1)
             {
-                return new [] { 0 };
+                return new[] { 0 };
             }
 
             var array = new int[length];
