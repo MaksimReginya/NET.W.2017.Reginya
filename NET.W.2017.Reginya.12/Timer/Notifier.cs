@@ -47,12 +47,12 @@ namespace Timer
 
         #region Private methods
 
-        private void OnTimerCallback(object message)
+        protected virtual void OnTimerCallback(object message)
         {
             OnNotification(this, new TimerEventArgs(message as string, DateTime.Now));
         }
 
-        private void OnNotification(object sender, TimerEventArgs args)
+        protected virtual void OnNotification(object sender, TimerEventArgs args)
         {
             EventHandler<TimerEventArgs> temp = Notification;
             temp?.Invoke(sender, args);
