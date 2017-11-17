@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace Algorithm
 {
@@ -10,40 +12,31 @@ namespace Algorithm
         /// <summary>
         /// Gets row of the specified length of Fibonacci numbers
         /// </summary>
-        /// <param name="length">Length of the row of Fibonacci numbers</param>
+        /// <param name="count">Length of the row of Fibonacci numbers</param>
         /// <returns>The array of Fibonacci numbers</returns>
         /// <exception cref="ArgumentException">
         /// Thrown if length is negative.
         /// </exception>
-        public static int[] GetRow(int length)
+        public static IEnumerable<BigInteger> GetNumbers(int count)
         {
-            if (length < 0)
+            if (count < 0)
             {
-                throw new ArgumentException(nameof(length) + " must not be negative.");
+                throw new ArgumentException(nameof(count) + " must not be negative.");
             }
 
-            if (length == 0)
-            {
-                return new int[] { };
-            }
+            return FibonacciCore(count);
 
-            if (length == 1)
+            IEnumerable<BigInteger> FibonacciCore(int length)
             {
-                return new[] { 0 };
-            }
-
-            var array = new int[length];
-            array[0] = 0;
-            array[1] = 1;
-            if (length > 2)
-            {
-                for (int i = 2; i < length; i++)
+                BigInteger num1 = 1, num2 = 1;
+                for (int i = 0; i < length; i++)
                 {
-                    array[i] = array[i - 1] + array[i - 2];
+                    yield return num1;
+                    var temp = num2;
+                    num2 += num1;
+                    num1 = temp;
                 }
-            }
-
-            return array;
+            }            
         }
     }
 }
