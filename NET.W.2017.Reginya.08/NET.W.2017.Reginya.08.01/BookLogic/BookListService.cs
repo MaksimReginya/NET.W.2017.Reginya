@@ -12,8 +12,7 @@ namespace BookLogic
     public class BookListService
     {
         #region Private fields
-
-        private readonly ILogger _logger;
+        
         private List<Book> _books;        
 
         #endregion
@@ -22,19 +21,25 @@ namespace BookLogic
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BookListService"/> class.
-        /// </summary>
-        /// <param name="logger">Logger to log all errors occurred in service</param>
+        /// </summary>        
         /// <param name="books">The list of books</param>
-        public BookListService(ILogger logger, IEnumerable<Book> books = null)
+        public BookListService(IEnumerable<Book> books = null)
         {
             _books = books == null ? new List<Book>() : new List<Book>(books);
-            _logger = logger;
-        }    
-        
+        }
+
         #endregion
 
         #region Public properties
 
+        /// <summary>
+        /// Logger to log all errors occurred in service
+        /// </summary>
+        public ILogger Logger { get; set; }
+
+        /// <summary>
+        /// Count of books in service
+        /// </summary>
         public int BooksCount => _books.Count;
 
         #endregion
@@ -51,15 +56,15 @@ namespace BookLogic
         {
             if (book == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"book\" in AddBook method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"book\" in AddBook method can't be null.");
                 throw new ArgumentNullException(nameof(book));
             }
             
             if (_books.Contains(book))
             {
-                _logger.Info("Unhandled BookAlreadyInListException:");
-                _logger.Error("The book passed to AddBook is already in list.");
+                Logger?.Info("Unhandled BookAlreadyInListException:");
+                Logger?.Error("The book passed to AddBook is already in list.");
                 throw new BookAlreadyInListException(book);
             }
 
@@ -76,15 +81,15 @@ namespace BookLogic
         {
             if (book == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"book\" in RemoveBook method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"book\" in RemoveBook method can't be null.");
                 throw new ArgumentNullException(nameof(book));
             }
 
             if (!_books.Remove(book))
             {
-                _logger.Info("Unhandled BookNotFoundException:");
-                _logger.Error("The book passed to RemoveBook can't be found in list.");
+                Logger?.Info("Unhandled BookNotFoundException:");
+                Logger?.Error("The book passed to RemoveBook can't be found in list.");
                 throw new BookNotFoundException(book);
             }
         }
@@ -103,8 +108,8 @@ namespace BookLogic
         {
             if (condition == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"condition\" in FindBookByTag method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"condition\" in FindBookByTag method can't be null.");
                 throw new ArgumentNullException(nameof(condition));
             }
 
@@ -124,8 +129,8 @@ namespace BookLogic
         {
             if (comparer == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"comparer\" in SortBooksByTag method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"comparer\" in SortBooksByTag method can't be null.");
                 throw new ArgumentNullException(nameof(comparer));
             }
 
@@ -141,8 +146,8 @@ namespace BookLogic
         {
             if (storage == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"storage\" in Save method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"storage\" in Save method can't be null.");
                 throw new ArgumentNullException(nameof(storage));
             }
 
@@ -152,8 +157,8 @@ namespace BookLogic
             }
             catch (Exception ex)
             {
-                _logger.Info("Unhandled Exception:");
-                _logger.Error("Some error while saving books to storage occuried.");
+                Logger?.Info("Unhandled Exception:");
+                Logger?.Error("Some error while saving books to storage occuried.");
                 throw;
             }
         }
@@ -168,8 +173,8 @@ namespace BookLogic
         {
             if (storage == null)
             {
-                _logger.Info("Unhandled ArgumentNullException:");
-                _logger.Error("Argument \"storage\" in Load method can't be null.");
+                Logger?.Info("Unhandled ArgumentNullException:");
+                Logger?.Error("Argument \"storage\" in Load method can't be null.");
                 throw new ArgumentNullException(nameof(storage));
             }
 
@@ -179,15 +184,15 @@ namespace BookLogic
             }
             catch (Exception ex)
             {
-                _logger.Info("Unhandled Exception:");
-                _logger.Error("Some error while loading books from storage occuried.");
+                Logger?.Info("Unhandled Exception:");
+                Logger?.Error("Some error while loading books from storage occuried.");
                 throw;
             }            
 
             if (_books == null)
             {
-                _logger.Info("Unhandled ArgumentException:");
-                _logger.Error($"Can't load book list from {nameof(storage)}.");
+                Logger?.Info("Unhandled ArgumentException:");
+                Logger?.Error($"Can't load book list from {nameof(storage)}.");
                 throw new ArgumentException($"Can't load book list from {nameof(storage)}.");
             }
         }

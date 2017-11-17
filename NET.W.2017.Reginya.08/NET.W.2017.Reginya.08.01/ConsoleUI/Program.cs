@@ -41,7 +41,8 @@ namespace ConsoleUI
                 new Book("999-9-99-999999-1", "Bart De Smet", "C# 4.0 Unleashed", "publisher2", 2010, 1605, 35.99d)
             };            
 
-            var bookListService = new BookListService(new NLogger(nameof(BookListService)), books);
+            var bookListService = new BookListService(books);
+            bookListService.Logger = new NLogger(nameof(BookListService));
             PrintBooks(bookListService.GetBooks());
 
             bookListService.AddBook(new Book("999-9-99-999999-2", "Jon Skeet", "C# in Depth. Third edition", "publisher3", 2014, 582, 25.99d));            
@@ -61,7 +62,8 @@ namespace ConsoleUI
 
         private static void LoadFromStorageTest(string storageName)
         {
-            var bookListService = new BookListService(new NLogger(nameof(BookListService)));
+            var bookListService = new BookListService();
+            bookListService.Logger = new NLogger(nameof(BookListService));
             bookListService.Load(new BinaryFileStorage(storageName));
 
             PrintBooks(bookListService.GetBooks());
