@@ -45,9 +45,16 @@
   <ItemGroup>
     <Compile Include="MatrixNUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SquareMatrixNUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Matrix\Matrix.csproj">
+      <Project>{60a7c78e-725a-44a9-a7a1-c49fdcceadf3}</Project>
+      <Name>Matrix</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

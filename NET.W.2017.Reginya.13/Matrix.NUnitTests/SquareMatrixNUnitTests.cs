@@ -5,30 +5,31 @@ using NUnit.Framework;
 namespace Matrix.NUnitTests
 {
     [TestFixture]
-    public class MatrixNUnitTests
+    public class SquareMatrixNUnitTests
     {
-        [TestCase(5, 10)]
-        [TestCase(10, 10)]
-        [TestCase(int.MinValue, int.MaxValue)]
-        public void ConstructorTest(int rowCount, int columnCount)
+        [TestCase(5)]
+        [TestCase(10)]
+        [TestCase(int.MinValue)]
+        [TestCase(int.MaxValue)]
+        public void ConstructorTest(int order)
         {
-            ConstructorTest<int>(rowCount, columnCount);
-            ConstructorTest<string>(rowCount, columnCount);
-            ConstructorTest<double>(rowCount, columnCount);
-            ConstructorTest<object>(rowCount, columnCount);
+            ConstructorTest<int>(order);
+            ConstructorTest<string>(order);
+            ConstructorTest<double>(order);
+            ConstructorTest<object>(order);
         }
-        
-        private static void ConstructorTest<T>(int rowCount, int columnCount)
+
+        private static void ConstructorTest<T>(int order)
         {
-            var matrix = new Matrix<T>(rowCount, columnCount);
-            Assert.AreEqual(matrix.ColumnCount, columnCount);
-            Assert.AreEqual(matrix.RowCount, rowCount);
+            var matrix = new SquareMatrix<T>(order);
+            Assert.AreEqual(matrix.ColumnCount, order);
+            Assert.AreEqual(matrix.RowCount, order);
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EnumeratorTest<T>(T[,] elements)
         {
-            var result = new Matrix<T>(elements.GetLength(0), elements.GetLength(1));
+            var result = new SquareMatrix<T>(elements.GetLength(0));
 
             for (int i = 0; i < elements.GetLength(0); i++)
             {
@@ -41,7 +42,7 @@ namespace Matrix.NUnitTests
             EnumeratorTest<T>(result);
         }
 
-        private static void EnumeratorTest<T>(Matrix<T> matrix)
+        private static void EnumeratorTest<T>(SquareMatrix<T> matrix)
         {
             foreach (var element in matrix)
             {
@@ -52,8 +53,8 @@ namespace Matrix.NUnitTests
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EqualityTest<T>(T[,] elements)
         {
-            var lhs = new Matrix<T>(elements.GetLength(0), elements.GetLength(1));
-            var rhs = new Matrix<T>(elements.GetLength(0), elements.GetLength(1));
+            var lhs = new SquareMatrix<T>(elements.GetLength(0));
+            var rhs = new SquareMatrix<T>(elements.GetLength(0));
 
             for (int i = 0; i < elements.GetLength(0); i++)
             {
@@ -70,8 +71,8 @@ namespace Matrix.NUnitTests
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddTest))]
         public T[,] AddTest<T>(T[,] elements)
         {
-            var lhs = new Matrix<T>(elements.GetLength(0), elements.GetLength(1));
-            var rhs = new Matrix<T>(elements.GetLength(0), elements.GetLength(1));
+            var lhs = new SquareMatrix<T>(elements.GetLength(0));
+            var rhs = new SquareMatrix<T>(elements.GetLength(0));
 
             for (int i = 0; i < elements.GetLength(0); i++)
             {
@@ -82,13 +83,13 @@ namespace Matrix.NUnitTests
                 }
             }
 
-            lhs = lhs.Add(rhs);
-            
+            lhs = lhs.Add(rhs) as SquareMatrix<T>;
+
             for (int i = 0; i < elements.GetLength(0); i++)
             {
                 for (int j = 0; j < elements.GetLength(1); j++)
                 {
-                    elements[i, j] = lhs[i, j];                    
+                    elements[i, j] = lhs[i, j];
                 }
             }
 
@@ -104,7 +105,7 @@ namespace Matrix.NUnitTests
                     yield return new TestCaseData(new[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } });
                     yield return new TestCaseData(new[,] { { "1", "2", "3" }, { "4", "5", "6" }, { "7", "8", "9" } });
                     yield return new TestCaseData(new[,] { { 1d, 2d, 3d }, { 4d, 5d, 6d }, { 7d, 8d, 9d } });
-                    yield return new TestCaseData(new[,] { { new object(), new object() }, { new object(), new object() } });                    
+                    yield return new TestCaseData(new[,] { { new object(), new object() }, { new object(), new object() } });
                 }
             }
 
@@ -112,12 +113,12 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[,] { { 1, 2, 3}, {4, 5, 6}, {7, 8, 9 } }).Returns(
+                    yield return new TestCaseData(new[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }).Returns(
                         new[,] { { 2, 4, 6 }, { 8, 10, 12 }, { 14, 16, 18 } });
-                    yield return new TestCaseData(new[,] { { "1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9" } }).Returns(
+                    yield return new TestCaseData(new[,] { { "1", "2", "3" }, { "4", "5", "6" }, { "7", "8", "9" } }).Returns(
                         new[,] { { "11", "22", "33" }, { "44", "55", "66" }, { "77", "88", "99" } });
                 }
-            }         
+            }
         }
     }
 }
