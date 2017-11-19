@@ -30,7 +30,7 @@ namespace Matrix
                 throw new InvalidOperationException("Diagonal matrix can have elements only on the diagonal.");
             }
 
-            this._matrix[i, j] = value;
+            this.Items[i, j] = value;
         }
 
         #endregion        

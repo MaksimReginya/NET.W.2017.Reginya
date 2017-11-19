@@ -36,7 +36,7 @@ namespace Matrix
         /// </summary>        
         /// <param name="lhs">First addendum</param>
         /// <param name="rhs">Second addendum</param>
-        /// <param name="sumOperation">Operation of summarising two matrix elements.</param>
+        /// <param name="sumOperation">Addition operation of two matrix elements.</param>
         /// <returns>Sum of two matrices.</returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="rhs"/> is null.

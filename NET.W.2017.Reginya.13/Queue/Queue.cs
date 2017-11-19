@@ -216,9 +216,9 @@ namespace Queue
         {
             #region Private fields            
      
-            private readonly Queue<T> _queue;            
-            private int _index;            
+            private readonly Queue<T> _queue;
             private readonly int _version;
+            private int _index;            
 
             #endregion           
 

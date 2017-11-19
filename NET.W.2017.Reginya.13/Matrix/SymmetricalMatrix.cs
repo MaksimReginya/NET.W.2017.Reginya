@@ -20,8 +20,8 @@
         /// <inheritdoc />        
         protected override void SetValue(T value, int i, int j)
         {            
-            this._matrix[i, j] = value;
-            this._matrix[j, i] = value;
+            this.Items[i, j] = value;
+            this.Items[j, i] = value;
         }
 
         #endregion        

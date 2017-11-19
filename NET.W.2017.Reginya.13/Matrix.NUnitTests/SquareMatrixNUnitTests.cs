@@ -18,14 +18,7 @@ namespace Matrix.NUnitTests
             ConstructorTest<double>(order);
             ConstructorTest<object>(order);
         }
-
-        private static void ConstructorTest<T>(int order)
-        {
-            var matrix = new SquareMatrix<T>(order);
-            Assert.AreEqual(matrix.ColumnCount, order);
-            Assert.AreEqual(matrix.RowCount, order);
-        }
-
+        
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EnumeratorTest<T>(T[,] elements)
         {
@@ -40,15 +33,7 @@ namespace Matrix.NUnitTests
             }
 
             EnumeratorTest<T>(result);
-        }
-
-        private static void EnumeratorTest<T>(SquareMatrix<T> matrix)
-        {
-            foreach (var element in matrix)
-            {
-                Assert.IsNotNull(element);
-            }
-        }
+        }       
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EqualityTest<T>(T[,] elements)
@@ -94,6 +79,21 @@ namespace Matrix.NUnitTests
             }
 
             return elements;
+        }
+
+        private static void ConstructorTest<T>(int order)
+        {
+            var matrix = new SquareMatrix<T>(order);
+            Assert.AreEqual(matrix.ColumnCount, order);
+            Assert.AreEqual(matrix.RowCount, order);
+        }
+
+        private static void EnumeratorTest<T>(SquareMatrix<T> matrix)
+        {
+            foreach (var element in matrix)
+            {
+                Assert.IsNotNull(element);
+            }
         }
 
         private class TestCasesClass

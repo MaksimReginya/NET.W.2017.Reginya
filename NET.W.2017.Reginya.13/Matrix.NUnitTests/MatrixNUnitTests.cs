@@ -17,14 +17,7 @@ namespace Matrix.NUnitTests
             ConstructorTest<double>(rowCount, columnCount);
             ConstructorTest<object>(rowCount, columnCount);
         }
-        
-        private static void ConstructorTest<T>(int rowCount, int columnCount)
-        {
-            var matrix = new Matrix<T>(rowCount, columnCount);
-            Assert.AreEqual(matrix.ColumnCount, columnCount);
-            Assert.AreEqual(matrix.RowCount, rowCount);
-        }
-
+                    
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EnumeratorTest<T>(T[,] elements)
         {
@@ -40,15 +33,7 @@ namespace Matrix.NUnitTests
 
             EnumeratorTest<T>(result);
         }
-
-        private static void EnumeratorTest<T>(Matrix<T> matrix)
-        {
-            foreach (var element in matrix)
-            {
-                Assert.IsNotNull(element);
-            }
-        }
-
+        
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCases))]
         public void EqualityTest<T>(T[,] elements)
         {
@@ -95,6 +80,21 @@ namespace Matrix.NUnitTests
             return elements;
         }
 
+        private static void ConstructorTest<T>(int rowCount, int columnCount)
+        {
+            var matrix = new Matrix<T>(rowCount, columnCount);
+            Assert.AreEqual(matrix.ColumnCount, columnCount);
+            Assert.AreEqual(matrix.RowCount, rowCount);
+        }
+
+        private static void EnumeratorTest<T>(Matrix<T> matrix)
+        {
+            foreach (var element in matrix)
+            {
+                Assert.IsNotNull(element);
+            }
+        }
+
         private class TestCasesClass
         {
             public static IEnumerable TestCases
@@ -112,9 +112,9 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[,] { { 1, 2, 3}, {4, 5, 6}, {7, 8, 9 } }).Returns(
+                    yield return new TestCaseData(new[,] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }).Returns(
                         new[,] { { 2, 4, 6 }, { 8, 10, 12 }, { 14, 16, 18 } });
-                    yield return new TestCaseData(new[,] { { "1", "2", "3"}, {"4", "5", "6"}, {"7", "8", "9" } }).Returns(
+                    yield return new TestCaseData(new[,] { { "1", "2", "3" }, { "4", "5", "6" }, { "7", "8", "9" } }).Returns(
                         new[,] { { "11", "22", "33" }, { "44", "55", "66" }, { "77", "88", "99" } });
                 }
             }         

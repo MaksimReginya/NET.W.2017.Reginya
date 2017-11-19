@@ -9,22 +9,7 @@ namespace Matrix
     /// </summary>
     /// <typeparam name="T">Type of stored elements.</typeparam>
     public class Matrix<T> : IEquatable<Matrix<T>>, IEnumerable<T>, IEnumerable
-    {
-        #region Private fields
-        
-        protected T[,] _matrix;        
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// The event that occurs when any element of the matrix is changed.
-        /// </summary>
-        public event EventHandler<MatrixEventArgs<T>> ElementChanged = delegate { };
-
-        #endregion
-
+    {             
         #region Public constuctors
                                 
         /// <summary>
@@ -39,10 +24,19 @@ namespace Matrix
                 throw new ArgumentException("Rows and columns count must be greater than 0.");
             }
 
-            _matrix = new T[rowCount, columnCount];
+            Items = new T[rowCount, columnCount];
             this.RowCount = rowCount;
             this.ColumnCount = columnCount;
         }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// The event that occurs when any element of the matrix is changed.
+        /// </summary>
+        public event EventHandler<MatrixEventArgs<T>> ElementChanged = delegate { };
 
         #endregion
 
@@ -57,7 +51,17 @@ namespace Matrix
         /// Count of columns in matrix.
         /// </summary>
         public int ColumnCount { get; protected set; }
-            
+                  
+        #endregion
+
+        #region Protected properties
+
+        protected T[,] Items { get; set; }
+
+        #endregion
+
+        #region Indexers
+
         /// <summary>
         /// Indexer to access matrix elements.
         /// </summary>
@@ -69,13 +73,13 @@ namespace Matrix
             get
             {
                 VerifyIndexes(i, j);
-                return _matrix[i, j];
+                return Items[i, j];
             }
 
             set
             {
                 VerifyIndexes(i, j);
-                var oldValue = _matrix[i, j];
+                var oldValue = Items[i, j];
                 SetValue(value, i, j);
                 OnElementChanged(this, new MatrixEventArgs<T>(i, j, oldValue, value));
             }
@@ -133,7 +137,7 @@ namespace Matrix
             {
                 for (int j = 0; j < ColumnCount; j++)
                 {
-                    yield return _matrix[i, j];
+                    yield return Items[i, j];
                 }
             }
         }
@@ -179,7 +183,7 @@ namespace Matrix
 
         /// <inheritdoc/>
         public override int GetHashCode()
-            => _matrix != null ? _matrix.GetHashCode() ^ this.ColumnCount ^ this.RowCount : 0;        
+            => Items != null ? Items.GetHashCode() ^ this.ColumnCount ^ this.RowCount : 0;        
 
         #endregion
 
@@ -203,7 +207,7 @@ namespace Matrix
         /// <param name="i">Row index.</param>
         /// <param name="j">Column index.</param>
         protected virtual void SetValue(T value, int i, int j)
-            => this._matrix[i, j] = value;
+            => this.Items[i, j] = value;
 
         #endregion
 
