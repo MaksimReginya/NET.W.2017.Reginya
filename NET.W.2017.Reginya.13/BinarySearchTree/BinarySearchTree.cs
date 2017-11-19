@@ -11,8 +11,8 @@ namespace BinarySearchTree
     {
         #region Private fields
 
-        private IComparer<T> _comparer;
-        private TreeNode<T> _head;        
+        private Comparison<T> _comparer;
+        private TreeNode<T> _head;
 
         #endregion
 
@@ -20,17 +20,46 @@ namespace BinarySearchTree
 
         /// <summary>
         /// Initializes a new instance of <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>        
+        /// <exception cref="ArgumentNullException"></exception>
+        public BinarySearchTree()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BinarySearchTree{T}"/> class.
         /// </summary>
         /// <param name="comparer">Comparer to determine the insert order of elements.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public BinarySearchTree(IComparer<T> comparer = null)
+        public BinarySearchTree(IComparer<T> comparer)
+        {
+            if (comparer != null)
+            {
+                this._comparer = comparer.Compare;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
+        /// <param name="comparer">Comparer to determine the insert order of elements.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public BinarySearchTree(Comparison<T> comparer)
         {
             this._comparer = comparer;
-        }       
+        }
 
         #endregion
 
         #region Public methods
+        
+        /// <summary>
+        /// Clears the tree.
+        /// </summary>
+        public void Clear()
+        {
+            _head = null;
+        }
 
         /// <summary>
         /// Inserts element in the binary search tree.
@@ -61,7 +90,7 @@ namespace BinarySearchTree
             var stack = new Stack<TreeNode<T>>();            
             stack.Push(_head);
 
-            while (stack.Count >= 0)
+            while (stack.Count > 0)
             {
                 var node = stack.Pop();
                 yield return node.Value;
@@ -111,7 +140,7 @@ namespace BinarySearchTree
             var stack = new Stack<TreeNode<T>>();
             var node = _head;
 
-            while (stack.Count >= 0 || node != null)
+            while (stack.Count > 0 || node != null)
             {
                 if (node == null)
                 {
@@ -177,7 +206,8 @@ namespace BinarySearchTree
             {
                 if (typeof(T).GetInterface("IComparable`1") != null || typeof(T).GetInterface("IComparable") != null)
                 {
-                    _comparer = Comparer<T>.Default;
+                    _comparer = Comparer<T>.Default.Compare;
+                    compareResult = _comparer(value, node.Value);
                 }
                 else
                 {
@@ -186,7 +216,7 @@ namespace BinarySearchTree
             }
             else
             {
-                compareResult = _comparer.Compare(value, node.Value);
+                compareResult = _comparer(value, node.Value);
             }
 
             if (compareResult >= 0)
