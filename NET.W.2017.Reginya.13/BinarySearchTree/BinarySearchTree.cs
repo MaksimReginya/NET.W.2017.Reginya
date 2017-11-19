@@ -107,9 +107,9 @@ namespace BinarySearchTree
         }
 
         /// <summary>
-        /// Provides inorder way of iterating through binary search tree.
+        /// Provides in-order way of iterating through binary search tree.
         /// </summary>
-        /// <returns>Tree elements in inorder</returns>
+        /// <returns>Tree elements in in-order.</returns>
         public IEnumerable<T> Inorder()
         {
             var stack = new Stack<TreeNode<T>>();
@@ -132,9 +132,9 @@ namespace BinarySearchTree
         }
 
         /// <summary>
-        /// Provides postorder way of iterating through binary search tree.
+        /// Provides post-order way of iterating through binary search tree.
         /// </summary>
-        /// <returns>Tree elements in postorder</returns>
+        /// <returns>Tree elements in post-order.</returns>
         public IEnumerable<T> Postorder()
         {
             var stack = new Stack<TreeNode<T>>();
@@ -247,23 +247,23 @@ namespace BinarySearchTree
 
         #region Node of the tree
 
-        private class TreeNode<T>
+        private class TreeNode<TN>
         {
             public TreeNode()
             {
-                this.Value = default(T);
+                this.Value = default(TN);
             }
 
-            public TreeNode(T value)
+            public TreeNode(TN value)
             {
                 this.Value = value;
             }
 
-            public T Value { get; }
+            public TN Value { get; }
 
-            public TreeNode<T> Left { get; set; }
+            public TreeNode<TN> Left { get; set; }
 
-            public TreeNode<T> Right { get; set; }
+            public TreeNode<TN> Right { get; set; }
         }
 
         #endregion

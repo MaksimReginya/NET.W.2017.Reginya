@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using BookLogic;
 using BinarySearchTree.NUnitTests.Comparers;
+using BookLogic;
 using NUnit.Framework;
 
 namespace BinarySearchTree.NUnitTests
@@ -91,13 +91,13 @@ namespace BinarySearchTree.NUnitTests
             {
                 yield return new TestCaseData(
                         new BookComparerByAuthor(),
-                        new[] {
+                        new[] 
+                        {
                             new Book("999-9-99-999999-0", "e", "a", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "d", "b", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "c", "c", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "b", "d", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "a", "e", "1", 1, 1, 1d)
-                            
+                            new Book("999-9-99-999999-1", "d", "b", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-2", "c", "c", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-3", "b", "d", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-4", "a", "e", "1", 1, 1, 1d)                            
                         })
                     .Returns("abcde");                
             }
@@ -109,13 +109,13 @@ namespace BinarySearchTree.NUnitTests
             {
                 yield return new TestCaseData(
                         new BookComparerByAuthor(),
-                        new[] {
+                        new[] 
+                        {
                             new Book("999-9-99-999999-0", "e", "a", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "d", "b", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "c", "c", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "b", "d", "1", 1, 1, 1d),
-                            new Book("999-9-99-999999-0", "a", "e", "1", 1, 1, 1d)
-
+                            new Book("999-9-99-999999-1", "d", "b", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-2", "c", "c", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-3", "b", "d", "1", 1, 1, 1d),
+                            new Book("999-9-99-999999-4", "a", "e", "1", 1, 1, 1d)
                         })
                     .Returns("edcba");
             }
