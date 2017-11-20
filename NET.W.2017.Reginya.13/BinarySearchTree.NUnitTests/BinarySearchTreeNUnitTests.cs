@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using BinarySearchTree.NUnitTests.Comparers;
 using BookLogic;
@@ -9,6 +10,16 @@ namespace BinarySearchTree.NUnitTests
     [TestFixture]
     public class BinarySearchTreeNUnitTests
     {
+        public static IEnumerable<TestCaseData> InsertAscendingIntTestCaseData
+        {
+            get
+            {
+                yield return new TestCaseData(null, new[] { 1, 2, 3, 4, 5 }).Returns("12345");
+                yield return new TestCaseData(null, new[] { 2, 4, 1, 3, 5 }).Returns("12345");
+                yield return new TestCaseData(null, new[] { 3, 3, 2, 1, 5 }).Returns("12335");
+            }
+        }
+
         public static IEnumerable<TestCaseData> InsertDescendingIntTestCaseData
         {
             get
@@ -27,42 +38,14 @@ namespace BinarySearchTree.NUnitTests
                     .Returns("53321");
             }
         }
-
-        public static IEnumerable<TestCaseData> InsertAscendingIntTestCaseData
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        new IntDescendingComparer(),
-                        new[] { 1, 2, 3, 4, 5 })
-                    .Returns("12345");
-                yield return new TestCaseData(
-                        new IntDescendingComparer(),
-                        new[] { 2, 4, 1, 3, 5 })
-                    .Returns("12345");
-                yield return new TestCaseData(
-                        new IntDescendingComparer(),
-                        new[] { 3, 3, 2, 1, 5 })
-                    .Returns("12335");
-            }
-        }
-
+        
         public static IEnumerable<TestCaseData> InsertStringTestCaseData
         {
             get
             {
-                yield return new TestCaseData(
-                        new StringComparerIgnoreCase(),
-                        new[] { "a", "A", "b", "B", "c" })
-                    .Returns("aAbBc");
-                yield return new TestCaseData(
-                        new StringComparerIgnoreCase(),
-                        new[] { "A", "B", "a", "b", "c" })
-                    .Returns("aAbBc");
-                yield return new TestCaseData(
-                        new StringComparerIgnoreCase(),
-                        new[] { "b", "b", "A", "a", "c" })
-                    .Returns("aAbbc");
+                yield return new TestCaseData(null, new[] { "a", "A", "b", "B", "c" }).Returns("aAbBc");
+                yield return new TestCaseData(null, new[] { "A", "B", "a", "b", "c" }).Returns("aAbBc");
+                yield return new TestCaseData(null, new[] { "b", "b", "A", "a", "c" }).Returns("aAbbc");
             }
         }
 
@@ -90,7 +73,7 @@ namespace BinarySearchTree.NUnitTests
             get
             {
                 yield return new TestCaseData(
-                        new BookComparerByAuthor(),
+                        null,
                         new[] 
                         {
                             new Book("999-9-99-999999-0", "e", "a", "1", 1, 1, 1d),
@@ -126,6 +109,22 @@ namespace BinarySearchTree.NUnitTests
             get
             {
                 yield return new TestCaseData(
+                    null,
+                    new Point[] { new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(3, 3), new Point(4, 4) });                    
+                yield return new TestCaseData(
+                    null,
+                    new Point[] { new Point(8, 8), new Point(2, 2), new Point(3, 3), new Point(3, 3), new Point(4, 4) });
+                yield return new TestCaseData(
+                    null,
+                    new Point[] { new Point(5, 5), new Point(3, 3), new Point(2, 1), new Point(4, 4), new Point(8, 8) });
+            }
+        }
+
+        public static IEnumerable<TestCaseData> InsertPointOuterComparerTestCaseData
+        {
+            get
+            {
+                yield return new TestCaseData(
                         new PointComparer(),
                         new Point[] { new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(3, 3), new Point(4, 4) })
                     .Returns("1122333344");
@@ -149,8 +148,6 @@ namespace BinarySearchTree.NUnitTests
             Assert.DoesNotThrow(() => treeString = new BinarySearchTree<string>());
             BinarySearchTree<Book> treeBook;
             Assert.DoesNotThrow(() => treeBook = new BinarySearchTree<Book>());
-            BinarySearchTree<Point> treePoint;
-            Assert.DoesNotThrow(() => treePoint = new BinarySearchTree<Point>());
         }
 
         [TestCase(3, 2, 1, ExpectedResult = "321")]
@@ -325,6 +322,12 @@ namespace BinarySearchTree.NUnitTests
         }
 
         [Test, TestCaseSource(nameof(InsertPointTestCaseData))]
+        public void InsertTestPointNativeComparer(IComparer<Point> comparer, params Point[] array)
+        {
+            Assert.Throws<ArgumentNullException>(() => new BinarySearchTree<Point>());           
+        }
+
+        [Test, TestCaseSource(nameof(InsertPointOuterComparerTestCaseData))]
         public string InsertTestPointOuterComparer(IComparer<Point> comparer, params Point[] array)
         {
             var tree = new BinarySearchTree<Point>(comparer);

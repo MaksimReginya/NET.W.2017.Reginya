@@ -24,6 +24,10 @@ namespace BinarySearchTree
         /// <exception cref="ArgumentNullException"></exception>
         public BinarySearchTree()
         {
+            if (!IsComparerExists())
+            {
+                throw new ArgumentNullException("comparer", "Comparer must be specified for types without IComparable.");
+            }
         }
 
         /// <summary>
@@ -37,6 +41,11 @@ namespace BinarySearchTree
             {
                 this._comparer = comparer.Compare;
             }
+
+            if (!IsComparerExists())
+            {
+                throw new ArgumentNullException("comparer", "Comparer must be specified for types without IComparable.");
+            }
         }
 
         /// <summary>
@@ -47,6 +56,10 @@ namespace BinarySearchTree
         public BinarySearchTree(Comparison<T> comparer)
         {
             this._comparer = comparer;
+            if (!IsComparerExists())
+            {
+                throw new ArgumentNullException("comparer", "Comparer must be specified for types without IComparable.");
+            }
         }
 
         #endregion
@@ -194,6 +207,22 @@ namespace BinarySearchTree
 
         #region Private methods
 
+        private bool IsComparerExists()
+        {
+            if (_comparer == null)
+            {
+                if (typeof(T).GetInterface("IComparable`1") != null || typeof(T).GetInterface("IComparable") != null)
+                {
+                    _comparer = Comparer<T>.Default.Compare;
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
         private void Insert(TreeNode<T> node, T value)
         {
             if (node == null)
@@ -201,23 +230,7 @@ namespace BinarySearchTree
                 node = new TreeNode<T>(value);
             }
 
-            int compareResult = 0;
-            if (_comparer == null)
-            {
-                if (typeof(T).GetInterface("IComparable`1") != null || typeof(T).GetInterface("IComparable") != null)
-                {
-                    _comparer = Comparer<T>.Default.Compare;
-                    compareResult = _comparer(value, node.Value);
-                }
-                else
-                {
-                    throw new ArgumentNullException("comparer", "Comparer must be specified for types without IComparable.");
-                }                
-            }
-            else
-            {
-                compareResult = _comparer(value, node.Value);
-            }
+            int compareResult = _comparer(value, node.Value);            
 
             if (compareResult >= 0)
             {
