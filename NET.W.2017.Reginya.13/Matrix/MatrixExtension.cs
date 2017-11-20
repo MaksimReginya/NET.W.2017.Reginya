@@ -56,7 +56,21 @@ namespace Matrix
                 throw new InvalidOperationException("Matrixes must have equal dimensional lengths.");
             }
 
-            var result = new Matrix<T>(lhs.RowCount, lhs.RowCount);
+            // BAD DECISION!!!
+            // TODO: Change type checking
+            Matrix<T> result;
+            if (lhs.GetType() == typeof(SquareMatrix<T>) || rhs.GetType() == typeof(SquareMatrix<T>))
+            {
+                result = new SquareMatrix<T>(lhs.RowCount);
+            }
+            else if (lhs.GetType() == typeof(SymmetricalMatrix<T>) || rhs.GetType() == typeof(SymmetricalMatrix<T>))
+            {
+                result = new SymmetricalMatrix<T>(lhs.RowCount);
+            }
+            else
+            {
+                result = new DiagonalMatrix<T>(lhs.RowCount);
+            }            
 
             for (int i = 0; i < lhs.RowCount; i++)
             {

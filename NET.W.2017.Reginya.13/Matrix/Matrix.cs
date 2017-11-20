@@ -8,16 +8,23 @@ namespace Matrix
     /// Two-dimensional array of elements of type <see cref="T"/>.
     /// </summary>
     /// <typeparam name="T">Type of stored elements.</typeparam>
-    public class Matrix<T> : IEquatable<Matrix<T>>, IEnumerable<T>, IEnumerable
-    {             
+    public abstract class Matrix<T> : IEquatable<Matrix<T>>, IEnumerable<T>, IEnumerable
+    {
         #region Public constuctors
-                                
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Matrix"/> class.
+        /// </summary>        
+        protected Matrix()
+        {            
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Matrix"/> class with specified dimensional sizes.
         /// </summary>
         /// <param name="rowCount">Count of rows.</param>
         /// <param name="columnCount">Count of columns.</param>
-        public Matrix(int rowCount, int columnCount)
+        protected Matrix(int rowCount, int columnCount)
         {
             if (rowCount < 1 || columnCount < 1)
             {
@@ -56,7 +63,7 @@ namespace Matrix
 
         #region Protected properties
 
-        protected T[,] Items { get; set; }
+        protected abstract T[,] Items { get; set; }
 
         #endregion
 
@@ -68,7 +75,7 @@ namespace Matrix
         /// <param name="i">Row number.</param>
         /// <param name="j">Column number.</param>
         /// <returns>The value of element.</returns>
-        public T this[int i, int j]
+        public virtual T this[int i, int j]
         {
             get
             {
@@ -137,7 +144,7 @@ namespace Matrix
             {
                 for (int j = 0; j < ColumnCount; j++)
                 {
-                    yield return Items[i, j];
+                    yield return this[i, j];
                 }
             }
         }
@@ -209,11 +216,7 @@ namespace Matrix
         protected virtual void SetValue(T value, int i, int j)
             => this.Items[i, j] = value;
 
-        #endregion
-
-        #region Private methods
-
-        private void VerifyIndexes(int i, int j)
+        protected void VerifyIndexes(int i, int j)
         {
             if (i < 0)
             {

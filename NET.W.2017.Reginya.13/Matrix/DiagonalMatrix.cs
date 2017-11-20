@@ -11,8 +11,53 @@ namespace Matrix
         #region Public constructors
 
         /// <inheritdoc />
-        public DiagonalMatrix(int order) : base(order)
+        public DiagonalMatrix(int order)
         {
+            if (order < 1)
+            {
+                throw new ArgumentException("Matrix order must be greater than 0.");
+            }
+
+            this.Items = new T[order];
+            this.RowCount = order;
+            this.ColumnCount = order;
+        }
+
+        #endregion
+
+        #region Protected properties
+
+        protected new T[] Items { get; set; }
+
+        #endregion
+
+        #region Indexers
+
+        public override T this[int i, int j]
+        {
+            get
+            {
+                this.VerifyIndexes(i, j);
+                if (i != j)
+                {
+                    return default(T);
+                }
+
+                return this.Items[i];
+            }
+
+            set
+            {
+                this.VerifyIndexes(i, j);
+                if (i != j)
+                {
+                    return;
+                }
+
+                var oldValue = this.Items[i];
+                this.SetValue(value, i, j);
+                this.OnElementChanged(this, new MatrixEventArgs<T>(i, j, oldValue, value));
+            }
         }
 
         #endregion
@@ -24,15 +69,10 @@ namespace Matrix
         /// Thrown when setting element is not on the diagonal.
         /// </exception>
         protected override void SetValue(T value, int i, int j)
-        {
-            if (i != j)
-            {
-                throw new InvalidOperationException("Diagonal matrix can have elements only on the diagonal.");
-            }
-
-            this.Items[i, j] = value;
+        {            
+            this.Items[i] = value;
         }
-
+        
         #endregion        
     }
 }
