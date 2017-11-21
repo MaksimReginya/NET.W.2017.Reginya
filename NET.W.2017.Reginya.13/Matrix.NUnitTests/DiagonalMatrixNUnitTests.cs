@@ -18,145 +18,79 @@ namespace Matrix.NUnitTests
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesInt))]
-        public void EnumeratorTest(int[] elements)
+        public void EnumeratorTest(int[,] elements)
         {
-            var result = new DiagonalMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {                
-                result[i, i] = elements[i];                
-            }
-
+            var result = new DiagonalMatrix<int>(elements);            
             EnumeratorTest<int>(result);
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesString))]
         public void EnumeratorTestString(string[,] elements)
         {            
-            var result = new DiagonalMatrix<string>(elements.GetLength(1));
-
-            for (int i = 0; i < elements.GetLength(1); i++)
-            {
-                result[i, i] = elements[0, i];
-            }
-
+            var result = new DiagonalMatrix<string>(elements);            
             EnumeratorTest<string>(result);
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesInt))]
-        public void EqualityTestInt(int[] elements)
+        public void EqualityTestInt(int[,] elements)
         {
-            var lhs = new DiagonalMatrix<int>(elements.GetLength(0));
-            var rhs = new DiagonalMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {                
-                lhs[i, i] = elements[i];
-                rhs[i, i] = elements[i];                
-            }
-
+            var lhs = new DiagonalMatrix<int>(elements);
+            var rhs = new DiagonalMatrix<int>(elements);
             Assert.IsTrue(lhs.Equals(rhs));
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesString))]
         public void EqualityTestString(string[,] elements)
         {
-            var lhs = new DiagonalMatrix<string>(elements.GetLength(0));
-            var rhs = new DiagonalMatrix<string>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                lhs[i, i] = elements[0, i];
-                rhs[i, i] = elements[0, i];
-            }
-
+            var lhs = new DiagonalMatrix<string>(elements);
+            var rhs = new DiagonalMatrix<string>(elements);            
             Assert.IsTrue(lhs.Equals(rhs));
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddTestInt))]
-        public int[] AddTestInt(int[] elements)
+        public int[,] AddTestInt(int[,] elements)
         {
-            var lhs = new DiagonalMatrix<int>(elements.GetLength(0));
-            var rhs = new DiagonalMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                lhs[i, i] = elements[i];
-                rhs[i, i] = elements[i];
-            }
+            var lhs = new DiagonalMatrix<int>(elements);
+            var rhs = new DiagonalMatrix<int>(elements);         
 
             lhs = lhs.Add(rhs) as DiagonalMatrix<int>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                elements[i] = lhs[i, i];
-            }
-
-            return elements;
+            
+            return lhs?.ToArray();
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddDiagonalAndSymmetricalTestInt))]
         public int[,] AddDiagonalAndSymmetricalTestInt(int[,] elements)
         {
-            var lhs = new DiagonalMatrix<int>(elements.GetLength(0));
-            var rhs = new SymmetricalMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {                    
-                    rhs[i, j] = elements[i, j];
-                }
-
-                lhs[i, i] = elements[i, i];
-            }
-
+            var lhs = new DiagonalMatrix<int>(elements);
+            var rhs = new SymmetricalMatrix<int>(elements);
+            
             rhs = rhs.Add(lhs) as SymmetricalMatrix<int>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    elements[i, j] = rhs[i, j];
-                }
-            }
-
-            return elements;
+            
+            return rhs?.ToArray();
         }        
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddTestString))]
         public string[,] AddTestString(string[,] elements)
         {
-            var lhs = new DiagonalMatrix<string>(elements.GetLength(1));
-            var rhs = new DiagonalMatrix<string>(elements.GetLength(1));
+            var lhs = new DiagonalMatrix<string>(elements);
+            var rhs = new DiagonalMatrix<string>(elements);
 
-            for (int i = 0; i < elements.GetLength(1); i++)
-            {
-                lhs[i, i] = elements[0, i];
-                rhs[i, i] = elements[0, i];
-            }
-
-            lhs = lhs.Add(rhs) as DiagonalMatrix<string>;
-
-            for (int i = 0; i < elements.GetLength(1); i++)
-            {
-                elements[0, i] = lhs[i, i];
-            }
-
-            return elements;
+            lhs = lhs.Add(rhs, (x, y) => x + y) as DiagonalMatrix<string>;
+            
+            return lhs?.ToArray();
         }
 
         private static void ConstructorTest<T>(int order)
         {
             var matrix = new DiagonalMatrix<T>(order);
-            Assert.AreEqual(matrix.ColumnCount, order);
-            Assert.AreEqual(matrix.RowCount, order);
+            Assert.AreEqual(matrix.Order, order);
         }
 
-        private static void EnumeratorTest<T>(DiagonalMatrix<T> matrix)
+        private static void EnumeratorTest<T>(IEnumerable<T> matrix)
         {
             foreach (var element in matrix)
-            {                
+            {                 
+                Assert.IsTrue(element != null || default(T) == null);
             }
         }
 
@@ -166,7 +100,7 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[] { 4, 5, 6 });
+                    yield return new TestCaseData(new[,] { { 1, 0, 0 }, { 0, 5, 0 }, { 0, 0, 9 } });
                 }
             }
 
@@ -174,7 +108,7 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[,] { { "4", "5", "6" } });
+                    yield return new TestCaseData(new[,] { { "1", null, null }, { null, "5", null }, { null, null, "9" } });
                 }
             }
 
@@ -182,7 +116,8 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[] { 4, 5, 6 }).Returns(new[] { 8, 10, 12 });
+                    yield return new TestCaseData(new[,] { { 1, 0, 0 }, { 0, 5, 0 }, { 0, 0, 9 } }).Returns(
+                        new[,] { { 2, 0, 0 }, { 0, 10, 0 }, { 0, 0, 18 } });
                 }
             }
 
@@ -199,7 +134,8 @@ namespace Matrix.NUnitTests
             {
                 get
                 {
-                    yield return new TestCaseData(new[,] { { "4", "5", "6" } }).Returns(new[,] { { "44", "55", "66" } });
+                    yield return new TestCaseData(new[,] { { "1", null, null }, { null, "5", null }, { null, null, "9" } }).Returns(
+                        new[,] { { "11", null, null }, { null, "55", null }, { null, null, "99" } });
                 }
             }
         }

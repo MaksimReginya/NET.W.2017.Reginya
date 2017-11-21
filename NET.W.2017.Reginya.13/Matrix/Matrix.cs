@@ -5,37 +5,54 @@ using System.Collections.Generic;
 namespace Matrix
 {    
     /// <summary>
-    /// Two-dimensional array of elements of type <see cref="T"/>.
-    /// </summary>
-    /// <typeparam name="T">Type of stored elements.</typeparam>
+    /// Two-dimensional square array of elements of type <see cref="T"/>.
+    /// </summary>    
     public abstract class Matrix<T> : IEquatable<Matrix<T>>, IEnumerable<T>, IEnumerable
     {
         #region Public constuctors
-
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix"/> class.
-        /// </summary>        
-        protected Matrix()
-        {            
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Matrix"/> class with specified dimensional sizes.
+        /// Initializes a new matrix of specified <paramref name="order"/>.
         /// </summary>
-        /// <param name="rowCount">Count of rows.</param>
-        /// <param name="columnCount">Count of columns.</param>
-        protected Matrix(int rowCount, int columnCount)
+        /// <param name="order">Matrix order</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when <paramref name="order"/> is not positive.
+        /// </exception>
+        protected Matrix(int order)
         {
-            if (rowCount < 1 || columnCount < 1)
+            if (order <= 0)
             {
-                throw new ArgumentException("Rows and columns count must be greater than 0.");
+                throw new ArgumentOutOfRangeException($"{nameof(order)} must be positive.", nameof(order));
             }
 
-            Items = new T[rowCount, columnCount];
-            this.RowCount = rowCount;
-            this.ColumnCount = columnCount;
+            this.Order = order;
         }
 
+        /// <summary>
+        /// Initializes a new matrix with specified <paramref name="elements"/>.
+        /// </summary>
+        /// <param name="elements">Array of matrix elements.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when <paramref name="elements"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown when matrix is not square.
+        /// </exception>
+        protected Matrix(T[,] elements)
+        {
+            if (ReferenceEquals(elements, null))
+            {
+                throw new ArgumentNullException(nameof(elements));
+            }
+
+            if (elements.GetLength(0) != elements.GetLength(1))
+            {
+                throw new ArgumentException($"Array of {nameof(elements)} must be square.", nameof(elements));
+            }
+
+            this.Order = elements.GetLength(0);
+        }
+        
         #endregion
 
         #region Events
@@ -50,23 +67,12 @@ namespace Matrix
         #region Public properties
 
         /// <summary>
-        /// Count of rows in matrix.
+        /// Order of the matrix.
         /// </summary>
-        public int RowCount { get; protected set; }
-
-        /// <summary>
-        /// Count of columns in matrix.
-        /// </summary>
-        public int ColumnCount { get; protected set; }
-                  
-        #endregion
-
-        #region Protected properties
-
-        protected abstract T[,] Items { get; set; }
+        public int Order { get; protected set; }
 
         #endregion
-
+        
         #region Indexers
 
         /// <summary>
@@ -75,26 +81,45 @@ namespace Matrix
         /// <param name="i">Row number.</param>
         /// <param name="j">Column number.</param>
         /// <returns>The value of element.</returns>
-        public virtual T this[int i, int j]
+        public T this[int i, int j]
         {
             get
             {
                 VerifyIndexes(i, j);
-                return Items[i, j];
+                return this.GetValue(i, j);
             }
 
             set
             {
                 VerifyIndexes(i, j);
-                var oldValue = Items[i, j];
-                SetValue(value, i, j);
-                OnElementChanged(this, new MatrixEventArgs<T>(i, j, oldValue, value));
+                var oldValue = this.GetValue(i, j);
+                this.SetValue(value, i, j);
+                this.OnElementChanged(this, new MatrixEventArgs<T>(i, j, oldValue, value));
             }
         }
 
         #endregion
 
         #region Public methods
+
+        /// <summary>
+        /// Returns an array of matrix elements.
+        /// </summary>
+        /// <returns>Array of matrix elements.</returns>
+        public T[,] ToArray()
+        {
+            var result = new T[this.Order, this.Order];
+
+            for (int i = 0; i < this.Order; i++)
+            {
+                for (int j = 0; j < this.Order; j++)
+                {
+                    result[i, j] = this.GetValue(i, j);
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Strictly typed Equals method. 
@@ -112,16 +137,16 @@ namespace Matrix
             {
                 return true;
             }
-           
-            if ((other.RowCount != this.RowCount) || (other.ColumnCount != this.ColumnCount))
+
+            if (this.Order != other.Order)
             {
                 return false;
             }
 
             var equalityComparer = EqualityComparer<T>.Default;
-            for (int i = 0; i < this.RowCount; i++)
+            for (int i = 0; i < this.Order; i++)
             {
-                for (int j = 0; j < this.ColumnCount; j++)
+                for (int j = 0; j < this.Order; j++)
                 {
                     if (!equalityComparer.Equals(this[i, j], other[i, j]))
                     {
@@ -140,11 +165,11 @@ namespace Matrix
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 0; i < this.Order; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 0; j < this.Order; j++)
                 {
-                    yield return this[i, j];
+                    yield return this.GetValue(i, j);
                 }
             }
         }
@@ -165,36 +190,22 @@ namespace Matrix
 
         #endregion
 
-        #region Overriding methods of class Object
-
-        /// <inheritdoc/>
-        public override bool Equals(object other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            if (other.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return this.Equals((Matrix<T>)other);
-        }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-            => Items != null ? Items.GetHashCode() ^ this.ColumnCount ^ this.RowCount : 0;        
-
-        #endregion
-
         #region Protected methods
+
+        /// <summary>
+        /// Sets the value of the matrix cell.
+        /// </summary>
+        /// <param name="value">Element value.</param>
+        /// <param name="i">Row index.</param>
+        /// <param name="j">Column index.</param>
+        protected abstract void SetValue(T value, int i, int j);
+
+        /// <summary>
+        /// Gets the value of the matrix cell.
+        /// </summary>        
+        /// <param name="i">Row index.</param>
+        /// <param name="j">Column index.</param>
+        protected abstract T GetValue(int i, int j);
 
         /// <summary>
         /// Invokes ElementChanged event.
@@ -208,14 +219,10 @@ namespace Matrix
         }
 
         /// <summary>
-        /// Sets the value of the matrix cell.
+        /// Verifies indexes of row(i) and column(j) in matrix.
         /// </summary>
-        /// <param name="value">Element value.</param>
-        /// <param name="i">Row index.</param>
-        /// <param name="j">Column index.</param>
-        protected virtual void SetValue(T value, int i, int j)
-            => this.Items[i, j] = value;
-
+        /// <param name="i">Index of row.</param>
+        /// <param name="j">Index of column.</param>
         protected void VerifyIndexes(int i, int j)
         {
             if (i < 0)
@@ -223,7 +230,7 @@ namespace Matrix
                 throw new ArgumentOutOfRangeException(nameof(i), $"{nameof(i)} must not be negative.");
             }
 
-            if (i > this.RowCount)
+            if (i > this.Order)
             {
                 throw new ArgumentOutOfRangeException(nameof(i), $"{nameof(i)} must be less than matrix size.");
             }
@@ -233,7 +240,7 @@ namespace Matrix
                 throw new ArgumentOutOfRangeException(nameof(j), $"{nameof(j)} must not be negative.");
             }
 
-            if (j > this.ColumnCount)
+            if (j > this.Order)
             {
                 throw new ArgumentOutOfRangeException(nameof(j), $"{nameof(j)} must be less than matrix size.");
             }

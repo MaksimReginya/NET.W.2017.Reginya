@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Matrix.NUnitTests
@@ -19,67 +20,31 @@ namespace Matrix.NUnitTests
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesInt))]
         public void EnumeratorTest(int[,] elements)
         {
-            var result = new SquareMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    result[i, j] = elements[i, j];
-                }
-            }
-
+            var result = new SquareMatrix<int>(elements);            
             EnumeratorTest<int>(result);
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesString))]
         public void EnumeratorTestString(string[,] elements)
         {
-            var result = new SquareMatrix<string>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    result[i, j] = elements[i, j];
-                }
-            }
-
+            var result = new SquareMatrix<string>(elements);            
             EnumeratorTest<string>(result);
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesInt))]
         public void EqualityTestInt(int[,] elements)
         {
-            var lhs = new SquareMatrix<int>(elements.GetLength(0));
-            var rhs = new SquareMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];
-                    rhs[i, j] = elements[i, j];
-                }
-            }
-
+            var lhs = new SquareMatrix<int>(elements);
+            var rhs = new SquareMatrix<int>(elements);
+           
             Assert.IsTrue(lhs.Equals(rhs));
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesString))]
         public void EqualityTestString(string[,] elements)
         {
-            var lhs = new SquareMatrix<string>(elements.GetLength(0));
-            var rhs = new SquareMatrix<string>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];
-                    rhs[i, j] = elements[i, j];
-                }
-            }
+            var lhs = new SquareMatrix<string>(elements);
+            var rhs = new SquareMatrix<string>(elements);
 
             Assert.IsTrue(lhs.Equals(rhs));
         }
@@ -87,128 +52,58 @@ namespace Matrix.NUnitTests
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddTestInt))]
         public int[,] AddTestInt(int[,] elements)
         {
-            var lhs = new SquareMatrix<int>(elements.GetLength(0));
-            var rhs = new SquareMatrix<int>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];
-                    rhs[i, j] = elements[i, j];
-                }
-            }
+            var lhs = new SquareMatrix<int>(elements);
+            var rhs = new SquareMatrix<int>(elements);            
 
             lhs = lhs.Add(rhs) as SquareMatrix<int>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    elements[i, j] = lhs[i, j];
-                }
-            }
-
-            return elements;
+            
+            return lhs?.ToArray();
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddSquareAndSymmetricalTestInt))]
         public int[,] AddSquareAndSymmetricalTestInt(int[,] elements)
         {
-            var lhs = new SquareMatrix<int>(elements.GetLength(0));
-            var rhs = new SymmetricalMatrix<int>(elements.GetLength(0));
+            var lhs = new SquareMatrix<int>(elements);
+            var rhs = new SymmetricalMatrix<int>(elements);
+            
+            lhs = lhs.Add(rhs) as SquareMatrix<int>;            
 
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];
-                    rhs[i, j] = elements[i, j];
-                }
-            }
-
-            lhs = lhs.Add(rhs) as SquareMatrix<int>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    elements[i, j] = lhs[i, j];
-                }
-            }
-
-            return elements;
+            return lhs?.ToArray();
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddSquareAndDiagonalTestInt))]
         public int[,] AddSquareAndDiagonalTestInt(int[,] elements)
         {
-            var lhs = new SquareMatrix<int>(elements.GetLength(0));
-            var rhs = new DiagonalMatrix<int>(elements.GetLength(0));
+            var lhs = new SquareMatrix<int>(elements);
+            var rhs = new DiagonalMatrix<int>(elements);          
 
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];                    
-                }
+            lhs = lhs.Add(rhs) as SquareMatrix<int>;            
 
-                rhs[i, i] = elements[i, i];
-            }
-
-            lhs = lhs.Add(rhs) as SquareMatrix<int>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    elements[i, j] = lhs[i, j];
-                }
-            }
-
-            return elements;
+            return lhs?.ToArray();
         }
 
         [Test, TestCaseSource(typeof(TestCasesClass), nameof(TestCasesClass.TestCasesAddTestString))]
         public string[,] AddTestString(string[,] elements)
         {
-            var lhs = new SquareMatrix<string>(elements.GetLength(0));
-            var rhs = new SquareMatrix<string>(elements.GetLength(0));
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    lhs[i, j] = elements[i, j];
-                    rhs[i, j] = elements[i, j];
-                }
-            }
-
+            var lhs = new SquareMatrix<string>(elements);
+            var rhs = new SquareMatrix<string>(elements);
+          
             lhs = lhs.Add(rhs) as SquareMatrix<string>;
-
-            for (int i = 0; i < elements.GetLength(0); i++)
-            {
-                for (int j = 0; j < elements.GetLength(1); j++)
-                {
-                    elements[i, j] = lhs[i, j];
-                }
-            }
-
-            return elements;
+           
+            return lhs?.ToArray();
         }
 
         private static void ConstructorTest<T>(int order)
         {
             var matrix = new SquareMatrix<T>(order);
-            Assert.AreEqual(matrix.ColumnCount, order);
-            Assert.AreEqual(matrix.RowCount, order);
+            Assert.AreEqual(matrix.Order, order);            
         }
 
-        private static void EnumeratorTest<T>(SquareMatrix<T> matrix)
+        private static void EnumeratorTest<T>(IEnumerable<T> matrix)
         {
             foreach (var element in matrix)
             {
-                Assert.IsNotNull(element);
+                Assert.IsTrue(element != null || default(T) == null);
             }
         }
 
