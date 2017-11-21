@@ -10,14 +10,32 @@ namespace Algorithm
         #region PublicMethods
 
         /// <summary>
-        /// Filters the array, so that only numbers containing the given digit remain on the output. </summary>
+        /// Filters the array, so that only numbers satisfying the predicate remain on the output. </summary>
         /// <param name="predicate">Predicate to filter array</param>
         /// <param name="numbers">Source numbers</param>        
         /// <exception cref="ArgumentNullException">
         /// Throws when predicate or numbers are null </exception>        
         /// <returns>
-        /// Numbers containing a given digit or empty array if there are no such numbers. </returns>
+        /// Numbers satisfying the predicate or empty array if there are no such numbers. </returns>
         public static int[] FilterDigit(IPredicate<int> predicate, params int[] numbers)
+        {
+            if (predicate != null)
+            {
+                return FilterDigit(predicate.IsSuitable, numbers);
+            }
+
+            throw new ArgumentNullException(nameof(predicate));
+        }
+
+        /// <summary>
+        /// Filters the array, so that only numbers satisfying the predicate remain on the output. </summary>
+        /// <param name="predicate">Predicate to filter array</param>
+        /// <param name="numbers">Source numbers</param>        
+        /// <exception cref="ArgumentNullException">
+        /// Throws when predicate or numbers are null </exception>        
+        /// <returns>
+        /// Numbers satisfying the predicate or empty array if there are no such numbers. </returns>
+        public static int[] FilterDigit(Predicate<int> predicate, params int[] numbers)
         {
             if (predicate == null)
             {
@@ -34,7 +52,7 @@ namespace Algorithm
                 return new int[0];
             }
 
-            return numbers.Where(predicate.IsSuitable).ToArray();
+            return numbers.Where(number => predicate(number)).ToArray();
         }
 
         #endregion

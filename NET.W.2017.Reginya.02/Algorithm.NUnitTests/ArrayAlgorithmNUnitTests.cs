@@ -14,12 +14,11 @@ namespace Algorithm.NUnitTests
         {
             return ArrayAlgorithm.FilterDigit(new IsDigitInNumberPredicate(digit), numbers);
         }
-
-        [TestCase(12, 5, 8, 999, 1212)]
-        public void FilterDigit_ThrowsArgumentException(int digit, params int[] numbers)
+        
+        public void FilterDigit_ThrowsArgumentException(int digit)
         {
             Assert.Throws<ArgumentException>(
-                () => ArrayAlgorithm.FilterDigit(null, numbers));
+                () => ArrayAlgorithm.FilterDigit(new IsDigitInNumberPredicate(digit), null));
         }
     }
 }
