@@ -45,7 +45,7 @@ namespace DAL.Fake
                 throw new ArgumentNullException(nameof(account));
             }
 
-            if (_accounts.Any(account.Equals))
+            if (_accounts.Any(dalAccount => dalAccount.AccountNumber == account.AccountNumber))
             {
                 throw new RepositoryException("Account already exists in repository.");
             }
@@ -77,12 +77,12 @@ namespace DAL.Fake
                 throw new ArgumentNullException(nameof(account));
             }
 
-            if (!_accounts.Any(account.Equals))
+            if (!_accounts.Any(dalAccount => dalAccount.AccountNumber == account.AccountNumber))
             {
                 throw new RepositoryException("Account can't be found in repository.");
             }
 
-            _accounts.Remove(account);
+            _accounts.RemoveAll(dalAccount => dalAccount.AccountNumber == account.AccountNumber);
             _accounts.Add(account);            
         }
 
@@ -94,12 +94,12 @@ namespace DAL.Fake
                 throw new ArgumentNullException(nameof(account));
             }
 
-            if (!_accounts.Any(account.Equals))
+            if (!_accounts.Any(dalAccount => dalAccount.AccountNumber == account.AccountNumber))
             {
                 throw new RepositoryException("Account can't be found in repository.");
             }
 
-            _accounts.Remove(account);            
+            _accounts.RemoveAll(dalAccount => dalAccount.AccountNumber == account.AccountNumber);
         }
 
         /// <inheritdoc />
