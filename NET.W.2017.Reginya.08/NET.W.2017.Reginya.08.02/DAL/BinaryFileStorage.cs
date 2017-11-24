@@ -1,0 +1,190 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using DAL.Interface;
+using DAL.Interface.DTO;
+
+namespace DAL
+{
+    /// <inheritdoc />
+    /// <summary>
+    /// Binary storage of accounts
+    /// </summary>
+    public class BinaryFileStorage : IBankAccountRepository
+    {
+        #region Private fields
+
+        private readonly string _filePath;
+        private readonly List<DalAccount> _accounts;
+
+        #endregion         
+
+        #region Public constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryFileStorage" /> class.
+        /// </summary>
+        public BinaryFileStorage(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("Path to file is invalid.", nameof(filePath));
+            }
+
+            _filePath = filePath;
+            _accounts = new List<DalAccount>();
+
+            try
+            {
+                if (File.Exists(_filePath))
+                {
+                    ParseFile();
+                }
+            }
+            catch (Exception)
+            {
+                _accounts.Clear();
+            }
+        }
+
+        #endregion
+
+        #region IStorage implementation
+
+        /// <inheritdoc />
+        public void AddAccount(DalAccount account)
+        {
+            if (ReferenceEquals(account, null))
+            {
+                throw new ArgumentNullException(nameof(account));
+            }
+
+            if (_accounts.Any(account.Equals))
+            {
+                throw new RepositoryException("Account already exists in repository.");
+            }
+
+            AppendAccountToFile(account);
+            _accounts.Add(account);
+        }
+
+        /// <inheritdoc />
+        public DalAccount GetAccount(string accountNumber)
+        {
+            if (string.IsNullOrWhiteSpace(accountNumber))
+            {
+                throw new ArgumentException(nameof(accountNumber));
+            }
+
+            return _accounts.FirstOrDefault(account => account.AccountNumber == accountNumber);
+        }
+
+        /// <inheritdoc />
+        public void UpdateAccount(DalAccount account)
+        {
+            if (ReferenceEquals(account, null))
+            {
+                throw new ArgumentNullException(nameof(account));
+            }
+
+            if (!_accounts.Any(account.Equals))
+            {
+                throw new RepositoryException("Account can't be found in repository.");
+            }
+
+            _accounts.Remove(account);
+            _accounts.Add(account);
+            WriteAccountsToFile();
+        }
+
+        /// <inheritdoc />
+        public void RemoveAccount(DalAccount account)
+        {
+            if (ReferenceEquals(account, null))
+            {
+                throw new ArgumentNullException(nameof(account));
+            }
+
+            if (!_accounts.Any(account.Equals))
+            {
+                throw new RepositoryException("Account can't be found in repository.");
+            }
+
+            _accounts.Remove(account);
+            WriteAccountsToFile();
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<DalAccount> GetAllAccounts() =>
+            new List<DalAccount>(_accounts);
+
+        #endregion
+
+        #region Private methods
+
+        private static DalAccount ReadAccountFromFile(BinaryReader reader)
+        {
+            string typeName = reader.ReadString();
+            string accountNumber = reader.ReadString();
+            string ownerFirstName = reader.ReadString();
+            string ownerLastName = reader.ReadString();
+            decimal balance = reader.ReadDecimal();
+            int bonus = reader.ReadInt32();
+
+            return new DalAccount
+            {
+                AccountType = Type.GetType(typeName),
+                AccountNumber = accountNumber,
+                OwnerFirstName = ownerFirstName,
+                OwnerLastName = ownerLastName,
+                Balance = balance,
+                Bonus = bonus
+            };
+        }
+
+        private static void WriteAccountToFile(BinaryWriter writer, DalAccount account)
+        {
+            writer.Write(account.AccountType.AssemblyQualifiedName);
+            writer.Write(account.AccountNumber);
+            writer.Write(account.OwnerFirstName);
+            writer.Write(account.OwnerLastName);
+            writer.Write(account.Balance);
+            writer.Write(account.Bonus);
+        }
+
+        private void ParseFile()
+        {
+            using (var reader = new BinaryReader(File.Open(_filePath, FileMode.Open), Encoding.UTF8))
+            {
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                {
+                    var account = ReadAccountFromFile(reader);
+                    _accounts.Add(account);
+                }
+            }
+        }
+
+        private void AppendAccountToFile(DalAccount account)
+        {
+            using (var writer = new BinaryWriter(File.Open(_filePath, FileMode.Append), Encoding.UTF8))
+            {
+                WriteAccountToFile(writer, account);
+            }
+        }
+
+        private void WriteAccountsToFile()
+        {
+            using (var writer = new BinaryWriter(File.Open(_filePath, FileMode.Create), Encoding.UTF8))
+            {
+                foreach (var account in _accounts)
+                {
+                    WriteAccountToFile(writer, account);
+                }
+            }
+        }
+
+        #endregion
+    }
+}
