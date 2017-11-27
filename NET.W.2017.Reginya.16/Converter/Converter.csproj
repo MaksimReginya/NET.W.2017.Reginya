@@ -41,10 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UrlToXmlConverter.cs" />
-    <Compile Include="Interfaces\IConverter.cs" />
+    <Compile Include="UrlToXmlTransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlConverter.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Converter.Interfaces\Converter.Interfaces.csproj">
+      <Project>{a13ec4b5-323f-4a74-9d6b-1aeb9cf8709d}</Project>
+      <Name>Converter.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger.Interfaces\Logger.Interfaces.csproj">
+      <Project>{b05bf0a6-bc5a-4910-b46b-59216496233a}</Project>
+      <Name>Logger.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reader.Interfaces\Reader.Interfaces.csproj">
+      <Project>{db85f319-8dbf-45e0-a00b-26339a741158}</Project>
+      <Name>Reader.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

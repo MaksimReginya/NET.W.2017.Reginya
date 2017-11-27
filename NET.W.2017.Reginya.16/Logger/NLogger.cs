@@ -22,7 +22,7 @@ namespace Logger
         /// <param name="className">Name of logging class.</param>
         public NLogger(string className)
         {
-            _logger = LogManager.GetLogger(className);
+            this._logger = LogManager.GetLogger(className);
         }
 
         #endregion
@@ -32,7 +32,7 @@ namespace Logger
         /// <inheritdoc />
         public void Warn(string message)
         {
-            _logger.Warn(message);
+            this._logger.Warn(message);
         }
 
         #endregion

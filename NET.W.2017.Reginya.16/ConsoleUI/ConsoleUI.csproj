@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
     </Reference>
@@ -57,6 +60,20 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Converter.Interfaces\Converter.Interfaces.csproj">
+      <Project>{a13ec4b5-323f-4a74-9d6b-1aeb9cf8709d}</Project>
+      <Name>Converter.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DependencyResolver\DependencyResolver.csproj">
+      <Project>{f733ce7d-6d51-4095-b343-ddbf1652d239}</Project>
+      <Name>DependencyResolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reader.Interfaces\Reader.Interfaces.csproj">
+      <Project>{db85f319-8dbf-45e0-a00b-26339a741158}</Project>
+      <Name>Reader.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

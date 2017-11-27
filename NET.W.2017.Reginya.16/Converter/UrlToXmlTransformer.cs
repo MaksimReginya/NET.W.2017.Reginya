@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Web;
+using System.Xml;
 using Converter.Interfaces;
 
 namespace Converter
@@ -9,19 +10,30 @@ namespace Converter
     /// <summary>
     /// Converts url to xml format.
     /// </summary>
-    public class UrlToXmlConverter : IConverter<string, string>
+    public class UrlToXmlTransformer : IXmlTransformer
     {
+        #region Public constants
+
+        public const string RootElement = "urlAddresses";
+
+        #endregion
+
         #region Public methods
-                
+
+        public XmlNode GetRootElement(XmlDocument xmlDocument)
+            => xmlDocument.CreateElement(RootElement);
+
         /// <inheritdoc />
         /// <summary>
         /// Сonverts url string to xml format.
         /// </summary>
         /// <param name="data">String with url address.</param>
+        /// <param name="xmlDocument">Document that contains resulting node.</param>
         /// <returns>Xml representation of url address.</returns>
-        /// <exception cref="ArgumentException">Exception thrown when
-        /// <paramref name="data"/> is invalid url.</exception>
-        public string Convert(string data)
+        /// <exception cref="ArgumentException">
+        /// Thrown when url in <paramref name="data"/> is not valid.
+        /// </exception>
+        public XmlNode Transform(string data, XmlDocument xmlDocument)
         {
             VerifyUrl(data);
 
@@ -36,7 +48,10 @@ namespace Converter
 
             result.Append("</urlAddress>");
 
-            return result.ToString();
+            var xmlDocumentFragment = xmlDocument.CreateDocumentFragment();
+            xmlDocumentFragment.InnerXml = result.ToString();
+
+            return xmlDocumentFragment;
         }
 
         #endregion
@@ -99,7 +114,7 @@ namespace Converter
 
             result.Append("</parameters>");
         }
-
+        
         #endregion
     }
 }
