@@ -3,8 +3,7 @@
 namespace Task5.Console
 {
     using System.Collections.Generic;
-    using System;
-    using Task5;
+    using System;    
 
     class Program
     {
