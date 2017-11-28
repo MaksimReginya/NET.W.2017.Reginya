@@ -1,23 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Task4.Solution;
 
 namespace Task4.Solution
 {
-    public class Calculator
+    public static class Calculator
     {
-        public double CalculateAverage(List<double> values, Func<List<double>, double> averagingMethod)
+        public static double CalculateAverage(List<double> values, Func<List<double>, double> averagingMethod)
+        {
+            VerifyInput(values, averagingMethod);
+
+            return averagingMethod(values);
+        }
+
+        public static double CalculateAverage(List<double> values, IAveragingMethod averagingMethod)
+        {
+            if (averagingMethod == null)
+            {
+                throw new ArgumentNullException(nameof(averagingMethod));
+            }
+
+            return CalculateAverage(values, averagingMethod.CalculateAverageValue);
+        }
+
+        private static void VerifyInput(List<double> values, Func<List<double>, double> averagingMethod)
         {
             if (values == null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return averagingMethod(values);
+            if (averagingMethod == null)
+            {
+                throw new ArgumentNullException(nameof(averagingMethod));
+            }
         }
-
-        public double CalculateAverage(List<double> values, IAveragingMethod averagingMethod)
-            => CalculateAverage(values, averagingMethod.CalculateAverageValue);
     }
 }
