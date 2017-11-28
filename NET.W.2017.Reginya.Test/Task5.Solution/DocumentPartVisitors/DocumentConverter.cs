@@ -15,8 +15,8 @@ namespace Task5.Solution.DocumentPartVisitors
         public string ConvertDocument(IEnumerable<DocumentPart> parts)
         {
             foreach (var part in parts)
-            {
-                Visit((dynamic)part);
+            {                
+                part.Accept(this);
             }
 
             return ConvertedDocument;
