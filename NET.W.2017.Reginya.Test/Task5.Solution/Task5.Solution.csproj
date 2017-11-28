@@ -41,12 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoldText.cs" />
-    <Compile Include="IConversion.cs" />
     <Compile Include="Document.cs" />
-    <Compile Include="DocumentConverter.cs" />
     <Compile Include="DocumentPart.cs" />
+    <Compile Include="DocumentPartVisitors\DocumentConverter.cs" />
+    <Compile Include="DocumentPartVisitors\HtmlConverter.cs" />
+    <Compile Include="DocumentPartVisitors\LaTeXConverter.cs" />
+    <Compile Include="DocumentPartVisitors\PlainTextConverter.cs" />
     <Compile Include="Hyperlink.cs" />
-    <Compile Include="IConverter.cs" />
+    <Compile Include="IDocumentPartVisitor.cs" />
     <Compile Include="PlainText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

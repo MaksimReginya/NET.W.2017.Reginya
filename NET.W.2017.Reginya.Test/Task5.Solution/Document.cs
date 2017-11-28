@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Task5.Solution.DocumentPartVisitors;
 
 namespace Task5.Solution
 {
     public class Document
     {
-        private IEnumerable<DocumentPart> _parts;
+        private readonly IEnumerable<DocumentPart> _parts;
 
         public Document(IEnumerable<DocumentPart> parts)
         {
@@ -14,17 +15,10 @@ namespace Task5.Solution
                 throw new ArgumentNullException(nameof(parts));
             }
 
-            Parts = parts;
+            this._parts = new List<DocumentPart>(parts);
         }
 
-        public IEnumerable<DocumentPart> Parts
-        {
-            get => new List<DocumentPart>(_parts);
-
-            set
-            {
-                _parts = new List<DocumentPart>(value);
-            }
-        }
+        public string Convert(DocumentConverter converter)
+            => converter.ConvertDocument(_parts);        
     }
 }
