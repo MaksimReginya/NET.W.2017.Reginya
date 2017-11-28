@@ -6,9 +6,9 @@ namespace Task5.Console
     using System.Collections.Generic;
     using System;    
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var parts = new List<DocumentPart>
             {
