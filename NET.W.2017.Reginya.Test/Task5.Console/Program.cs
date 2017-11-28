@@ -1,4 +1,6 @@
-﻿namespace Task5.Console
+﻿using Task5.Solution;
+
+namespace Task5.Console
 {
     using System.Collections.Generic;
     using System;
@@ -15,13 +17,16 @@
                     new BoldText {Text = "Some bold text"}
                 };
 
-            Document document = new Document(parts);
+            var document = new Document(parts);
+            var converter = new DocumentConverter();
 
-            Console.WriteLine(document.ToHtml());
+            Console.WriteLine(converter.Convert(document, ConversionType.Html));
 
-            Console.WriteLine(document.ToPlainText());
+            Console.WriteLine(converter.Convert(document, ConversionType.PlainText));
 
-            Console.WriteLine(document.ToLaTeX());
+            Console.WriteLine(converter.Convert(document, ConversionType.LaTeX));
+
+            Console.ReadKey();
         }
     }
 }
