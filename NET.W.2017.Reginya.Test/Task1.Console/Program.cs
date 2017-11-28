@@ -10,29 +10,29 @@ namespace Task1.Console
             var repository = new SqlRepository();
             var verifier = new PasswordVerifier();
 
-            var checkerService = new PasswordCheckerService(repository, verifier);
+            var checkerService = new PasswordCheckerService(repository);
 
-            if (checkerService.VerifyPassword("").Item1 == true)
+            if (checkerService.VerifyPassword("", verifier).Item1)
             {
                 throw new Exception();
             }
 
-            if (checkerService.VerifyPassword("abc").Item1 == true)
+            if (checkerService.VerifyPassword("abc", verifier).Item1)
             {
                 throw new Exception();
             }
 
-            if (checkerService.VerifyPassword("abcabcabcabcabcabc").Item1 == true)
+            if (checkerService.VerifyPassword("abcabcabcabcabcabc", verifier).Item1)
             {
                 throw new Exception();
             }
 
-            if (checkerService.VerifyPassword("awdwadawdawd").Item1 == true)
+            if (checkerService.VerifyPassword("awdwadawdawd", verifier).Item1)
             {
                 throw new Exception();
             }
 
-            if (checkerService.VerifyPassword("qwerty123").Item1 == false)
+            if (!checkerService.VerifyPassword("qwerty123", verifier).Item1)
             {
                 throw new Exception();
             }

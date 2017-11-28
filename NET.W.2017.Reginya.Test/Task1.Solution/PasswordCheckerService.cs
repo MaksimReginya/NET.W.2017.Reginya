@@ -4,40 +4,27 @@ namespace Task1.Solution
 {
     public class PasswordCheckerService
     {
-        private readonly IRepository _repository;
-        private readonly IVerifier _verifier;
+        private readonly IRepository _repository;        
 
-        public PasswordCheckerService(IRepository repository, IVerifier verifier)
+        public PasswordCheckerService(IRepository repository)
         {
-            VerifyParameteres(repository, verifier);
-            _repository = repository;
-            _verifier = verifier;
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));            
         }
         
-        public Tuple<bool, string> VerifyPassword(string password)
+        public Tuple<bool, string> VerifyPassword(string password, IVerifier verifier)
         {
-            var result = _verifier.VerifyPassword(password);
-            if (result.Item1 == false)
-            {
-                return result;
-            }
-
-            _repository.Create(password);
-
-            return result;
-        }
-
-        private void VerifyParameteres(IRepository repository, IVerifier verifier)
-        {
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-
             if (verifier == null)
             {
                 throw new ArgumentNullException(nameof(verifier));
             }
-        }
+
+            var result = verifier.VerifyPassword(password);
+            if (result.Item1)
+            {
+                _repository.Create(password);
+            }
+            
+            return result;
+        }        
     }
 }
