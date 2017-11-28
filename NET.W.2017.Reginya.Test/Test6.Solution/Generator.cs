@@ -1,46 +1,68 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Test6.Solution
 {
     public static class Generator<T>
-    {            
-        public static IEnumerable<T> Generate(T first, T second, int count, Func<T, T, T> calculationRule)
+    {
+        public static IEnumerable<T> GenerateSequence(T first, T second, int count, Func<T, T, T> elementCalculator)
         {
-            VerifyInput(first, second, calculationRule);
+            VerifyInput(first, second, count, elementCalculator);
 
-            T current = first;
-            T next = second;
-            yield return current;
-            yield return next;
-            for (int i = 2; i < count; i++)
-            {
-                var temp = calculationRule(current, next);
-                current = next;
-                next = temp;
-                yield return next;                
-            }            
+            return count == 0 ? new T[0] : Generate(first, second, count, elementCalculator);
         }
 
-        private static void VerifyInput(T first, T second, Func<T, T, T> calculationRule)
+        public static IEnumerable<T> GenerateSequence(T first, T second, int count, IElementCalculation<T> elementCalculator)
         {
-            if (first == null)
+            if (ReferenceEquals(elementCalculator, null))
+            {
+                throw new ArgumentNullException(nameof(elementCalculator));
+            }
+
+            return GenerateSequence(first, second, count, elementCalculator.CalculateNextElement);
+        }
+
+        private static IEnumerable<T> Generate(T first, T second, int count, Func<T, T, T> elementCalculator)
+        {
+            if (count >= 1)
+            {
+                yield return first;
+            }
+
+            if (count >= 2)
+            {
+                yield return second;
+            }
+
+            for (int i = 3; i <= count; i++)
+            {
+                var temp = second;
+                second = elementCalculator(first, second);
+                yield return second;
+                first = temp;
+            }
+        }
+
+        private static void VerifyInput(T first, T second, int count, Func<T, T, T> elementCalculator)
+        {
+            if (count < 0)
+            {
+                throw new ArgumentException($"{nameof(count)} must be positive.", nameof(count));
+            }
+
+            if (ReferenceEquals(first, null))
             {
                 throw new ArgumentNullException(nameof(first));
             }
 
-            if (second == null)
+            if (ReferenceEquals(second, null))
             {
                 throw new ArgumentNullException(nameof(second));
             }
 
-            if (calculationRule == null)
+            if (ReferenceEquals(elementCalculator, null))
             {
-                throw new ArgumentNullException(nameof(calculationRule));
+                throw new ArgumentNullException(nameof(elementCalculator));
             }
         }
     }
