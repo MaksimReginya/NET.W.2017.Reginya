@@ -7,28 +7,41 @@ using System.Threading.Tasks;
 
 namespace Test6.Solution
 {
-    public class Generator<T>
-    {
-        private readonly Func<T, T, T> _calculationRule;
-
-        public Generator(Func<T, T, T> calculationRule)
+    public static class Generator<T>
+    {            
+        public static IEnumerable<T> Generate(T first, T second, int count, Func<T, T, T> calculationRule)
         {
-            _calculationRule = calculationRule;
-        }
+            VerifyInput(first, second, calculationRule);
 
-        public IEnumerable<T> Generate(T first, T second, int count)
-        {
             T current = first;
             T next = second;
             yield return current;
             yield return next;
             for (int i = 2; i < count; i++)
             {
-                var temp = _calculationRule(current, next);
+                var temp = calculationRule(current, next);
                 current = next;
                 next = temp;
                 yield return next;                
             }            
+        }
+
+        private static void VerifyInput(T first, T second, Func<T, T, T> calculationRule)
+        {
+            if (first == null)
+            {
+                throw new ArgumentNullException(nameof(first));
+            }
+
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            if (calculationRule == null)
+            {
+                throw new ArgumentNullException(nameof(calculationRule));
+            }
         }
     }
 }

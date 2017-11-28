@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task5.Solution
 {
-    public enum ConversionType
+    public interface IConversion
     {
         Html,
         PlainText,

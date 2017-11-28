@@ -5,7 +5,7 @@ namespace Task5.Solution
 {
     public class Document
     {
-        private List<DocumentPart> _parts;
+        private IEnumerable<DocumentPart> _parts;
 
         public Document(IEnumerable<DocumentPart> parts)
         {
@@ -14,10 +14,10 @@ namespace Task5.Solution
                 throw new ArgumentNullException(nameof(parts));
             }
 
-            Parts = parts as List<DocumentPart>;
+            Parts = parts;
         }
 
-        public List<DocumentPart> Parts
+        public IEnumerable<DocumentPart> Parts
         {
             get => new List<DocumentPart>(_parts);
 

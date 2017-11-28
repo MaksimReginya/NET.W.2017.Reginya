@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoldText.cs" />
-    <Compile Include="ConversionType.cs" />
+    <Compile Include="IConversion.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="DocumentConverter.cs" />
     <Compile Include="DocumentPart.cs" />
