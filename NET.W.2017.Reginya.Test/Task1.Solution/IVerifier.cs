@@ -1,9 +1,10 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Task1.Solution
 {
-    public interface IVerifier
+    public interface IVerifier : IEnumerable<IVerification>, IEnumerable
     {
-        Tuple<bool, string> VerifyPassword(string password);
+        void Add(IVerification verification);
     }
 }

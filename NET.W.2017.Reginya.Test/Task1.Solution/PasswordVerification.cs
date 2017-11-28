@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Task1.Solution
 {
-    public class PasswordVerifier : IVerifier
+    public class PasswordVerification : IVerification
     {
         public Tuple<bool, string> VerifyPassword(string password)
         {

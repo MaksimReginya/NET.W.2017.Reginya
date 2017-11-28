@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Task1.Solution
 {
@@ -17,14 +18,21 @@ namespace Task1.Solution
             {
                 throw new ArgumentNullException(nameof(verifier));
             }
-
-            var result = verifier.VerifyPassword(password);
-            if (result.Item1)
-            {
-                _repository.Create(password);
-            }
             
-            return result;
+            var result = new StringBuilder();            
+            foreach (var verification in verifier)
+            {
+                var temp = verification.VerifyPassword(password);
+                if (!temp.Item1)
+                {                    
+                    return new Tuple<bool, string>(false, temp.Item2);
+                }
+
+                result.Append(temp.Item2);
+            }
+                        
+            _repository.Create(password);                        
+            return new Tuple<bool, string>(true, result.ToString());
         }        
     }
 }
