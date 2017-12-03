@@ -135,7 +135,7 @@ namespace DAL
 
             return new DalAccount
             {
-                AccountType = Type.GetType(typeName),
+                AccountType = typeName,
                 AccountNumber = accountNumber,
                 OwnerFirstName = ownerFirstName,
                 OwnerLastName = ownerLastName,
@@ -146,7 +146,7 @@ namespace DAL
 
         private static void WriteAccountToFile(BinaryWriter writer, DalAccount account)
         {
-            writer.Write(account.AccountType.AssemblyQualifiedName);
+            writer.Write(account.AccountType);
             writer.Write(account.AccountNumber);
             writer.Write(account.OwnerFirstName);
             writer.Write(account.OwnerLastName);

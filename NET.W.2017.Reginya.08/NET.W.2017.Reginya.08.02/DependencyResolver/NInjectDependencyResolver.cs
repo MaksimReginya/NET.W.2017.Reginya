@@ -1,5 +1,6 @@
 ﻿using BLL.Interface.ServiceInterface;
 using BLL.ServiceImplementation;
+using DAL.EF;
 using DAL.Fake;
 using DAL.Interface;
 using Ninject;
@@ -10,7 +11,8 @@ namespace DependencyResolver
     {
         public static void Configure(IKernel kernel)
         {
-            kernel.Bind<IBankAccountRepository>().To<FakeRepository>().WithConstructorArgument("filePath", "accounts");
+            // kernel.Bind<IBankAccountRepository>().To<FakeRepository>().WithConstructorArgument("filePath", "accounts");
+            kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>();
             kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>();
 
             var accountRepository = kernel.Get<IBankAccountRepository>();

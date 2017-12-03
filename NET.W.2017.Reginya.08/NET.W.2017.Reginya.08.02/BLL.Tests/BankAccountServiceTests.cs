@@ -85,7 +85,7 @@ namespace BLL.Tests
                 new DalAccount
                 {
                     AccountNumber = expectedAccountNumber,
-                    AccountType = typeof(BaseBankAccount),
+                    AccountType = "BaseBankAccount",
                     Balance = 100,
                     Bonus = 100,
                     OwnerFirstName = firstName,
@@ -115,7 +115,7 @@ namespace BLL.Tests
                 new DalAccount
                 {
                     AccountNumber = expectedAccountNumber,
-                    AccountType = typeof(BaseBankAccount),
+                    AccountType = "BaseBankAccount",
                     Balance = 0,
                     Bonus = 0,
                     OwnerFirstName = firstName,

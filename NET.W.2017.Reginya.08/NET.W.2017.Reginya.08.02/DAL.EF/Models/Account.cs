@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace DAL.Interface.DTO
+namespace DAL.EF.Models
 {
     /// <summary>
     /// Decorator of bank account entity that is used to be saved in repository.
     /// </summary>
-    public class DalAccount
+    public class Account
     {
         #region Public properties
                 
@@ -13,10 +14,11 @@ namespace DAL.Interface.DTO
         /// Type of bank account.
         /// </summary>
         public string AccountType { get; set; }
-
+        
         /// <summary>
         /// Unique account number.
         /// </summary>
+        [Key]        
         public string AccountNumber { get; set; }
 
         /// <summary>

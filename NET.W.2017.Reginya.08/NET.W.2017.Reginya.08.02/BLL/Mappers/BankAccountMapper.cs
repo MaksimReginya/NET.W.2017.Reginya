@@ -11,13 +11,15 @@ namespace BLL.Mappers
     /// </summary>
     public static class BankAccountMapper
     {
+        #region Public methods
+                
         /// <summary>
         /// Maps <paramref cref="BankAccount"/> to <paramref cref="DalAccount"/>.
         /// </summary>
         public static DalAccount ToDalAccount(this BankAccount account) =>
             new DalAccount
             {
-                AccountType = account.GetType(),
+                AccountType = account.GetType().AssemblyQualifiedName,
                 AccountNumber = account.AccountNumber,
                 OwnerFirstName = account.OwnerFirstName,
                 OwnerLastName = account.OwnerLastName,
@@ -30,7 +32,7 @@ namespace BLL.Mappers
         /// </summary>
         public static BankAccount ToBllAccount(this DalAccount dalAccount) =>
             (BankAccount)Activator.CreateInstance(
-                dalAccount.AccountType,
+                GetBllAccountType(dalAccount.AccountType),
                 dalAccount.AccountNumber,
                 dalAccount.OwnerFirstName,
                 dalAccount.OwnerLastName,
@@ -43,7 +45,7 @@ namespace BLL.Mappers
         public static IEnumerable<DalAccount> ToDalAccounts(this IEnumerable<BankAccount> accounts)
             => new List<DalAccount>(accounts.Select(account => new DalAccount
             {
-                AccountType = account.GetType(),
+                AccountType = account.GetType().AssemblyQualifiedName,
                 AccountNumber = account.AccountNumber,
                 OwnerFirstName = account.OwnerFirstName,
                 OwnerLastName = account.OwnerLastName,
@@ -56,11 +58,32 @@ namespace BLL.Mappers
         /// </summary>
         public static IEnumerable<BankAccount> ToBllAccounts(this IEnumerable<DalAccount> accounts)
             => new List<BankAccount>(accounts.Select(account => (BankAccount)Activator.CreateInstance(
-                account.AccountType,
+                GetBllAccountType(account.AccountType),
                 account.AccountNumber,
                 account.OwnerFirstName,
                 account.OwnerLastName,
                 account.Balance,
                 account.Bonus)));
+
+        #endregion
+
+        #region Private methods
+                
+        private static Type GetBllAccountType(string type)
+        {
+            if (type.Contains("Gold"))
+            {
+                return typeof(GoldBankAccount);
+            }
+
+            if (type.Contains("Platinum"))
+            {
+                return typeof(PlatinumBankAccount);
+            }
+
+            return typeof(BaseBankAccount);
+        }
+
+        #endregion
     }
 }
