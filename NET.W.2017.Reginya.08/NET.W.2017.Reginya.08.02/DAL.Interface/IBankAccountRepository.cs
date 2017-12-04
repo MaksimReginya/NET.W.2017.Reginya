@@ -15,7 +15,7 @@ namespace DAL.Interface
         /// <exception cref="RepositoryException">
         /// Thrown if account already exists in repository.
         /// </exception>
-        void AddAccount(DalAccount account);
+        void AddAccount(DtoAccount account);
 
         /// <summary>
         /// Gets the account with specified number.
@@ -25,7 +25,7 @@ namespace DAL.Interface
         /// Thrown if account can't be found in repository.
         /// </exception>
         /// <returns>Requested account.</returns>
-        DalAccount GetAccount(string accountNumber);
+        DtoAccount GetAccount(string accountNumber);
 
         /// <summary>
         /// Updates account's information in the repository.
@@ -34,7 +34,7 @@ namespace DAL.Interface
         /// <exception cref="RepositoryException">
         /// Thrown if account can't be found in repository.
         /// </exception>  
-        void UpdateAccount(DalAccount account);
+        void UpdateAccount(DtoAccount account);
 
         /// <summary>
         /// Removes account from the repository.
@@ -43,12 +43,12 @@ namespace DAL.Interface
         /// <exception cref="RepositoryException">
         /// Thrown if account can't be found in repository.
         /// </exception>  
-        void RemoveAccount(DalAccount account);
+        void RemoveAccount(DtoAccount account);
 
         /// <summary>
         /// Gets all accounts from the repository.
         /// </summary>         
         /// <returns>All accounts in the repository.</returns>        
-        IEnumerable<DalAccount> GetAllAccounts();
+        IEnumerable<DtoAccount> GetAllAccounts();
     }
 }

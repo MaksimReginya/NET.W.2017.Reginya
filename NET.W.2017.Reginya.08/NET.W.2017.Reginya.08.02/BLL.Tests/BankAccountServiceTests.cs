@@ -72,7 +72,7 @@ namespace BLL.Tests
             bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);                        
          
             repositoryMock.Verify(
-                repository => repository.AddAccount(It.Is<DalAccount>(account => account.AccountNumber == expectedAccountNumber)),
+                repository => repository.AddAccount(It.Is<DtoAccount>(account => account.AccountNumber == expectedAccountNumber)),
                 Times.Once);
         }
 
@@ -82,7 +82,7 @@ namespace BLL.Tests
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
             repositoryMock.Setup(repository => repository.GetAccount(It.IsAny<string>())).Returns(
-                new DalAccount
+                new DtoAccount
                 {
                     AccountNumber = expectedAccountNumber,
                     AccountType = "BaseBankAccount",
@@ -102,7 +102,7 @@ namespace BLL.Tests
             bankAccountService.Withdraw(actualAccountNumber, 10m);
           
             repositoryMock.Verify(
-                repository => repository.UpdateAccount(It.Is<DalAccount>(account => account.AccountNumber == expectedAccountNumber)),
+                repository => repository.UpdateAccount(It.Is<DtoAccount>(account => account.AccountNumber == expectedAccountNumber)),
                 Times.Exactly(2));                                 
         }
 
@@ -112,7 +112,7 @@ namespace BLL.Tests
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
             repositoryMock.Setup(repository => repository.GetAccount(It.IsAny<string>())).Returns(
-                new DalAccount
+                new DtoAccount
                 {
                     AccountNumber = expectedAccountNumber,
                     AccountType = "BaseBankAccount",
@@ -130,7 +130,7 @@ namespace BLL.Tests
             bankAccountService.CloseAccount(expectedAccountNumber);
                                
             repositoryMock.Verify(
-                repository => repository.RemoveAccount(It.Is<DalAccount>(account => account.AccountNumber == expectedAccountNumber)),
+                repository => repository.RemoveAccount(It.Is<DtoAccount>(account => account.AccountNumber == expectedAccountNumber)),
                 Times.Once);
         }
     }

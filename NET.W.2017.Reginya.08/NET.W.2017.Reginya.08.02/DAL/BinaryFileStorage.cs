@@ -17,7 +17,7 @@ namespace DAL
         #region Private fields
 
         private readonly string _filePath;
-        private readonly List<DalAccount> _accounts;
+        private readonly List<DtoAccount> _accounts;
 
         #endregion         
 
@@ -34,7 +34,7 @@ namespace DAL
             }
 
             _filePath = filePath;
-            _accounts = new List<DalAccount>();
+            _accounts = new List<DtoAccount>();
 
             try
             {
@@ -54,7 +54,7 @@ namespace DAL
         #region IStorage implementation
 
         /// <inheritdoc />
-        public void AddAccount(DalAccount account)
+        public void AddAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -71,7 +71,7 @@ namespace DAL
         }
 
         /// <inheritdoc />
-        public DalAccount GetAccount(string accountNumber)
+        public DtoAccount GetAccount(string accountNumber)
         {
             if (string.IsNullOrWhiteSpace(accountNumber))
             {
@@ -82,7 +82,7 @@ namespace DAL
         }
 
         /// <inheritdoc />
-        public void UpdateAccount(DalAccount account)
+        public void UpdateAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -100,7 +100,7 @@ namespace DAL
         }
 
         /// <inheritdoc />
-        public void RemoveAccount(DalAccount account)
+        public void RemoveAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -117,14 +117,14 @@ namespace DAL
         }
 
         /// <inheritdoc />
-        public IEnumerable<DalAccount> GetAllAccounts() =>
-            new List<DalAccount>(_accounts);
+        public IEnumerable<DtoAccount> GetAllAccounts() =>
+            new List<DtoAccount>(_accounts);
 
         #endregion
 
         #region Private methods
 
-        private static DalAccount ReadAccountFromFile(BinaryReader reader)
+        private static DtoAccount ReadAccountFromFile(BinaryReader reader)
         {
             string typeName = reader.ReadString();
             string accountNumber = reader.ReadString();
@@ -133,7 +133,7 @@ namespace DAL
             decimal balance = reader.ReadDecimal();
             int bonus = reader.ReadInt32();
 
-            return new DalAccount
+            return new DtoAccount
             {
                 AccountType = typeName,
                 AccountNumber = accountNumber,
@@ -144,7 +144,7 @@ namespace DAL
             };
         }
 
-        private static void WriteAccountToFile(BinaryWriter writer, DalAccount account)
+        private static void WriteAccountToFile(BinaryWriter writer, DtoAccount account)
         {
             writer.Write(account.AccountType);
             writer.Write(account.AccountNumber);
@@ -166,7 +166,7 @@ namespace DAL
             }
         }
 
-        private void AppendAccountToFile(DalAccount account)
+        private void AppendAccountToFile(DtoAccount account)
         {
             using (var writer = new BinaryWriter(File.Open(_filePath, FileMode.Append), Encoding.UTF8))
             {

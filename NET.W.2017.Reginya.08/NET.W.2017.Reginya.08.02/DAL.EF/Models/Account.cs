@@ -9,28 +9,17 @@ namespace DAL.EF.Models
     public class Account
     {
         #region Public properties
-                
+
         /// <summary>
-        /// Type of bank account.
+        /// Unique id of account.
         /// </summary>
-        public string AccountType { get; set; }
-        
+        public int Id { get; set; }
+
         /// <summary>
         /// Unique account number.
-        /// </summary>
-        [Key]        
+        /// </summary>            
         public string AccountNumber { get; set; }
-
-        /// <summary>
-        /// Owner's first name.
-        /// </summary>
-        public string OwnerFirstName { get; set; }
-
-        /// <summary>
-        /// Owner's last name.
-        /// </summary>
-        public string OwnerLastName { get; set; }
-
+       
         /// <summary>
         /// Balance of the account.
         /// </summary>
@@ -40,6 +29,26 @@ namespace DAL.EF.Models
         /// Bonus of the account.
         /// </summary>
         public int Bonus { get; set; }
+
+        /// <summary>
+        /// Id of owner of bank account.
+        /// </summary>
+        public int AccountOwnerId { get; set; }
+
+        /// <summary>
+        /// Id of type of bank account.
+        /// </summary>
+        public int AccountTypeId { get; set; }
+
+        /// <summary>
+        /// Owner of bank account.
+        /// </summary>
+        public virtual AccountOwner AccountOwner { get; set; }
+
+        /// <summary>
+        /// Type of bank account.
+        /// </summary>
+        public virtual AccountType AccountType { get; set; }
 
         #endregion       
     }

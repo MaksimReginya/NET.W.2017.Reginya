@@ -9,6 +9,8 @@ namespace DAL.EF
         {
         }
 
-        public DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountOwner> AccountOwners { get; set; }
+        public virtual DbSet<AccountType> AccountTypes { get; set; }
     }
 }

@@ -49,7 +49,19 @@
   <ItemGroup>
     <Compile Include="AccountContext.cs" />
     <Compile Include="DatabaseRepository.cs" />
+    <Compile Include="Mappers\AccountMappers.cs" />
+    <Compile Include="Migrations\201712041951091_InitialCreate.cs" />
+    <Compile Include="Migrations\201712041951091_InitialCreate.Designer.cs">
+      <DependentUpon>201712041951091_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712042008303_RecreateDatabase.cs" />
+    <Compile Include="Migrations\201712042008303_RecreateDatabase.Designer.cs">
+      <DependentUpon>201712042008303_RecreateDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountOwner.cs" />
+    <Compile Include="Models\AccountType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +73,14 @@
       <Project>{0b243814-4491-4369-830d-f7172f92357e}</Project>
       <Name>DAL.Interface</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201712041951091_InitialCreate.resx">
+      <DependentUpon>201712041951091_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712042008303_RecreateDatabase.resx">
+      <DependentUpon>201712042008303_RecreateDatabase.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

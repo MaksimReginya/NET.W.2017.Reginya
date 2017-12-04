@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace DAL.Interface.DTO
+﻿namespace DAL.Interface.DTO
 {
     /// <summary>
     /// Decorator of bank account entity that is used to be saved in repository.
     /// </summary>
-    public class DalAccount
+    public class DtoAccount
     {
         #region Public properties
                 

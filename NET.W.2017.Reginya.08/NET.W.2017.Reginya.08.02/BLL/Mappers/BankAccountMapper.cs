@@ -14,10 +14,10 @@ namespace BLL.Mappers
         #region Public methods
                 
         /// <summary>
-        /// Maps <paramref cref="BankAccount"/> to <paramref cref="DalAccount"/>.
+        /// Maps <paramref cref="BankAccount"/> to <paramref cref="DtoAccount"/>.
         /// </summary>
-        public static DalAccount ToDalAccount(this BankAccount account) =>
-            new DalAccount
+        public static DtoAccount ToDtoAccount(this BankAccount account) =>
+            new DtoAccount
             {
                 AccountType = account.GetType().AssemblyQualifiedName,
                 AccountNumber = account.AccountNumber,
@@ -28,9 +28,9 @@ namespace BLL.Mappers
             };
 
         /// <summary>
-        /// Maps <paramref cref="DalAccount"/> to <paramref cref="BankAccount"/>.
+        /// Maps <paramref cref="DtoAccount"/> to <paramref cref="BankAccount"/>.
         /// </summary>
-        public static BankAccount ToBllAccount(this DalAccount dalAccount) =>
+        public static BankAccount ToBllAccount(this DtoAccount dalAccount) =>
             (BankAccount)Activator.CreateInstance(
                 GetBllAccountType(dalAccount.AccountType),
                 dalAccount.AccountNumber,
@@ -40,10 +40,10 @@ namespace BLL.Mappers
                 dalAccount.Bonus);
 
         /// <summary>
-        /// Maps enumerable of <paramref cref="BankAccount"/> to enumerable of <paramref cref="DalAccount "/>.
+        /// Maps enumerable of <paramref cref="BankAccount"/> to enumerable of <paramref cref="DtoAccount "/>.
         /// </summary>
-        public static IEnumerable<DalAccount> ToDalAccounts(this IEnumerable<BankAccount> accounts)
-            => new List<DalAccount>(accounts.Select(account => new DalAccount
+        public static IEnumerable<DtoAccount> ToDtoAccounts(this IEnumerable<BankAccount> accounts)
+            => new List<DtoAccount>(accounts.Select(account => new DtoAccount
             {
                 AccountType = account.GetType().AssemblyQualifiedName,
                 AccountNumber = account.AccountNumber,
@@ -54,9 +54,9 @@ namespace BLL.Mappers
             }));
 
         /// <summary>
-        /// Maps enumerable of <paramref cref="DalAccount"/> to enumerable of <paramref cref="BankAccount "/>.
+        /// Maps enumerable of <paramref cref="DtoAccount"/> to enumerable of <paramref cref="BankAccount "/>.
         /// </summary>
-        public static IEnumerable<BankAccount> ToBllAccounts(this IEnumerable<DalAccount> accounts)
+        public static IEnumerable<BankAccount> ToBllAccounts(this IEnumerable<DtoAccount> accounts)
             => new List<BankAccount>(accounts.Select(account => (BankAccount)Activator.CreateInstance(
                 GetBllAccountType(account.AccountType),
                 account.AccountNumber,

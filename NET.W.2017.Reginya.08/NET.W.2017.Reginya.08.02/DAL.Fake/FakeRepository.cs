@@ -14,7 +14,7 @@ namespace DAL.Fake
     {
         #region Private fields
         
-        private readonly List<DalAccount> _accounts;
+        private readonly List<DtoAccount> _accounts;
 
         #endregion         
 
@@ -30,7 +30,7 @@ namespace DAL.Fake
                 throw new ArgumentException("Path to file is invalid.", nameof(filePath));
             }
             
-            _accounts = new List<DalAccount>();
+            _accounts = new List<DtoAccount>();
         }
 
         #endregion
@@ -38,7 +38,7 @@ namespace DAL.Fake
         #region IStorage implementation
 
         /// <inheritdoc />
-        public void AddAccount(DalAccount account)
+        public void AddAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -54,7 +54,7 @@ namespace DAL.Fake
         }
 
         /// <inheritdoc />
-        public DalAccount GetAccount(string accountNumber)
+        public DtoAccount GetAccount(string accountNumber)
         {
             if (string.IsNullOrWhiteSpace(accountNumber))
             {
@@ -70,7 +70,7 @@ namespace DAL.Fake
         }
 
         /// <inheritdoc />
-        public void UpdateAccount(DalAccount account)
+        public void UpdateAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -87,7 +87,7 @@ namespace DAL.Fake
         }
 
         /// <inheritdoc />
-        public void RemoveAccount(DalAccount account)
+        public void RemoveAccount(DtoAccount account)
         {
             if (ReferenceEquals(account, null))
             {
@@ -103,8 +103,8 @@ namespace DAL.Fake
         }
 
         /// <inheritdoc />
-        public IEnumerable<DalAccount> GetAllAccounts() =>
-            new List<DalAccount>(_accounts);
+        public IEnumerable<DtoAccount> GetAllAccounts() =>
+            new List<DtoAccount>(_accounts);
         
         #endregion
     }

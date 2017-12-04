@@ -54,7 +54,7 @@ namespace BLL.ServiceImplementation
                 string accountNumber = _numberGenerator.CreateNumber(_repository.GetAllAccounts().ToBllAccounts());
                 var account = CreateAccountOfSpecifiedType(type, accountNumber, ownerFirstName, ownerLastName, balance, bonus);
 
-                _repository.AddAccount(account.ToDalAccount());
+                _repository.AddAccount(account.ToDtoAccount());
 
                 return accountNumber;
             }
@@ -71,7 +71,7 @@ namespace BLL.ServiceImplementation
             {
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Deposit(value);
-                _repository.UpdateAccount(account.ToDalAccount());
+                _repository.UpdateAccount(account.ToDtoAccount());
             }
             catch (Exception ex)
             {
@@ -86,7 +86,7 @@ namespace BLL.ServiceImplementation
             {                
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Withdraw(value);
-                _repository.UpdateAccount(account.ToDalAccount());
+                _repository.UpdateAccount(account.ToDtoAccount());
             }
             catch (Exception ex)
             {
