@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DAL.EF.Mappers;
-using DAL.EF.Models;
 using DAL.Interface;
 using DAL.Interface.DTO;
+using ORM.Models;
 
 namespace DAL.EF
 {
@@ -14,7 +14,22 @@ namespace DAL.EF
     /// Binary storage of accounts
     /// </summary>
     public class DatabaseRepository : IBankAccountRepository
-    {        
+    {
+        #region Private fields
+
+        private readonly DbContext _context;
+
+        #endregion
+
+        #region Public constructors
+
+        public DatabaseRepository(DbContext context)
+        {
+            _context = context;
+        }
+
+        #endregion
+
         #region IStorage implementation
 
         /// <inheritdoc />
@@ -24,18 +39,15 @@ namespace DAL.EF
             {
                 throw new ArgumentNullException(nameof(account));
             }
+                
+            if (GetAccountByNumber(account.AccountNumber) != null)
+            {
+                throw new RepositoryException("Account already exists in repository.");
+            }
 
-            using (var db = new AccountContext())
-            {    
-                if (GetAccountByNumber(db, account.AccountNumber) == null)
-                {
-                    throw new RepositoryException("Account already exists in repository.");
-                }
-
-                SetTypeAndOwner(db, account.ToOrmAccount());
-                db.Entry(account).State = EntityState.Added;
-                db.SaveChanges();                                                  
-            }           
+            var ormAccount = account.ToOrmAccount();
+            SetTypeAndOwner(ormAccount);
+            _context.Set<Account>().Add(ormAccount);                                     
         }
 
         /// <inheritdoc />
@@ -45,15 +57,12 @@ namespace DAL.EF
             {
                 throw new ArgumentException(nameof(accountNumber));
             }
-
-            using (var db = new AccountContext())
-            {
-                return db.Accounts
-                    .Include(account => account.AccountOwner)
-                    .Include(account => account.AccountType)
-                    .FirstOrDefault(account => account.AccountNumber == accountNumber)
-                    ?.ToDtoAccount();                
-            }           
+            
+            return _context.Set<Account>()
+                .Include(account => account.AccountOwner)
+                .Include(account => account.AccountType)
+                .FirstOrDefault(account => account.AccountNumber == accountNumber)
+                ?.ToDtoAccount();                
         }
 
         /// <inheritdoc />
@@ -63,18 +72,14 @@ namespace DAL.EF
             {
                 throw new ArgumentNullException(nameof(account));
             }
-
-            using (var db = new AccountContext())
+            
+            var updatingAccount = GetAccountByNumber(account.AccountNumber);
+            if (ReferenceEquals(updatingAccount, null))
             {
-                var updatingAccount = GetAccountByNumber(db, account.AccountNumber);
-                if (ReferenceEquals(updatingAccount, null))
-                {
-                    throw new RepositoryException("Updating account does not exist.");
-                }
+                throw new RepositoryException("Updating account does not exist.");
+            }
 
-                UpdateAccount(updatingAccount, account);
-                db.SaveChanges();                
-            }            
+            UpdateAccount(updatingAccount, account);                        
         }
         
         /// <inheritdoc />
@@ -84,51 +89,40 @@ namespace DAL.EF
             {
                 throw new ArgumentNullException(nameof(account));
             }
-
-            using (var db = new AccountContext())
+            
+            var removingAccount = GetAccountByNumber(account.AccountNumber);
+            if (ReferenceEquals(removingAccount, null))
             {
-                var removingAccount = GetAccountByNumber(db, account.AccountNumber);
-                if (ReferenceEquals(removingAccount, null))
-                {
-                    throw new RepositoryException("Removing account can't be found in repository.");
-                }
+                throw new RepositoryException("Removing account can't be found in repository.");
+            }
 
-                db.Entry(removingAccount).State = EntityState.Deleted;                
-                db.SaveChanges();
-            }            
+            _context.Set<Account>().Remove(removingAccount);
         }
 
         /// <inheritdoc />
         public IEnumerable<DtoAccount> GetAllAccounts()
-        {            
-            using (var db = new AccountContext())
-            {                
-                return db.Accounts
-                    .Include(account => account.AccountOwner)
-                    .Include(account => account.AccountType)
-                    .ToList()
-                    .Select(account => account.ToDtoAccount());
-            }            
-        }
+            => _context.Set<Account>()
+                .Include(account => account.AccountOwner)
+                .Include(account => account.AccountType)
+                .ToList()
+                .Select(account => account.ToDtoAccount());                    
 
         #endregion
 
         #region Private methods
 
-        private static AccountOwner GetAccountOwnerByName(AccountContext db, string firstName, string lastName)
+        private AccountOwner GetAccountOwnerByName(string firstName, string lastName)
+            => _context.Set<AccountOwner>().FirstOrDefault(owner => owner.FirstName == firstName && owner.LastName == lastName);        
+
+        private AccountType GetAccountTypeByName(string accountTypeName)
+            => _context.Set<AccountType>().FirstOrDefault(accountType => accountType.Name == accountTypeName);        
+
+        private Account GetAccountByNumber(string accountNumber)
+            => _context.Set<Account>().FirstOrDefault(account => account.AccountNumber == accountNumber);
+
+        private void SetTypeAndOwner(Account account)
         {
-            return db.AccountOwners.FirstOrDefault(owner => owner.FirstName == firstName && owner.LastName == lastName);
-        }
-
-        private static AccountType GetAccountTypeByName(AccountContext db, string accountTypeName)
-            => db.AccountTypes.FirstOrDefault(accountType => accountType.Name == accountTypeName);        
-
-        private static Account GetAccountByNumber(AccountContext db, string accountNumber)
-            => db.Accounts.FirstOrDefault(account => account.AccountNumber == accountNumber);
-
-        private static void SetTypeAndOwner(AccountContext db, Account account)
-        {
-            var accountOwner = GetAccountOwnerByName(db, account.AccountOwner.FirstName, account.AccountOwner.LastName);
+            var accountOwner = GetAccountOwnerByName(account.AccountOwner.FirstName, account.AccountOwner.LastName);
 
             if (accountOwner != null)
             {
@@ -136,7 +130,7 @@ namespace DAL.EF
                 account.AccountOwnerId = accountOwner.Id;
             }
 
-            var accountType = GetAccountTypeByName(db, account.AccountType.Name);
+            var accountType = GetAccountTypeByName(account.AccountType.Name);
 
             if (accountType != null)
             {

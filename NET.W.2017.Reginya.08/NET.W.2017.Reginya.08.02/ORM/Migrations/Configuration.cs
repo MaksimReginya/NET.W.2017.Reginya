@@ -1,19 +1,19 @@
-namespace DAL.EF.Migrations
+namespace ORM.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DAL.EF.AccountContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<AccountContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "DAL.EF.AccountContext";
+            ContextKey = "ORM.AccountContext";
         }
 
-        protected override void Seed(DAL.EF.AccountContext context)
+        protected override void Seed(AccountContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -1,5 +1,5 @@
-﻿using DAL.EF.Models;
-using DAL.Interface.DTO;
+﻿using DAL.Interface.DTO;
+using ORM.Models;
 
 namespace DAL.EF.Mappers
 {

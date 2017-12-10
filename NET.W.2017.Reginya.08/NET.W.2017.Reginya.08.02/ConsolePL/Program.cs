@@ -8,12 +8,14 @@ namespace ConsolePL
 {
     internal class Program
     {
+        private static readonly IAccountNumberGenerator NumberGenerator;
         private static readonly IKernel Kernel;
 
         static Program()
         {
             Kernel = new StandardKernel();
             NInjectDependencyResolver.Configure(Kernel);
+            NumberGenerator = Kernel.Get<IAccountNumberGenerator>();            
         }
 
         private static void Main()
@@ -35,9 +37,9 @@ namespace ConsolePL
         {            
             var accountList = new List<string>
             {
-                bankAccountService.CreateAccount(AccountType.Base, "Max", "Smith"),
-                bankAccountService.CreateAccount(AccountType.Gold, "John", "Pitt"),
-                bankAccountService.CreateAccount(AccountType.Platinum, "Brad", "Fox", 500)
+                bankAccountService.CreateAccount(AccountType.Base, NumberGenerator, "Max", "Smith"),
+                bankAccountService.CreateAccount(AccountType.Gold, NumberGenerator, "John", "Pitt"),
+                bankAccountService.CreateAccount(AccountType.Platinum, NumberGenerator, "Brad", "Fox", 500)
             };
             PrintAccounts(bankAccountService, accountList);
 

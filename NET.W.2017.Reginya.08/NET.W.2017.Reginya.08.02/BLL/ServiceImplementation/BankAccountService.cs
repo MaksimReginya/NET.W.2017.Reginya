@@ -15,7 +15,7 @@ namespace BLL.ServiceImplementation
         #region Private fields        
 
         private readonly IBankAccountRepository _repository;
-        private readonly IAccountNumberGenerator _numberGenerator;
+        private readonly IUnitOfWork _unitOfWork;
 
         #endregion
 
@@ -24,22 +24,22 @@ namespace BLL.ServiceImplementation
         /// <summary>
         /// Initializes a new instance of the <see cref="BankAccountService"/> class.
         /// </summary>
-        /// <param name="repository">Account repository service.</param>              
-        /// <param name="numberGenerator">Generator of unique account number.</param>   
-        public BankAccountService(IBankAccountRepository repository, IAccountNumberGenerator numberGenerator)
+        /// <param name="repository">Account repository service.</param>                        
+        /// <param name="unitOfWork">Perfoms confirmation of changes in repository.</param>  
+        public BankAccountService(IBankAccountRepository repository, IUnitOfWork unitOfWork)
         {
             if (ReferenceEquals(repository, null))
             {
                 throw new ArgumentNullException(nameof(repository));
             }
 
-            if (ReferenceEquals(numberGenerator, null))
+            if (ReferenceEquals(unitOfWork, null))
             {
-                throw new ArgumentNullException(nameof(numberGenerator));
+                throw new ArgumentNullException(nameof(unitOfWork));
             }
 
             _repository = repository;
-            _numberGenerator = numberGenerator;
+            _unitOfWork = unitOfWork;
         }
 
         #endregion
@@ -47,14 +47,26 @@ namespace BLL.ServiceImplementation
         #region IBankAccountService implementation
 
         /// <inheritdoc />
-        public string CreateAccount(AccountType type, string ownerFirstName, string ownerLastName, decimal balance = 0m, int bonus = 0)
+        public string CreateAccount(
+            AccountType type,
+            IAccountNumberGenerator numberGenerator,
+            string ownerFirstName,
+            string ownerLastName,
+            decimal balance = 0m,
+            int bonus = 0)
         {
+            if (ReferenceEquals(numberGenerator, null))
+            {
+                throw new ArgumentNullException(nameof(numberGenerator));
+            }
+
             try
             {
-                string accountNumber = _numberGenerator.CreateNumber(_repository.GetAllAccounts().ToBllAccounts());
+                string accountNumber = numberGenerator.CreateNumber(_repository.GetAllAccounts().ToBllAccounts());
                 var account = CreateAccountOfSpecifiedType(type, accountNumber, ownerFirstName, ownerLastName, balance, bonus);
 
                 _repository.AddAccount(account.ToDtoAccount());
+                _unitOfWork.Commit();
 
                 return accountNumber;
             }
@@ -72,6 +84,7 @@ namespace BLL.ServiceImplementation
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Deposit(value);
                 _repository.UpdateAccount(account.ToDtoAccount());
+                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {
@@ -87,6 +100,7 @@ namespace BLL.ServiceImplementation
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Withdraw(value);
                 _repository.UpdateAccount(account.ToDtoAccount());
+                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {
@@ -100,6 +114,7 @@ namespace BLL.ServiceImplementation
             try
             {
                 _repository.RemoveAccount(_repository.GetAccount(accountNumber));
+                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {

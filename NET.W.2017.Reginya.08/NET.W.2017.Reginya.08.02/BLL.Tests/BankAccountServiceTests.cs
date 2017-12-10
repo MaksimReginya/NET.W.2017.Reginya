@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using BLL.Interface.Entities;
 using BLL.Interface.ServiceInterface;
 using BLL.ServiceImplementation;
@@ -19,12 +17,17 @@ namespace BLL.Tests
         public void AccountNumberGenerator_CreateNumberTest(string firstName, string lastName, string expectedAccountNumber)
         {            
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
             
-            string actualAccountNumber = bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);
+            string actualAccountNumber = bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);
             
             Assert.AreEqual(expectedAccountNumber, actualAccountNumber);
         }
@@ -34,12 +37,17 @@ namespace BLL.Tests
         public void BankAccountRepository_GetAccountTest(string firstName, string lastName, string expectedAccountNumber)
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
 
-            bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);
+            bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);
 
             repositoryMock.Verify(repository => repository.GetAllAccounts(), Times.Once);
         }
@@ -49,12 +57,17 @@ namespace BLL.Tests
         public void BankAccountRepository_GetAllAccountsTest(string firstName, string lastName, string expectedAccountNumber)
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
             
-            bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);
+            bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);
             
             repositoryMock.Verify(repository => repository.GetAllAccounts(), Times.Once);
         }
@@ -64,12 +77,17 @@ namespace BLL.Tests
         public void BankAccountRepository_AddAccountTest(string firstName, string lastName, string expectedAccountNumber)
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
 
-            bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);                        
+            bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);                        
          
             repositoryMock.Verify(
                 repository => repository.AddAccount(It.Is<DtoAccount>(account => account.AccountNumber == expectedAccountNumber)),
@@ -81,6 +99,7 @@ namespace BLL.Tests
         public void BankAccountRepository_UpdateAccountTest(string firstName, string lastName, string expectedAccountNumber)
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             repositoryMock.Setup(repository => repository.GetAccount(It.IsAny<string>())).Returns(
                 new DtoAccount
                 {
@@ -94,9 +113,13 @@ namespace BLL.Tests
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
 
-            string actualAccountNumber = bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);
+            string actualAccountNumber = bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);
             
             bankAccountService.Deposit(actualAccountNumber, 100m);
             bankAccountService.Withdraw(actualAccountNumber, 10m);
@@ -111,6 +134,7 @@ namespace BLL.Tests
         public void BankAccountRepository_RemoveAccountTest(string firstName, string lastName, string expectedAccountNumber)
         {
             var repositoryMock = new Mock<IBankAccountRepository>();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
             repositoryMock.Setup(repository => repository.GetAccount(It.IsAny<string>())).Returns(
                 new DtoAccount
                 {
@@ -124,9 +148,14 @@ namespace BLL.Tests
             var accountNumberGeneratorMock = new Mock<IAccountNumberGenerator>(MockBehavior.Strict);
 
             accountNumberGeneratorMock.Setup(service => service.CreateNumber(new List<BankAccount>())).Returns(expectedAccountNumber);
-            var bankAccountService = new BankAccountService(repositoryMock.Object, accountNumberGeneratorMock.Object);
+            var bankAccountService = new BankAccountService(repositoryMock.Object, unitOfWorkMock.Object);
 
-            bankAccountService.CreateAccount(AccountType.Base, firstName, lastName);
+            bankAccountService.CreateAccount(
+                AccountType.Base,
+                accountNumberGeneratorMock.Object,
+                firstName,
+                lastName);
+
             bankAccountService.CloseAccount(expectedAccountNumber);
                                
             repositoryMock.Verify(

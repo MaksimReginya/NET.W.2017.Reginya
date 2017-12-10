@@ -9,6 +9,7 @@
         /// Creates the bank account.
         /// </summary>
         /// <param name="type">Account type.</param>        
+        /// <param name="numberGenerator">Generator of unique account number.</param> 
         /// <param name="ownerFirstName">Owner's first name.</param>
         /// <param name="ownerLastName">Owner's last name.</param>
         /// <param name="balance">Balance of account.</param>
@@ -17,7 +18,13 @@
         /// Thrown when error occurred while creating new account.
         /// </exception>
         /// <returns>Account's unique number.</returns>                
-        string CreateAccount(AccountType type, string ownerFirstName, string ownerLastName, decimal balance = 0m, int bonus = 0);
+        string CreateAccount(
+            AccountType type,
+            IAccountNumberGenerator numberGenerator,
+            string ownerFirstName,
+            string ownerLastName,
+            decimal balance = 0m,
+            int bonus = 0);
 
         /// <summary>
         /// Deposits money to the account with specific <see cref="accountNumber" />.

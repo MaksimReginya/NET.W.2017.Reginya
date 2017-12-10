@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace DAL.EF.Models
+﻿namespace ORM.Models
 {
     /// <summary>
     /// Decorator of bank account entity that is used to be saved in repository.

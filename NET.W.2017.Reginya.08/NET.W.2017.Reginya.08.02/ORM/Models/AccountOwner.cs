@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DAL.EF.Models
+namespace ORM.Models
 {
     public class AccountOwner
     {

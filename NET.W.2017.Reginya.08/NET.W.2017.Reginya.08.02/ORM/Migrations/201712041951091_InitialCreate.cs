@@ -1,4 +1,4 @@
-namespace DAL.EF.Migrations
+namespace ORM.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

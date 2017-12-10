@@ -1,7 +1,8 @@
-﻿using BLL.Interface.ServiceInterface;
+﻿using System.Data.Entity;
+using BLL.Interface.ServiceInterface;
 using BLL.ServiceImplementation;
 using DAL.EF;
-using DAL.Fake;
+using ORM;
 using DAL.Interface;
 using Ninject;
 
@@ -12,12 +13,20 @@ namespace DependencyResolver
         public static void Configure(IKernel kernel)
         {
             // kernel.Bind<IBankAccountRepository>().To<FakeRepository>().WithConstructorArgument("filePath", "accounts");
-            kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>();
-            kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>();
+            kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>().InSingletonScope();
+            kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>().InSingletonScope();
+            kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InSingletonScope();
+
+            kernel.Bind<DbContext>().To<AccountContext>().InSingletonScope();
 
             var accountRepository = kernel.Get<IBankAccountRepository>();
+            var unitOfWork = kernel.Get<IUnitOfWork>();
 
-            kernel.Bind<IBankAccountService>().To<BankAccountService>().WithConstructorArgument("repository", accountRepository);
+            kernel
+                .Bind<IBankAccountService>()
+                .To<BankAccountService>()
+                .WithConstructorArgument("repository", accountRepository)
+                .WithConstructorArgument("unitOfWork", unitOfWork);
         }
     }
 }
