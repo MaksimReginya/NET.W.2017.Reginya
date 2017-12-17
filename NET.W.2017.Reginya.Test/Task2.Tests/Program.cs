@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Task2.Solution;
+﻿using Task2.Solution;
 
 namespace Task2.Tests
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             RandomFileGenerator generator = new RandomBytesFileGenerator();
             generator.GenerateFiles(2, 1024);

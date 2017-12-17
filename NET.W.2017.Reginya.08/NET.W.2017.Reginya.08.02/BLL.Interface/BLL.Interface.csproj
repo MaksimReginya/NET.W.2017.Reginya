@@ -44,6 +44,8 @@
     <Compile Include="Entities\BaseBankAccount.cs" />
     <Compile Include="Entities\GoldBankAccount.cs" />
     <Compile Include="Entities\PlatinumBankAccount.cs" />
+    <Compile Include="MailServiceInterface\IMailService.cs" />
+    <Compile Include="MailServiceInterface\MailData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceInterface\BankAccountServiceException.cs" />
     <Compile Include="ServiceInterface\AccountType.cs" />

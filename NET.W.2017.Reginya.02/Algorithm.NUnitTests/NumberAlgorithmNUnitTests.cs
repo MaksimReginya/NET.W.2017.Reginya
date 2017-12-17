@@ -41,7 +41,8 @@ namespace Algorithm.NUnitTests
         [TestCase(1, 5, 0.0001)]        
         [TestCase(8, 3, 0.0001)]
         [TestCase(0.001, 3, 0.0001)]
-        [TestCase(0.04100625, 4, 0.0001)]
+        [TestCase(0.04100625, 4, 0.0001)]        
+        [TestCase(double.MaxValue, 50, 0.0001)]
         public void FindNthRootTest(double number, int power, double accuracy)
         {
             double expected = Math.Pow(number, 1.0 / power);
