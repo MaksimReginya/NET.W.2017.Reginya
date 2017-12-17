@@ -12,6 +12,7 @@
         /// <param name="numberGenerator">Generator of unique account number.</param> 
         /// <param name="ownerFirstName">Owner's first name.</param>
         /// <param name="ownerLastName">Owner's last name.</param>
+        /// <param name="ownerEmail">Owner's email address.</param>
         /// <param name="balance">Balance of account.</param>
         /// <param name="bonus">Bonus on account.</param>
         /// <exception cref="BankAccountServiceException">
@@ -23,6 +24,7 @@
             IAccountNumberGenerator numberGenerator,
             string ownerFirstName,
             string ownerLastName,
+            string ownerEmail,
             decimal balance = 0m,
             int bonus = 0);
 

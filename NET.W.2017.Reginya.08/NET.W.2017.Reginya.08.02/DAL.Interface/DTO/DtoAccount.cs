@@ -28,6 +28,11 @@
         public string OwnerLastName { get; set; }
 
         /// <summary>
+        /// Owner's email address.
+        /// </summary>
+        public string OwnerEmail { get; set; }
+
+        /// <summary>
         /// Balance of the account.
         /// </summary>
         public decimal Balance { get; set; }

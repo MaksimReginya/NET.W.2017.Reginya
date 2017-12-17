@@ -18,7 +18,8 @@ namespace DAL.EF.Mappers
                 AccountOwner = new AccountOwner
                 {
                     FirstName = account.OwnerFirstName,
-                    LastName = account.OwnerLastName
+                    LastName = account.OwnerLastName,
+                    Email = account.OwnerEmail
                 }
             };
 
@@ -30,7 +31,8 @@ namespace DAL.EF.Mappers
                 Bonus = account.Bonus,
                 AccountNumber = account.AccountNumber,
                 OwnerFirstName = account.AccountOwner.FirstName,
-                OwnerLastName = account.AccountOwner.LastName
+                OwnerLastName = account.AccountOwner.LastName,
+                OwnerEmail = account.AccountOwner.Email
             };
     }
 }

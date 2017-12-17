@@ -52,6 +52,7 @@ namespace BLL.ServiceImplementation
             IAccountNumberGenerator numberGenerator,
             string ownerFirstName,
             string ownerLastName,
+            string ownerEmail,
             decimal balance = 0m,
             int bonus = 0)
         {
@@ -63,7 +64,7 @@ namespace BLL.ServiceImplementation
             try
             {
                 string accountNumber = numberGenerator.CreateNumber(_repository.GetAllAccounts().ToBllAccounts());
-                var account = CreateAccountOfSpecifiedType(type, accountNumber, ownerFirstName, ownerLastName, balance, bonus);
+                var account = CreateAccountOfSpecifiedType(type, accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
 
                 _repository.AddAccount(account.ToDtoAccount());
                 _unitOfWork.Commit();
@@ -140,16 +141,22 @@ namespace BLL.ServiceImplementation
         #region Private methods
        
         private static BankAccount CreateAccountOfSpecifiedType(
-            AccountType type, string accountNumber, string ownerFirstName, string ownerLastName, decimal balance, int bonus)
+            AccountType type,
+            string accountNumber,
+            string ownerFirstName,
+            string ownerLastName,
+            string ownerEmail,
+            decimal balance,
+            int bonus)
         {
             switch (type)
             {
                 case AccountType.Base:
-                    return new BaseBankAccount(accountNumber, ownerFirstName, ownerLastName, balance, bonus);
+                    return new BaseBankAccount(accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
                 case AccountType.Gold:
-                    return new GoldBankAccount(accountNumber, ownerFirstName, ownerLastName, balance, bonus);
+                    return new GoldBankAccount(accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
                 case AccountType.Platinum:
-                    return new PlatinumBankAccount(accountNumber, ownerFirstName, ownerLastName, balance, bonus);
+                    return new PlatinumBankAccount(accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
                 default:
                     return null;
             }

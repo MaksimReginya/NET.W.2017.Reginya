@@ -20,6 +20,11 @@ namespace ORM.Models
         public string LastName { get; set; }
 
         /// <summary>
+        /// Owner's email address.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
         /// Collection of owner's accounts.
         /// </summary>
         public virtual ICollection<Account> Accounts { get; set; }

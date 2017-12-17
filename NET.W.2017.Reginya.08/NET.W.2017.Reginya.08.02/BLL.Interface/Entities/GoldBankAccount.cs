@@ -11,8 +11,14 @@ namespace BLL.Interface.Entities
         #region Public constructors
 
         /// <inheritdoc />  
-        public GoldBankAccount(string accountNumber, string ownerFirstName, string ownerLastName, decimal balance = 0m, int bonus = 0)
-            : base(accountNumber, ownerFirstName, ownerLastName, balance, bonus)
+        public GoldBankAccount(
+            string accountNumber,
+            string ownerFirstName,
+            string ownerLastName,
+            string ownerEmail,
+            decimal balance = 0m,
+            int bonus = 0)
+            : base(accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus)
         {            
         }
 

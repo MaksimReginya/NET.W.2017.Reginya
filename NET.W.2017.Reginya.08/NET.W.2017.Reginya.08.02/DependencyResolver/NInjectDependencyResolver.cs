@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using BLL.Interface.MailServiceInterface;
 using BLL.Interface.ServiceInterface;
 using BLL.ServiceImplementation;
 using DAL.EF;
@@ -16,12 +17,11 @@ namespace DependencyResolver
             kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>().InSingletonScope();
             kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>().InSingletonScope();
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InSingletonScope();
-
+            kernel.Bind<IMailService>().To<GmailService>().InSingletonScope();
             kernel.Bind<DbContext>().To<AccountContext>().InSingletonScope();
 
             var accountRepository = kernel.Get<IBankAccountRepository>();
-            var unitOfWork = kernel.Get<IUnitOfWork>();
-
+            var unitOfWork = kernel.Get<IUnitOfWork>();            
             kernel
                 .Bind<IBankAccountService>()
                 .To<BankAccountService>()

@@ -111,8 +111,9 @@ namespace DAL.EF
 
         #region Private methods
 
-        private AccountOwner GetAccountOwnerByName(string firstName, string lastName)
-            => _context.Set<AccountOwner>().FirstOrDefault(owner => owner.FirstName == firstName && owner.LastName == lastName);        
+        private AccountOwner GetAccountOwnerByName(string firstName, string lastName, string email)
+            => _context.Set<AccountOwner>().FirstOrDefault(
+                owner => owner.FirstName == firstName && owner.LastName == lastName && owner.Email == email);        
 
         private AccountType GetAccountTypeByName(string accountTypeName)
             => _context.Set<AccountType>().FirstOrDefault(accountType => accountType.Name == accountTypeName);        
@@ -122,7 +123,10 @@ namespace DAL.EF
 
         private void SetTypeAndOwner(Account account)
         {
-            var accountOwner = GetAccountOwnerByName(account.AccountOwner.FirstName, account.AccountOwner.LastName);
+            var accountOwner = GetAccountOwnerByName(
+                account.AccountOwner.FirstName,
+                account.AccountOwner.LastName,
+                account.AccountOwner.Email);
 
             if (accountOwner != null)
             {

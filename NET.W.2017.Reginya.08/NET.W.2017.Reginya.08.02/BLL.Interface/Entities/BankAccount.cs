@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace BLL.Interface.Entities
@@ -13,6 +14,7 @@ namespace BLL.Interface.Entities
         private string _accountNumber;
         private string _ownerFirstName;
         private string _ownerLastName;
+        private string _ownerEmail;
         private decimal _balance;
         private int _bonus;
 
@@ -26,11 +28,18 @@ namespace BLL.Interface.Entities
         /// <param name="accountNumber">Unique account number.</param>
         /// <param name="ownerFirstName">Owner's first name.</param>
         /// <param name="ownerLastName">Owner's last name.</param>
+        /// <param name="ownerEmail">Owner's email address.</param>
         /// <param name="balance">Balance of account.</param>
         /// <param name="bonus">Bonus on account.</param>
-        protected BankAccount(string accountNumber, string ownerFirstName, string ownerLastName, decimal balance = 0m, int bonus = 0)
+        protected BankAccount(
+            string accountNumber,
+            string ownerFirstName,
+            string ownerLastName,
+            string ownerEmail,
+            decimal balance = 0m,
+            int bonus = 0)
         {
-            VerifyInput(accountNumber, ownerFirstName, ownerLastName, balance, bonus);
+            VerifyInput(accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
 
             AccountNumber = accountNumber;
             OwnerFirstName = ownerFirstName;
@@ -93,7 +102,20 @@ namespace BLL.Interface.Entities
                 _ownerLastName = value;
             }
         }
-        
+
+        /// <summary>
+        /// Owner's last name.
+        /// </summary>
+        public string OwnerEmail
+        {
+            get => _ownerEmail;
+            set
+            {
+                VerifyEmailAddress(value);
+                _ownerEmail = value;
+            }
+        }
+
         /// <summary>
         /// Balance of the account.
         /// </summary>
@@ -280,7 +302,13 @@ namespace BLL.Interface.Entities
 
         #region Private methods
 
-        private void VerifyInput(string accountNumber, string ownerFirstName, string ownerLastName, decimal balance, int bonus)
+        private void VerifyInput(
+            string accountNumber,
+            string ownerFirstName,
+            string ownerLastName,
+            string ownerEmail,
+            decimal balance,
+            int bonus)
         {
             if (!IsAccountNumberValid(accountNumber))
             {
@@ -297,6 +325,8 @@ namespace BLL.Interface.Entities
                 throw new ArgumentException($"{nameof(ownerLastName)} can't be empty.", nameof(ownerLastName));
             }
 
+            VerifyEmailAddress(ownerEmail);
+            
             if (balance < MinBalance)
             {
                 throw new ArgumentException($"{balance} can must be bigger than {MinBalance}.");
@@ -305,6 +335,23 @@ namespace BLL.Interface.Entities
             if (bonus < 0)
             {
                 throw new ArgumentException($"{bonus} can not be negative.");
+            }
+        }
+
+        private static void VerifyEmailAddress(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    throw new ArgumentException();
+                }
+
+                var mailAddress = new MailAddress(email);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException($"{nameof(OwnerEmail)} is invalid.", nameof(OwnerEmail));
             }
         }
 
