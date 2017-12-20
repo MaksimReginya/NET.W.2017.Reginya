@@ -3,30 +3,45 @@ using BLL.Interface.MailServiceInterface;
 using BLL.Interface.ServiceInterface;
 using BLL.ServiceImplementation;
 using DAL.EF;
-using ORM;
 using DAL.Interface;
 using Ninject;
+using Ninject.Web.Common;
+using ORM;
 
 namespace DependencyResolver
 {
-    public class NInjectDependencyResolver
+    public static class NInjectDependencyResolver
     {
-        public static void Configure(IKernel kernel)
+        public static void ConfigurateResolverWeb(this IKernel kernel)
         {
-            // kernel.Bind<IBankAccountRepository>().To<FakeRepository>().WithConstructorArgument("filePath", "accounts");
-            kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>().InSingletonScope();
-            kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>().InSingletonScope();
-            kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InSingletonScope();
-            kernel.Bind<IMailService>().To<GmailService>().InSingletonScope();
-            kernel.Bind<DbContext>().To<AccountContext>().InSingletonScope();
+            Configure(kernel, true);
+        }
 
+        public static void ConfigurateResolverConsole(this IKernel kernel)
+        {
+            Configure(kernel, false);
+        }
+
+        public static void Configure(IKernel kernel, bool isWeb)
+        {
+            if (isWeb)
+            {                
+                kernel.Bind<IMailService>().To<GmailService>().InRequestScope();
+                kernel.Bind<DbContext>().To<AccountContext>().InRequestScope();
+            }
+            else
+            {
+                kernel.Bind<DbContext>().To<AccountContext>().InSingletonScope();                
+            }            
+
+            kernel.Bind<IBankAccountRepository>().To<DatabaseRepository>();
+            kernel.Bind<IAccountNumberGenerator>().To<AccountNumberGenerator>();
+                                   
             var accountRepository = kernel.Get<IBankAccountRepository>();
-            var unitOfWork = kernel.Get<IUnitOfWork>();            
             kernel
                 .Bind<IBankAccountService>()
                 .To<BankAccountService>()
-                .WithConstructorArgument("repository", accountRepository)
-                .WithConstructorArgument("unitOfWork", unitOfWork);
+                .WithConstructorArgument("repository", accountRepository);
         }
     }
 }

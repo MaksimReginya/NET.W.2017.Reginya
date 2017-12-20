@@ -14,8 +14,7 @@ namespace BLL.ServiceImplementation
     {
         #region Private fields        
 
-        private readonly IBankAccountRepository _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IBankAccountRepository _repository;        
 
         #endregion
 
@@ -24,22 +23,15 @@ namespace BLL.ServiceImplementation
         /// <summary>
         /// Initializes a new instance of the <see cref="BankAccountService"/> class.
         /// </summary>
-        /// <param name="repository">Account repository service.</param>                        
-        /// <param name="unitOfWork">Perfoms confirmation of changes in repository.</param>  
-        public BankAccountService(IBankAccountRepository repository, IUnitOfWork unitOfWork)
+        /// <param name="repository">Account repository service.</param>                                
+        public BankAccountService(IBankAccountRepository repository)
         {
             if (ReferenceEquals(repository, null))
             {
                 throw new ArgumentNullException(nameof(repository));
-            }
+            }            
 
-            if (ReferenceEquals(unitOfWork, null))
-            {
-                throw new ArgumentNullException(nameof(unitOfWork));
-            }
-
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            _repository = repository;            
         }
 
         #endregion
@@ -66,8 +58,7 @@ namespace BLL.ServiceImplementation
                 string accountNumber = numberGenerator.CreateNumber(_repository.GetAllAccounts().ToBllAccounts());
                 var account = CreateAccountOfSpecifiedType(type, accountNumber, ownerFirstName, ownerLastName, ownerEmail, balance, bonus);
 
-                _repository.AddAccount(account.ToDtoAccount());
-                _unitOfWork.Commit();
+                _repository.AddAccount(account.ToDtoAccount());                
 
                 return accountNumber;
             }
@@ -84,8 +75,7 @@ namespace BLL.ServiceImplementation
             {
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Deposit(value);
-                _repository.UpdateAccount(account.ToDtoAccount());
-                _unitOfWork.Commit();
+                _repository.UpdateAccount(account.ToDtoAccount());                
             }
             catch (Exception ex)
             {
@@ -100,8 +90,7 @@ namespace BLL.ServiceImplementation
             {                
                 var account = _repository.GetAccount(accountNumber).ToBllAccount();
                 account.Withdraw(value);
-                _repository.UpdateAccount(account.ToDtoAccount());
-                _unitOfWork.Commit();
+                _repository.UpdateAccount(account.ToDtoAccount());                
             }
             catch (Exception ex)
             {
@@ -114,8 +103,7 @@ namespace BLL.ServiceImplementation
         {
             try
             {
-                _repository.RemoveAccount(_repository.GetAccount(accountNumber));
-                _unitOfWork.Commit();
+                _repository.RemoveAccount(_repository.GetAccount(accountNumber));                
             }
             catch (Exception ex)
             {

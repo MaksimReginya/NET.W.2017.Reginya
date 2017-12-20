@@ -14,7 +14,7 @@ namespace ConsolePL
         static Program()
         {
             Kernel = new StandardKernel();
-            NInjectDependencyResolver.Configure(Kernel);
+            Kernel.ConfigurateResolverConsole();
             NumberGenerator = Kernel.Get<IAccountNumberGenerator>();            
         }
 
@@ -37,9 +37,9 @@ namespace ConsolePL
         {            
             var accountList = new List<string>
             {
-                bankAccountService.CreateAccount(AccountType.Base, NumberGenerator, "Max", "Smith"),
-                bankAccountService.CreateAccount(AccountType.Gold, NumberGenerator, "John", "Pitt"),
-                bankAccountService.CreateAccount(AccountType.Platinum, NumberGenerator, "Brad", "Fox", 500)
+                bankAccountService.CreateAccount(AccountType.Base, NumberGenerator, "Max", "Smith", "example1@mail.ru"),
+                bankAccountService.CreateAccount(AccountType.Gold, NumberGenerator, "John", "Pitt", "example1@mail.ru"),
+                bankAccountService.CreateAccount(AccountType.Platinum, NumberGenerator, "Brad", "Fox", "example1@mail.ru", 500)
             };
             PrintAccounts(bankAccountService, accountList);
 

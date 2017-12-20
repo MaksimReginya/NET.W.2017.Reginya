@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using ASP_NET_PL.ViewModels;
 using BLL.Interface.ServiceInterface;
 using BLL.Interface.MailServiceInterface;
-using ASP_NET_PL.Models.ViewModels;
-using System.Threading.Tasks;
 
 namespace ASP_NET_PL.Controllers
 {
     public class AccountController : Controller
     {
         #region Private fields
-                
+
+        private readonly string _hostEmailAddress = ConfigurationManager.AppSettings["ServiceEmailAddress"];
+        private readonly string _hostEmailPassword = ConfigurationManager.AppSettings["ServiceEmailPassword"];
         private readonly IBankAccountService _bankAccountService;
         private readonly IAccountNumberGenerator _numberGenerator;
         private readonly IMailService _mailService;
@@ -20,11 +22,11 @@ namespace ASP_NET_PL.Controllers
 
         #region Public constructors
                 
-        public AccountController()
+        public AccountController(IBankAccountService bankAccountService, IMailService mailService, IAccountNumberGenerator numberGenerator)
         {
-            _numberGenerator = DependencyFactory.NumberGenerator;
-            _bankAccountService = DependencyFactory.BankAccountService;
-            _mailService = DependencyFactory.MailService;
+            _numberGenerator = numberGenerator;
+            _bankAccountService = bankAccountService;
+            _mailService = mailService;
         }
 
         #endregion
@@ -47,26 +49,26 @@ namespace ASP_NET_PL.Controllers
             }
 
             string openedAccountNumber = _bankAccountService.CreateAccount(account.Type, _numberGenerator, account.OwnerFirstName,
-                account.OwnerSecondName, account.OwnerEmail, account.Sum, account.Bonus);
+                account.OwnerSecondName, account.OwnerEmail, account.Balance, account.Bonus);
 
             string subject = "Account is successfully opened!";
-            string message = $"Your account ID: {openedAccountNumber}";
-            await this.SendMailAsync(account.OwnerEmail, subject, message);
+            string message = $"Your account number: {openedAccountNumber}";
+            await SendMailAsync(account.OwnerEmail, subject, message);
 
-            Session["accountOpened"] = true;
+            TempData["accountOpened"] = true;
             return RedirectToAction("AccountIsOpened");
         }
 
         [HttpGet]
         public ActionResult AccountIsOpened()
         {
-            var accountOpened = Session["accountOpened"] as bool?;
+            var accountOpened = TempData["accountOpened"] as bool?;
             if (!accountOpened.HasValue || !accountOpened.Value)
             {
                 return RedirectToAction("OpenAccount");
             }
 
-            Session["accountOpened"] = false;
+            TempData["accountOpened"] = false;
             return View();
         }
 
@@ -81,8 +83,8 @@ namespace ASP_NET_PL.Controllers
             var mailData = new MailData
             {
                 To = to,
-                From = ConfigurationManager.AppSettings["ServiceEmailAddress"],
-                Password = ConfigurationManager.AppSettings["ServiceEmailPassword"],
+                From = _hostEmailAddress,
+                Password = _hostEmailPassword,
                 Subject = subject,
                 Message = message
             };

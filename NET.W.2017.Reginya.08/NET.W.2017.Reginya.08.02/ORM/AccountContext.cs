@@ -5,7 +5,7 @@ namespace ORM
 {
     public class AccountContext : DbContext
     {
-        public AccountContext() : base("DefaultConnection")
+        public AccountContext() : base("AccountsDb")
         {
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BLL.Interface.ServiceInterface;
 
-namespace ASP_NET_PL.Models.ViewModels
+namespace ASP_NET_PL.ViewModels
 {
     public class ViewAccountModel
     {
@@ -22,11 +22,11 @@ namespace ASP_NET_PL.Models.ViewModels
         [DataType(DataType.EmailAddress)]
         public string OwnerEmail { get; set; }
 
-        [Display(Name = "Initial sum")]
+        [Display(Name = "Initial balance")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
         [DataType(DataType.Currency)]
-        [Range(typeof(decimal), "0", "50000", ErrorMessage = "The initial sum must be at least 0 and not more than 50,000")]
-        public decimal Sum { get; set; }
+        [Range(typeof(decimal), "0", "50000", ErrorMessage = "The initial balance must be at least 0 and not more than 5000")]
+        public decimal Balance { get; set; }
 
         [Display(Name = "Initial bonus")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
