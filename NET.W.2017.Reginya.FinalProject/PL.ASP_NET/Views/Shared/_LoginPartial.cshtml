@@ -1,0 +1,29 @@
+﻿@Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+@Scripts.Render("~/Scripts/login_window.js")
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav navbar-right">            
+            <li>
+                @Html.ActionLink("Hello, " + User.Identity.Name + "!",
+                    "ShowAccounts",
+                    "BankManage",
+                    routeValues: null,
+                    htmlAttributes: new { title = "View my accounts" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li class="open">Log in</li>        
+    </ul>
+}
+
+@RenderPage("~/Views/Account/Login.cshtml")
