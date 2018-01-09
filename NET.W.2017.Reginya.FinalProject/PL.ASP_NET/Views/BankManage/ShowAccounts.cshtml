@@ -1,8 +1,38 @@
-﻿@model dynamic
+﻿@model IEnumerable<PL.ASP_NET.ViewModels.ViewAccountModel>
 
 @{
     ViewBag.Title = "My accounts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>title</h2>
+<h2>My accounts</h2>
+
+<p>
+    @Html.ActionLink("Open new account", "OpenAccount", "BankManage")
+</p>
+<table class="table">
+    <tr>
+        <th>Account number</th>
+        <th>Account type</th>
+        <th>Balance</th>
+        <th>Bonus</th>            
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bonus)
+            </td>
+        </tr>
+    }
+</table>

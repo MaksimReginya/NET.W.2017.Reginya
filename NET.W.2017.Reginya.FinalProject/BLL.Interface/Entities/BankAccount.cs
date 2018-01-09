@@ -54,6 +54,11 @@ namespace BLL.Interface.Entities
                 _accountNumber = value;
             }
         }
+
+        /// <summary>
+        /// Name of the type of the account.
+        /// </summary>
+        public string AccountType { get; set; }
                                
         /// <summary>
         /// Owner of the account.

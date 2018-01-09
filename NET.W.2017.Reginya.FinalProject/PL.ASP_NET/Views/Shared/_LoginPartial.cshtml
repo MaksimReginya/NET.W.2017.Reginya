@@ -1,19 +1,11 @@
-﻿@Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
-@Scripts.Render("~/Scripts/login_window.js")
+﻿@using PL.ASP_NET.ViewModels
 
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
-        <ul class="nav navbar-nav navbar-right">            
-            <li>
-                @Html.ActionLink("Hello, " + User.Identity.Name + "!",
-                    "ShowAccounts",
-                    "BankManage",
-                    routeValues: null,
-                    htmlAttributes: new { title = "View my accounts" })
-            </li>
+        <ul class="nav navbar-nav navbar-right">                        
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>
     }

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using PL.ASP_NET.ViewModels
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,13 +18,13 @@
             </button>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">                
+            <ul class="nav navbar-nav">
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li>@Html.ActionLink("My accounts", "ShowAccounts", "BankManage")</li>
                 }
-                @Html.Partial("_LoginPartial")
             </ul>
+            @Html.Partial("_LoginPartial", new LoginViewModel())
         </div>
     </div>
 </div>

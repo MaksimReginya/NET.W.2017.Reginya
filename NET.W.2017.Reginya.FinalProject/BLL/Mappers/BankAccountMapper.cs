@@ -46,14 +46,19 @@ namespace BLL.Mappers
         /// <summary>
         /// Maps <paramref cref="DtoAccount"/> to <paramref cref="BankAccount"/>.
         /// </summary>
-        public static BankAccount ToBllAccount(this DtoAccount account, AccountOwner owner) =>
-            (BankAccount)Activator.CreateInstance(
-                GetBllAccountType(account.AccountType),
+        public static BankAccount ToBllAccount(this DtoAccount account, AccountOwner owner)
+        {
+            var type = GetBllAccountType(account.AccountType);
+            var bllAccount = (BankAccount) Activator.CreateInstance(
+                type,
                 CryptoService.RijndaelDecrypt(account.AccountNumber, owner.Email),
                 owner,
                 account.Balance,
                 account.Bonus);
-        
+            bllAccount.AccountType = type.Name;
+            return bllAccount;
+        }
+
         /// <summary>
         /// Maps enumerable of <paramref cref="DtoAccount"/> to enumerable of <paramref cref="BankAccount "/>.
         /// </summary>

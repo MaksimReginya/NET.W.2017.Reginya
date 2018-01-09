@@ -5,11 +5,15 @@ namespace PL.ASP_NET.ViewModels
 {
     public class ViewAccountModel
     {
+        [Display(Name = "Account number")]
+        [Required(ErrorMessage = "Field must be selected", AllowEmptyStrings = false)]
+        public string AccountNumber { get; set; }
+
         [Display(Name = "Account type")]
         [Required(ErrorMessage = "Field must be selected", AllowEmptyStrings = false)]
         public AccountType Type { get; set; }
 
-        [Display(Name = "First name")]
+        /*[Display(Name = "First name")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
         public string OwnerFirstName { get; set; }
 
@@ -20,7 +24,7 @@ namespace PL.ASP_NET.ViewModels
         [Display(Name = "Email address")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
         [DataType(DataType.EmailAddress)]
-        public string OwnerEmail { get; set; }
+        public string OwnerEmail { get; set; }*/
 
         [Display(Name = "Initial balance")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
