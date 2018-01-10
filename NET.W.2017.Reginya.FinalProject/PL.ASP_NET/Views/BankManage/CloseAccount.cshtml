@@ -1,0 +1,48 @@
+﻿@model PL.ASP_NET.ViewModels.CloseAccountViewModel
+
+@{
+    ViewBag.Title = "Close account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Close account</h2>
+<div class="alert alert-danger">
+    <strong>Danger!</strong> After the account is closed, all funds on it will be lost.
+</div>
+
+@using (Html.BeginForm("CloseAccount", "BankManage", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" value=@ViewBag.ClosingAccountNumber readonly />
+                @Html.HiddenFor(model => model.AccountNumber, new { value = ViewBag.ClosingAccountNumber})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Close account" class="btn btn-default" />
+                <div style="margin-top: 10px">
+                    @Html.ActionLink("Back to my accounts", "ShowAccounts", "BankManage")
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

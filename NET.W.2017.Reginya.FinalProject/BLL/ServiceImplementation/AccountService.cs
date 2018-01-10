@@ -71,7 +71,7 @@ namespace BLL.ServiceImplementation
         }
 
         /// <inheritdoc />
-        public void Deposit(string accountNumber, decimal value)
+        public void Deposit(string email, string accountNumber, decimal value)
         {
             if (value < 0)
             {
@@ -80,7 +80,8 @@ namespace BLL.ServiceImplementation
 
             try
             {
-                var dtoAccount = _repository.GetAccount(accountNumber);
+                var cryptedAccountNumber = CryptoService.RijndaelEncrypt(accountNumber, email);
+                var dtoAccount = _repository.GetAccount(cryptedAccountNumber);
                 var account = dtoAccount.ToBllAccount(dtoAccount.AccountOwner.ToBllAccountOwner());
                 account.Deposit(value);
                 _repository.UpdateAccount(account.ToDtoAccount());                
@@ -92,7 +93,7 @@ namespace BLL.ServiceImplementation
         }
 
         /// <inheritdoc />
-        public void Withdraw(string accountNumber, decimal value)
+        public void Withdraw(string email, string accountNumber, decimal value)
         {
             if (value < 0)
             {
@@ -100,8 +101,9 @@ namespace BLL.ServiceImplementation
             }
 
             try
-            {                
-                var dtoAccount = _repository.GetAccount(accountNumber);
+            {
+                var cryptedAccountNumber = CryptoService.RijndaelEncrypt(accountNumber, email);
+                var dtoAccount = _repository.GetAccount(cryptedAccountNumber);
                 var account = dtoAccount.ToBllAccount(dtoAccount.AccountOwner.ToBllAccountOwner());
                 account.Withdraw(value);
                 _repository.UpdateAccount(account.ToDtoAccount());                
@@ -113,11 +115,12 @@ namespace BLL.ServiceImplementation
         }
 
         /// <inheritdoc />
-        public void CloseAccount(string accountNumber)
+        public void CloseAccount(string email, string accountNumber)
         {
             try
             {
-                _repository.RemoveAccount(_repository.GetAccount(accountNumber));                
+                var cryptedAccountNumber = CryptoService.RijndaelEncrypt(accountNumber, email);
+                _repository.RemoveAccount(_repository.GetAccount(cryptedAccountNumber));                
             }
             catch (Exception ex)
             {
@@ -126,11 +129,12 @@ namespace BLL.ServiceImplementation
         }
 
         /// <inheritdoc />
-        public string GetAccountInfo(string accountNumber)
+        public string GetAccountInfo(string email, string accountNumber)
         {
             try
             {
-                var account = _repository.GetAccount(accountNumber);
+                var cryptedAccountNumber = CryptoService.RijndaelEncrypt(accountNumber, email);
+                var account = _repository.GetAccount(cryptedAccountNumber);
                 return account.ToBllAccount(account.AccountOwner.ToBllAccountOwner()).ToString();
             }
             catch (Exception ex)

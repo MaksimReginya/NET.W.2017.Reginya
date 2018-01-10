@@ -63,12 +63,14 @@ namespace BLL.Mappers
         /// Maps enumerable of <paramref cref="DtoAccount"/> to enumerable of <paramref cref="BankAccount "/>.
         /// </summary>
         public static IEnumerable<BankAccount> ToBllAccounts(this IEnumerable<DtoAccount> accounts)
-            => new List<BankAccount>(accounts.Select(account => (BankAccount)Activator.CreateInstance(
+            => new List<BankAccount>(accounts.Select(account =>
+                account.ToBllAccount(account.AccountOwner.ToBllAccountOwner())));
+            /*(BankAccount)Activator.CreateInstance(
                 GetBllAccountType(account.AccountType),
                 account.AccountNumber,
                 account.AccountOwner.ToBllAccountOwner(),
                 account.Balance,
-                account.Bonus)));
+                account.Bonus)));*/
 
         #endregion
 

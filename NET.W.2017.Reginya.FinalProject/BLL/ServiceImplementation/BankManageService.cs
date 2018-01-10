@@ -164,7 +164,7 @@ namespace BLL.ServiceImplementation
 
             try
             {
-                _accountService.Deposit(accountNumber, value);
+                _accountService.Deposit(email, accountNumber, value);
                 this.SendMail(
                     email,
                     "Bank account service",
@@ -189,7 +189,7 @@ namespace BLL.ServiceImplementation
 
             try
             {
-                _accountService.Withdraw(accountNumber, value);
+                _accountService.Withdraw(email, accountNumber, value);
                 this.SendMail(
                     email,
                     "Bank account service",
@@ -243,12 +243,12 @@ namespace BLL.ServiceImplementation
         }
 
         /// <inheritdoc />
-        public string GetAccountInfo(string accountNumber)
+        public string GetAccountInfo(string email, string accountNumber)
         {
             VerifyIsValidString(accountNumber, nameof(accountNumber));            
             try
             {
-                return _accountService.GetAccountInfo(accountNumber);
+                return _accountService.GetAccountInfo(email, accountNumber);
             }
             catch (Exception ex)
             {
@@ -263,7 +263,7 @@ namespace BLL.ServiceImplementation
             this.VerifyRegistration(email, password);
             try
             {
-                _accountService.CloseAccount(accountNumber);
+                _accountService.CloseAccount(email, accountNumber);
                 this.SendMail(
                     email,
                     "Bank account service",

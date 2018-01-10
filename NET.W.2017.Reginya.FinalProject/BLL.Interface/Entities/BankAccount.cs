@@ -46,7 +46,7 @@ namespace BLL.Interface.Entities
             get => _accountNumber;
             set
             {
-                if (!IsAccountNumberValid(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException("Account number is not valid.", nameof(AccountNumber));
                 }
@@ -133,24 +133,7 @@ namespace BLL.Interface.Entities
         #endregion
         
         #region Public methods
-       
-        /// <summary>
-        /// Determines if value is valid account number.
-        /// </summary>
-        /// <param name="value">Number to check.</param>
-        /// <returns>
-        /// True if number is valid, false - if not.
-        /// </returns>
-        public virtual bool IsAccountNumberValid(string value)
-        {
-            if (value?.Length != 20)
-            {
-                return false;
-            }
-
-            return new Regex(@"[0-9]{5}[a-z]{4}[0-9]{11}").IsMatch(value);
-        }
-
+               
         /// <summary>
         /// Performs decreasing of account balance on value.
         /// </summary>

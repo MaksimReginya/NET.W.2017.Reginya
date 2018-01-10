@@ -9,8 +9,14 @@ namespace BLL.ServiceImplementation
     /// </summary>
     public static class CryptoService
     {
+        #region Private constants
+
+        private const int KeyLength = 16;
+
+        #endregion
+
         #region Public methods
-                
+
         /// <summary>
         /// Encrypts string with specified key using Rijndael algorithm.
         /// </summary>
@@ -21,10 +27,11 @@ namespace BLL.ServiceImplementation
         {
             VerifyIsValidString(encryptString, nameof(encryptString));
             VerifyIsValidString(key, nameof(key));
+            var keyBytes = ModifyKey(key);
             var cipher = new RijndaelManaged
             {               
-                Key = Encoding.UTF8.GetBytes(key),
-                IV = Encoding.UTF8.GetBytes(key)
+                Key = keyBytes,
+                IV = keyBytes
             };            
             var encryptor = cipher.CreateEncryptor();            
             byte[] textInBytes = Encoding.UTF8.GetBytes(encryptString);
@@ -42,10 +49,11 @@ namespace BLL.ServiceImplementation
         {
             VerifyIsValidString(decryptString, nameof(decryptString));
             VerifyIsValidString(key, nameof(key));
+            var keyBytes = ModifyKey(key);
             var cipher = new RijndaelManaged
             {                
-                Key = Encoding.UTF8.GetBytes(key),
-                IV = Encoding.UTF8.GetBytes(key)
+                Key = keyBytes,
+                IV = keyBytes
             };
             var decryptor = cipher.CreateDecryptor();            
             byte[] textInBytes = Convert.FromBase64String(decryptString);
@@ -56,6 +64,19 @@ namespace BLL.ServiceImplementation
         #endregion
 
         #region Private methods
+
+        private static byte[] ModifyKey(string key)
+        {
+            var bytes = Encoding.UTF8.GetBytes(key);
+            var i = bytes.Length;
+            Array.Resize(ref bytes, KeyLength);
+            while (i < bytes.Length)
+            {
+                bytes[i++] = 0;
+            }
+
+            return bytes;
+        }
 
         private static void VerifyIsValidString(string str, string paramName)
         {

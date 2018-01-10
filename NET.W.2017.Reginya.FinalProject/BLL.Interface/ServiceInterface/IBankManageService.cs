@@ -119,6 +119,7 @@ namespace BLL.Interface.ServiceInterface
         /// <summary>
         /// Gets information about the account with specific <see cref="accountNumber"/>.
         /// </summary>
+        /// <param name="email">Email of account owner.</param>
         /// <param name="accountNumber">Number of account to get info.</param>
         /// <returns>Information about the account.</returns>
         /// <exception cref="ArgumentException">
@@ -127,7 +128,7 @@ namespace BLL.Interface.ServiceInterface
         /// <exception cref="BankManageServiceException">
         /// Thrown when error occurred while getting account info.
         /// </exception>             
-        string GetAccountInfo(string accountNumber);
+        string GetAccountInfo(string email, string accountNumber);
 
         /// <summary>
         /// Closes the account with specified <see cref="accountNumber"/>.

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PL.ASP_NET.ViewModels.ViewAccountModel>
+﻿@model IEnumerable<PL.ASP_NET.ViewModels.AccountViewModel>
 
 @{
     ViewBag.Title = "My accounts";
@@ -15,24 +15,28 @@
         <th>Account number</th>
         <th>Account type</th>
         <th>Balance</th>
-        <th>Bonus</th>            
+        <th>Bonus</th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bonus)
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bonus)
+        </td>
+        <td>
+            @Html.ActionLink("Close account", "CloseAccount", new {accountNumber = item.AccountNumber})
+        </td>
+    </tr>
     }
 </table>

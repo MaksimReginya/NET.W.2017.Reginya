@@ -19,7 +19,7 @@ namespace DAL.Interface
 
         /// <summary>
         /// Gets the account with specified number.
-        /// </summary>
+        /// </summary>        
         /// <param name="accountNumber">Account's number.</param>
         /// <exception cref="RepositoryException">
         /// Thrown if account can't be found in repository.

@@ -6,8 +6,8 @@ namespace PL.ASP_NET.Utils.Mappers
 {
     public static class Mapper
     {
-        public static ViewAccountModel ToViewModel(this BankAccount account) =>
-            new ViewAccountModel
+        public static AccountViewModel ToViewModel(this BankAccount account) =>
+            new AccountViewModel
             {
                 AccountNumber = account.AccountNumber,
                 Balance = account.Balance,

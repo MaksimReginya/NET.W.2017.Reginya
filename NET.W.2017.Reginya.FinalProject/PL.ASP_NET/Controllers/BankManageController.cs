@@ -8,6 +8,7 @@ using PL.ASP_NET.ViewModels;
 
 namespace PL.ASP_NET.Controllers
 {
+    [Authorize]
     public class BankManageController : Controller
     {
         #region Private fields
@@ -24,23 +25,32 @@ namespace PL.ASP_NET.Controllers
         }
 
         #endregion
-        
+
+        #region Public actions
+                    
         #region Open account
 
         [HttpGet]
-        public ActionResult OpenAccount() => throw new Exception();//this.View();
+        public ActionResult OpenAccount() => this.View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [HandleError(ExceptionType = typeof(Exception), View = "Error.html")]
-        public ActionResult OpenAccount(ViewAccountModel account)
-        {            
+        public ActionResult OpenAccount(OpenAccountViewModel viewModel)
+        {
             if (!ModelState.IsValid)
             {
-                return this.View();
+                return View();
             }
 
-            return this.View();
+            string userEmail = User.Identity.Name;
+            var accountNumber = _bankManageService.CreateAccount(userEmail, viewModel.Password, viewModel.Type, viewModel.Balance);            
+            if (_bankManageService.GetAccountInfo(userEmail, accountNumber) is null)
+            {
+                return RedirectToAction("OpenAccount");
+            }
+            
+            return View("AccountIsOpened");
         }
 
         #endregion
@@ -48,23 +58,42 @@ namespace PL.ASP_NET.Controllers
         #region Show accounts
 
         [HttpGet]
-        public ActionResult ShowAccounts()
-        {
-            return this.View(GetCurrentUserAccounts());
-        } 
+        public ActionResult ShowAccounts() => this.View(GetCurrentUserAccounts());
 
-        [HttpPost]
-        [HandleError(ExceptionType = typeof(Exception), View = "Error.html")]
-        public ActionResult ShowAccounts(ViewAccountModel account)
+        #endregion
+
+        #region Close account
+
+        [HttpGet]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error.html")]
+        public ActionResult CloseAccount(string accountNumber)
         {
-            throw new NotImplementedException();
+            ViewBag.ClosingAccountNumber = accountNumber;
+            return this.View();
+        } 
+                    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error.html")]
+        public ActionResult CloseAccount(CloseAccountViewModel closeAccountData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            
+            string userEmail = User.Identity.Name;
+            _bankManageService.CloseAccount(userEmail, closeAccountData.Password, closeAccountData.AccountNumber);            
+            return RedirectToAction("ShowAccounts");
         }
+
+        #endregion
 
         #endregion
 
         #region Private methods
 
-        private IEnumerable<ViewAccountModel> GetCurrentUserAccounts()
+        private IEnumerable<AccountViewModel> GetCurrentUserAccounts()
         {
             string userEmail = User.Identity.Name;
             var user = _bankManageService.GetUserInfo(userEmail);

@@ -28,6 +28,7 @@ namespace BLL.Interface.ServiceInterface
         /// <summary>
         /// Deposits money to the account with specified <see cref="accountNumber" />.
         /// </summary>
+        /// <param name="email">Email of account owner.</param>
         /// <param name="accountNumber">Number of account to deposit.</param>
         /// <param name="value">Value to increase balance.</param>
         /// <exception cref="ArgumentException">
@@ -36,11 +37,12 @@ namespace BLL.Interface.ServiceInterface
         /// <exception cref="AccountServiceException">
         /// Thrown when error occurred in deposit operation.
         /// </exception>
-        void Deposit(string accountNumber, decimal value);
+        void Deposit(string email, string accountNumber, decimal value);
 
         /// <summary>
         /// Withdraws money from the account with specified <see cref="accountNumber" />.
         /// </summary>
+        /// <param name="email">Email of account owner.</param>
         /// <param name="accountNumber">Number of account to withdraw.</param>
         /// <param name="value">Value to decrease balance.</param>
         /// <exception cref="ArgumentException">
@@ -49,25 +51,27 @@ namespace BLL.Interface.ServiceInterface
         /// <exception cref="AccountServiceException">
         /// Thrown when error occurred in withdraw operation.
         /// </exception>
-        void Withdraw(string accountNumber, decimal value);
+        void Withdraw(string email, string accountNumber, decimal value);
 
         /// <summary>
         /// Closes the account with specified <see cref="accountNumber"/>.
         /// </summary>
+        /// <param name="email">Email of account owner.</param>
         /// <param name="accountNumber">Number of account to close.</param>    
         /// <exception cref="AccountServiceException">
         /// Thrown when error occurred while closing the account.
         /// </exception>    
-        void CloseAccount(string accountNumber);
+        void CloseAccount(string email, string accountNumber);
 
         /// <summary>
         /// Gets information about the account with specific <see cref="accountNumber"/>.
         /// </summary>
+        /// <param name="email">Email of account owner.</param>
         /// <param name="accountNumber">Number of account to get info.</param>
         /// <exception cref="AccountServiceException">
         /// Thrown when error occurred while getting account info.
         /// </exception>
         /// <returns>Information about the account.</returns>        
-        string GetAccountInfo(string accountNumber);
+        string GetAccountInfo(string email, string accountNumber);
     }
 }
