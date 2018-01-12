@@ -16,7 +16,7 @@
 
 <div class="backpopup"></div>
 <div class="popup-window">
-    <p class="close">x</p>
+    <p class="closed">x</p>
     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = Request.Url }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()

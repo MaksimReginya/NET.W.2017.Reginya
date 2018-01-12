@@ -30,12 +30,12 @@ namespace PL.ASP_NET.Controllers
                     
         #region Open account
 
-        [HttpGet]
+        [HttpGet]        
         public ActionResult OpenAccount() => this.View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HandleError(ExceptionType = typeof(Exception), View = "Error.html")]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
         public ActionResult OpenAccount(OpenAccountViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -62,10 +62,65 @@ namespace PL.ASP_NET.Controllers
 
         #endregion
 
+        #region Deposit
+
+        [HttpGet]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult Deposit(string accountNumber)
+        {
+            ViewBag.DepositingAccountNumber = accountNumber;
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult Deposit(DepositWithdrawViewModel depositData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            string userEmail = User.Identity.Name;
+            _bankManageService.Deposit(userEmail, depositData.AccountNumber, depositData.OperationSum);
+            return RedirectToAction("ShowAccounts");
+        }
+
+        #endregion
+
+        #region Withdraw
+
+        [HttpGet]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult Withdraw(string accountNumber, int? balance)
+        {
+            ViewBag.WithdrawingAccountNumber = accountNumber;
+            ViewBag.Balance = balance;
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult Withdraw(DepositWithdrawViewModel withdrawData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            string userEmail = User.Identity.Name;
+            _bankManageService.Withdraw(userEmail, withdrawData.AccountNumber, withdrawData.OperationSum);
+            return RedirectToAction("ShowAccounts");
+        }
+
+        #endregion
+
         #region Close account
 
         [HttpGet]
-        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error.html")]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
         public ActionResult CloseAccount(string accountNumber)
         {
             ViewBag.ClosingAccountNumber = accountNumber;
@@ -74,7 +129,7 @@ namespace PL.ASP_NET.Controllers
                     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error.html")]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
         public ActionResult CloseAccount(CloseAccountViewModel closeAccountData)
         {
             if (!ModelState.IsValid)

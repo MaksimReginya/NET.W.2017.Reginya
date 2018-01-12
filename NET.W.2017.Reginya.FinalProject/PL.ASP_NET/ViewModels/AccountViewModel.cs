@@ -5,24 +5,18 @@ namespace PL.ASP_NET.ViewModels
 {
     public class AccountViewModel
     {
-        [Display(Name = "Account number")]
-        //[Required(ErrorMessage = "Field must be selected", AllowEmptyStrings = false)]
+        [Display(Name = "Account number")]        
         public string AccountNumber { get; set; }
 
-        [Display(Name = "Account type")]
-        //[Required(ErrorMessage = "Field must be selected", AllowEmptyStrings = false)]
+        [Display(Name = "Account type")]        
         public AccountType Type { get; set; }
        
-        [Display(Name = "Initial balance")]
-        //[Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
-        [DataType(DataType.Currency)]
-        //[Range(typeof(decimal), "0", "50000", ErrorMessage = "The initial balance must be at least 0 and not more than 5000")]
+        [Display(Name = "Initial balance")]        
+        [DataType(DataType.Currency)]        
         public decimal Balance { get; set; }
 
-        [Display(Name = "Initial bonus")]
-        //[Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
-        [DataType(DataType.Currency)]
-        //[Range(typeof(int), "0", "500", ErrorMessage = "The initial bonus must be at least 0 and not more than 500")]
+        [Display(Name = "Initial bonus")]        
+        [DataType(DataType.Currency)]        
         public int Bonus { get; set; }
     }
 }

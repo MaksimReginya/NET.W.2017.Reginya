@@ -12,7 +12,7 @@ namespace PL.ASP_NET.ViewModels
         [Display(Name = "Initial balance")]
         [Required(ErrorMessage = "Field must not be empty", AllowEmptyStrings = false)]
         [DataType(DataType.Currency)]
-        [Range(typeof(decimal), "0", "50000", ErrorMessage = "The initial balance must be at least 0 and not more than 5000")]
+        [Range(typeof(decimal), "0", "50000", ErrorMessage = "The initial balance must be at least 0 and not more than 50000")]
         public decimal Balance { get; set; }
         
         [Display(Name = "Password")]

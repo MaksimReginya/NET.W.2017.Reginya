@@ -84,6 +84,7 @@ namespace BLL.ServiceImplementation
                 var dtoAccount = _repository.GetAccount(cryptedAccountNumber);
                 var account = dtoAccount.ToBllAccount(dtoAccount.AccountOwner.ToBllAccountOwner());
                 account.Deposit(value);
+                account.AccountNumber = cryptedAccountNumber;
                 _repository.UpdateAccount(account.ToDtoAccount());                
             }
             catch (Exception ex)
@@ -106,6 +107,7 @@ namespace BLL.ServiceImplementation
                 var dtoAccount = _repository.GetAccount(cryptedAccountNumber);
                 var account = dtoAccount.ToBllAccount(dtoAccount.AccountOwner.ToBllAccountOwner());
                 account.Withdraw(value);
+                account.AccountNumber = cryptedAccountNumber;
                 _repository.UpdateAccount(account.ToDtoAccount());                
             }
             catch (Exception ex)

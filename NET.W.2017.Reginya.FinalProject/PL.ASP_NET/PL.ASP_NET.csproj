@@ -163,6 +163,7 @@
     <Compile Include="Infrastructure\NinjectRegistrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Mappers\Mapper.cs" />
+    <Compile Include="ViewModels\DepositWithdrawViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\CloseAccountViewModel.cs" />
     <Compile Include="ViewModels\OpenAccountViewModel.cs" />
@@ -218,6 +219,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\BankManage\CloseAccount.cshtml" />
+    <Content Include="Views\BankManage\Deposit.cshtml" />
+    <Content Include="Views\BankManage\Withdraw.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
