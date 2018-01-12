@@ -40,7 +40,7 @@
                 <ul class="dropdown-menu">
                     <li>@Html.ActionLink("Deposit", "Deposit", new { accountNumber = item.AccountNumber })</li>
                     <li>@Html.ActionLink("Withdraw", "Withdraw", new { accountNumber = item.AccountNumber, balance = item.Balance })</li>
-                    <li>@Html.ActionLink("Money transfer", "MoneyTransfer", "BankManage")</li>
+                    <li>@Html.ActionLink("Money transfer", "MoneyTransfer", new { accountNumber = item.AccountNumber, balance = item.Balance })</li>
                     <li>@Html.ActionLink("Close account", "CloseAccount", new { accountNumber = item.AccountNumber })</li>
                 </ul>
             </div>

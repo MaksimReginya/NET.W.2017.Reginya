@@ -220,14 +220,16 @@ namespace BLL.ServiceImplementation
 
             try
             {
-                this.Withdraw(fromEmail, fromAccountNumber, value);
-                this.Deposit(toEmail, toAccountNumber, value);                                
-                                
+                _accountService.Withdraw(fromEmail, fromAccountNumber, value);
+                _accountService.Deposit(toEmail, toAccountNumber, value);
+
+                string message =
+                    $"Money successfully transfered from your account. Account: {fromAccountNumber}, Withdraw sum: {value}. " +
+                    $"Account: {toAccountNumber}, Deposit sum: {value}";
                 this.SendMail(
                     fromEmail,
                     "Bank account service",
-                    $"Money successfully transfered from your account. Account: {fromAccountNumber}, Withdraw sum: {value}. " +
-                    $"Account: {toAccountNumber}, Deposit sum: {value}");
+                    message);
 
                 this.SendMail(
                     toEmail,

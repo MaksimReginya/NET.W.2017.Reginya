@@ -87,7 +87,7 @@ namespace BLL.Interface.Entities
             {
                 if (value < MinBalance)
                 {
-                    throw new ArgumentException($"{Balance} can must be bigger than {MinBalance}.");
+                    throw new ArgumentException($"{nameof(Balance)} can must be bigger than {MinBalance}.");
                 }
 
                 _balance = value;
@@ -104,7 +104,7 @@ namespace BLL.Interface.Entities
             {
                 if (value < 0)
                 {
-                    throw new ArgumentException($"{Bonus} can not be negative.");
+                    _bonus = 0;
                 }
 
                 _bonus = value;

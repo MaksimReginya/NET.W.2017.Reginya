@@ -49,7 +49,7 @@ namespace BLL.Mappers
         public static BankAccount ToBllAccount(this DtoAccount account, AccountOwner owner)
         {
             var type = GetBllAccountType(account.AccountType);
-            var bllAccount = (BankAccount) Activator.CreateInstance(
+            var bllAccount = (BankAccount)Activator.CreateInstance(
                 type,
                 CryptoService.RijndaelDecrypt(account.AccountNumber, owner.Email),
                 owner,

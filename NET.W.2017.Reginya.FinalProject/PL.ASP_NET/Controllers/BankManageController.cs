@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using BLL.Interface.ServiceInterface;
@@ -40,17 +39,17 @@ namespace PL.ASP_NET.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return this.View();
             }
 
             string userEmail = User.Identity.Name;
             var accountNumber = _bankManageService.CreateAccount(userEmail, viewModel.Password, viewModel.Type, viewModel.Balance);            
             if (_bankManageService.GetAccountInfo(userEmail, accountNumber) is null)
             {
-                return RedirectToAction("OpenAccount");
+                return this.RedirectToAction("OpenAccount");
             }
             
-            return View("AccountIsOpened");
+            return this.View("AccountIsOpened");
         }
 
         #endregion
@@ -58,7 +57,7 @@ namespace PL.ASP_NET.Controllers
         #region Show accounts
 
         [HttpGet]
-        public ActionResult ShowAccounts() => this.View(GetCurrentUserAccounts());
+        public ActionResult ShowAccounts() => this.View(this.GetCurrentUserAccounts());
 
         #endregion
 
@@ -79,12 +78,12 @@ namespace PL.ASP_NET.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return this.View();
             }
 
             string userEmail = User.Identity.Name;
             _bankManageService.Deposit(userEmail, depositData.AccountNumber, depositData.OperationSum);
-            return RedirectToAction("ShowAccounts");
+            return this.RedirectToAction("ShowAccounts");
         }
 
         #endregion
@@ -93,7 +92,7 @@ namespace PL.ASP_NET.Controllers
 
         [HttpGet]
         [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
-        public ActionResult Withdraw(string accountNumber, int? balance)
+        public ActionResult Withdraw(string accountNumber, decimal balance)
         {
             ViewBag.WithdrawingAccountNumber = accountNumber;
             ViewBag.Balance = balance;
@@ -107,12 +106,46 @@ namespace PL.ASP_NET.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return this.View();
             }
 
             string userEmail = User.Identity.Name;
             _bankManageService.Withdraw(userEmail, withdrawData.AccountNumber, withdrawData.OperationSum);
-            return RedirectToAction("ShowAccounts");
+            return this.RedirectToAction("ShowAccounts");
+        }
+
+        #endregion
+
+        #region Money transfer
+
+        [HttpGet]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult MoneyTransfer(string accountNumber, decimal balance)
+        {
+            ViewBag.TransferingAccountNumber = accountNumber;
+            ViewBag.Balance = balance;
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HandleError(ExceptionType = typeof(BankManageServiceException), View = "Error")]
+        public ActionResult MoneyTransfer(MoneyTransferViewModel moneyTransferData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            string userEmail = User.Identity.Name;
+            _bankManageService.MoneyTransfer(
+                userEmail,
+                moneyTransferData.FromAccountNumber,
+                moneyTransferData.ToEmail,
+                moneyTransferData.ToAccountNumber,
+                moneyTransferData.TransferSum);
+
+            return this.RedirectToAction("ShowAccounts");
         }
 
         #endregion
@@ -134,12 +167,12 @@ namespace PL.ASP_NET.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return this.View();
             }
             
             string userEmail = User.Identity.Name;
             _bankManageService.CloseAccount(userEmail, closeAccountData.Password, closeAccountData.AccountNumber);            
-            return RedirectToAction("ShowAccounts");
+            return this.RedirectToAction("ShowAccounts");
         }
 
         #endregion

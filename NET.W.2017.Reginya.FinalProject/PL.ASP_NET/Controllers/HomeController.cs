@@ -9,7 +9,7 @@ namespace PL.ASP_NET.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                 return RedirectToAction("ShowAccounts", "BankManage");
+                 return this.RedirectToAction("ShowAccounts", "BankManage");
             }
 
             return this.View();
